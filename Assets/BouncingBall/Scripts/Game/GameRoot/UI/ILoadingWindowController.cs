@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 
-namespace BouncingBall.Scripts.Game.GameRoot
+namespace BouncingBall.Scripts.Game.GameRoot.UI
 {
     public interface ILoadingWindowController
     {

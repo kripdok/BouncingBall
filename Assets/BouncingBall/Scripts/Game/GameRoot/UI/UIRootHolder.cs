@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.GameRoot
+namespace BouncingBall.Scripts.Game.GameRoot.UI
 {
     public class UIRootHolder : MonoBehaviour, ILoadingWindowController
     {

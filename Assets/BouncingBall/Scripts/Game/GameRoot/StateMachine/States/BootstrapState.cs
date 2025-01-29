@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Scripts.Game.GameRoot.Constants;
+using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
