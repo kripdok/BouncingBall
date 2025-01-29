@@ -1,19 +1,18 @@
-﻿using Cysharp.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace BouncingBall.Scripts.Game
+namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public class MainMenuState : IState
     {
 
         private readonly GameStateMachine _gameStateMachine;
-        private readonly LoadingWindow _loadingWindow;
+        private readonly ILoadingWindowController _loadingWindowController;
         private readonly SceneLoader _sceneLoader;
 
-        public MainMenuState(GameStateMachine gameStateMachine,SceneLoader sceneLoader,LoadingWindow loadingWindow)
+        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController)
         {
             _gameStateMachine = gameStateMachine;
-            _loadingWindow = loadingWindow;
+            _loadingWindowController = loadingWindowController;
             _sceneLoader = new SceneLoader();
         }
 
@@ -21,7 +20,7 @@ namespace BouncingBall.Scripts.Game
         public async void Enter()
         {
             await _sceneLoader.LoadScene(SceneNames.Gameplay, EnterLoadLevel);
-            await _loadingWindow.Hide();
+            await _loadingWindowController.HideLoadingWindow();
 
             Debug.Log("Состояние главноего меню");
         }
@@ -33,7 +32,7 @@ namespace BouncingBall.Scripts.Game
 
         private void EnterLoadLevel()
         {
-         //TODO - сделать загрузку главного меню в UI и сцены с катающимся шариком
+            //TODO - сделать загрузку главного меню в UI и сцены с катающимся шариком
         }
     }
 }

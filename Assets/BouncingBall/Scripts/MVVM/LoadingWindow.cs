@@ -7,7 +7,7 @@ namespace BouncingBall.Scripts.Game
     {
         [SerializeField] private CanvasGroup _loadingWindowCanvasGroup;
 
-        private void Awake()
+        public void Initialize()
         {
             _loadingWindowCanvasGroup.alpha = 1.0f;
         }

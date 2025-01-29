@@ -1,8 +1,8 @@
-﻿namespace BouncingBall.Scripts.Game
+﻿namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public interface IState
     {
         public void Enter();
-        public void Exit(); 
+        public void Exit();
     }
 }

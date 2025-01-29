@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Scripts.Game.GameRoot.StateMachine;
+using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
+using UnityEngine;
 
-namespace BouncingBall.Scripts.Game
+namespace BouncingBall.Scripts.Game.GameRoot
 {
     public class GameBootstrap
     {

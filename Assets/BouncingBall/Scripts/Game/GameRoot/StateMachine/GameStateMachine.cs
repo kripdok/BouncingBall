@@ -1,20 +1,21 @@
+using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
 using System;
 using System.Collections.Generic;
 
 
-namespace BouncingBall.Scripts.Game
+namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
 {
     public class GameStateMachine
     {
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, LoadingWindow loadingWindow)
+        public GameStateMachine(SceneLoader sceneLoader, ILoadingWindowController loadingWindowController)
         {
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
-                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindow),
+                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController),
             };
         }
 

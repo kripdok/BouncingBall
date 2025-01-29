@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BouncingBall.Scripts.Game
+namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public class BootstrapState : IState
     {

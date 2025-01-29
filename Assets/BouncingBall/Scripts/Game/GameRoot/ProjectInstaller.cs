@@ -1,12 +1,11 @@
-using Zenject;
+using BouncingBall.Scripts.Game.GameRoot.StateMachine;
 using UnityEngine;
+using Zenject;
 
-namespace BouncingBall.Scripts.Game
+namespace BouncingBall.Scripts.Game.GameRoot
 {
     public class ProjectInstaller : MonoInstaller
     {
-        [SerializeField] private LoadingWindow _loadingWindowPrefab;
-
         public override void InstallBindings()
         {
             Container.Bind<SceneLoader>().AsSingle();
@@ -18,9 +17,11 @@ namespace BouncingBall.Scripts.Game
 
         private void BindLoadingWindow()
         {
-            var loadingWindow = Instantiate(_loadingWindowPrefab);
-            DontDestroyOnLoad(loadingWindow);
-            Container.Bind<LoadingWindow>().FromInstance(loadingWindow).AsSingle() ;
+            var uiRootViewPrefab = Resources.Load<UIRootHolder>("Prefabs/UI/UIRoot");
+            var uiRootView = Instantiate(uiRootViewPrefab);
+            DontDestroyOnLoad(uiRootView);
+
+            Container.Bind<ILoadingWindowController>().FromInstance(uiRootView).AsSingle();
         }
     }
 }
