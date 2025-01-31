@@ -23,13 +23,15 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         {
             await _sceneLoader.LoadScene(SceneNames.Gameplay, EnterLoadLevel);
             await _loadingWindowController.HideLoadingWindow();
-
+            // Происходит загрузка префаба с искуственным интелектом
             Debug.Log("Состояние главноего меню");
+            await _loadingWindowController.ShowLoadingWindow();
+            _gameStateMachine.SetState<GameplayState>();
         }
 
-        public void Exit()
+        public async void Exit()
         {
-
+            
         }
 
         private void EnterLoadLevel()

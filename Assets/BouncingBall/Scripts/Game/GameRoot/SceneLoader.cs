@@ -9,8 +9,6 @@ namespace BouncingBall.Scripts.Game.GameRoot
     {
         public async UniTask LoadScene(string sceneName, Action onLoader = null)
         {
-            await UniTask.WaitForSeconds(1f);
-
             if (SceneManager.GetActiveScene().name == sceneName)
             {
                 onLoader?.Invoke();

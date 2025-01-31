@@ -21,17 +21,21 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
                 _loadingWindowCanvasGroup.alpha -= duration;
                 await UniTask.Yield();
             }
+
+            await UniTask.WaitForSeconds(1f);
         }
 
         public async UniTask Show()
         {
             float duration = 0.1f;
 
-            while (_loadingWindowCanvasGroup.alpha == 1)
+            while (_loadingWindowCanvasGroup.alpha != 1)
             {
                 _loadingWindowCanvasGroup.alpha += duration;
                 await UniTask.Yield();
             }
+
+            await UniTask.WaitForSeconds(1f);
         }
     }
 }

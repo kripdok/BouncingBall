@@ -1,5 +1,6 @@
 using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
 using BouncingBall.Scripts.Game.GameRoot.UI;
+using BouncingBall.Scripts.InputSystem.Controller;
 using System;
 using System.Collections.Generic;
 
@@ -11,12 +12,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, ILoadingWindowController loadingWindowController)
+        public GameStateMachine(SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, InputSystemManager manageInputState)
         {
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
                 [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController),
+                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController),
             };
         }
 
