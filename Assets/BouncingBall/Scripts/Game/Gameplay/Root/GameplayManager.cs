@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
+using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.Scripts.Game.Gameplay.Root
 {
     public class GameplayManager
     {

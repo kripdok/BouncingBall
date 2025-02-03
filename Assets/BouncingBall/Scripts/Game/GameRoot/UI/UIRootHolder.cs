@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.UI
 {
-    public class UIRootHolder : MonoBehaviour, ILoadingWindowController
+    public class UIRootHolder : MonoBehaviour, ILoadingWindowController, IAttachStateUI
     {
         [SerializeField] private LoadingWindow _loadingWindow;
         [SerializeField] private Transform _uiSceneContainer;
@@ -16,21 +16,23 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
         public async UniTask HideLoadingWindow()
         {
             await _loadingWindow.Hide();
+            _loadingWindow.gameObject.SetActive(false);
         }
 
         public async UniTask ShowLoadingWindow()
         {
+            _loadingWindow.gameObject.SetActive(true);
             await _loadingWindow.Show();
         }
 
-        public void AttachSceneUI(GameObject sceneUI)
+        public void AttachStateUI(GameObject sceneUI)
         {
-            ClearSceneUI();
+            ClearStateUI();
 
             sceneUI.transform.SetParent(_uiSceneContainer, false);
         }
 
-        private void ClearSceneUI()
+        private void ClearStateUI()
         {
             //TODO - тут происходит уничтожение экранов. Не соответствует ТЗ
             var childCount = _uiSceneContainer.childCount;

@@ -3,19 +3,19 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
 {
     public class BallDirectionSign : MonoBehaviour
     {
-        private InputController _inputController;
+        private IPointingDirection _inputController;
 
         [Inject]
-        public void Сonstructor(InputController inputController)
+        public void Сonstructor(IPointingDirection inputController)
         {
             Debug.Log("Зарегестрирован указатель шара");
             _inputController = inputController;
             _inputController.PointerLocation.Skip(1).Subscribe(Tets);
-            _inputController.IsWork.Skip(1).Subscribe(x => gameObject.SetActive(x));
+            _inputController.IsDirectionSet.Skip(1).Subscribe(x => gameObject.SetActive(x));
             gameObject.SetActive(false);
         }
 

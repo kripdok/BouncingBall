@@ -1,8 +1,10 @@
 ﻿using Zenject;
 using UnityEngine;
 using BouncingBall.Scripts.InputSystem.Controller;
+using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
+using BouncingBall.Scripts.Game.Gameplay.BallSystem;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.Scripts.Game.Gameplay.Root
 {
     public class GameplaySceneInstaller : MonoInstaller
     {

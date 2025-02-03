@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace BouncingBall.Scripts.InputSystem.Controller
 {
-    public class InputController
+    public class InputController: IPointingDirection
     {
-        public ReadOnlyReactiveProperty<Vector3> PointerLocation;
-        public ReadOnlyReactiveProperty<bool> IsWork;
+        public ReadOnlyReactiveProperty<Vector3> PointerLocation { get; private set; }
+        public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
 
         private readonly ReactiveProperty<Vector3> _pointerLocation;
-        private readonly ReactiveProperty<bool> _isWork;
+        private readonly ReactiveProperty<bool> _isDirectionSet;
         private readonly InputSystemActions _inputActions;
 
         //TODO - подумать где будет отключаться управление. Для этого нужен Интерфейс?
@@ -18,21 +18,19 @@ namespace BouncingBall.Scripts.InputSystem.Controller
         {
             _inputActions = inputActions;
 
-            _isWork = new ReactiveProperty<bool>();
-            IsWork = new ReadOnlyReactiveProperty<bool>(_isWork);
+            _isDirectionSet = new ReactiveProperty<bool>();
+            IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_isDirectionSet);
 
             _pointerLocation = new ReactiveProperty<Vector3>();
             PointerLocation = new ReadOnlyReactiveProperty<Vector3>(_pointerLocation);
 
             _inputActions.Player.Attack.started += cnt => StartMove();
             _inputActions.Player.Attack.canceled += cnt => StopMove();
-
-            PointerLocation.Subscribe(vector => Debug.Log("МОй код " + vector));
         }
 
         private async void StartMove()
         {
-            _isWork.Value = true;
+            _isDirectionSet.Value = true;
             await Move();
 
             //Подает сигнал для включения указателя
@@ -40,7 +38,7 @@ namespace BouncingBall.Scripts.InputSystem.Controller
 
         private void StopMove()
         {
-            _isWork.Value = false;
+            _isDirectionSet.Value = false;
         }
 
         private async UniTask Move()
@@ -58,7 +56,7 @@ namespace BouncingBall.Scripts.InputSystem.Controller
 
                 await UniTask.Yield();
             }
-            while (_isWork.Value);
+            while (_isDirectionSet.Value);
         }
     }
 }

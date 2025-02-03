@@ -1,4 +1,3 @@
-using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem.Controller;
@@ -13,24 +12,28 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, InputSystemManager manageInputState)
+        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, InputSystemManager manageInputState)
         {
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
-                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController),
-                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController),
+                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI),
+                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI),
             };
         }
 
-        public void SetState<T>() where T : IState
+        public async void SetState<T>() where T : IState
         {
             if (!_states.TryGetValue(typeof(T), out var newState))
             {
                 throw new InvalidOperationException($"State with name {typeof(T)} is not registered!");
             }
 
-            _concreteState?.Exit();
+            if (_concreteState != null)
+            {
+                await _concreteState.Exit();
+            }
+
             _concreteState = newState;
             _concreteState.Enter();
         }

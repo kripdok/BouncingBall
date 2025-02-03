@@ -24,7 +24,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
             var uiRootView = Instantiate(uiRootViewPrefab);
             DontDestroyOnLoad(uiRootView);
 
-            Container.Bind<ILoadingWindowController>().FromInstance(uiRootView).AsSingle();
+            Container.BindInterfacesTo<UIRootHolder>().FromInstance(uiRootView).AsSingle();
         }
 
         private void BindInputController()

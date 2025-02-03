@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Scripts.Game.GameRoot.Constants;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
@@ -20,9 +21,9 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             await _sceneLoader.LoadScene(SceneNames.PreLoader, EnterLoadLevel);
         }
 
-        public void Exit()
+        public UniTask Exit()
         {
-
+            return UniTask.CompletedTask;
         }
 
         private void EnterLoadLevel()

@@ -1,8 +1,10 @@
-﻿namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
+﻿using Cysharp.Threading.Tasks;
+
+namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public interface IState
     {
         public void Enter();
-        public void Exit();
+        public UniTask Exit();
     }
 }

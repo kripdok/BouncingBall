@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
 {
     public class Level : MonoBehaviour
     {
