@@ -1,6 +1,7 @@
 ﻿using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem.Controller;
+using log4net.Core;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
@@ -10,8 +11,6 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly InputSystemManager _manageInputState;
         private readonly GameStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
-
-        private Level _level;
 
 
         public GameplayState(GameStateMachine gameStateMachine, InputSystemManager manageInputState, ILoadingWindowController loadingWindowController)
@@ -24,8 +23,6 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 
         public async void Enter()
         {
-            var levelPrefab = Resources.Load<Level>("Prefabs/Gameplay/Levels/Level_1");
-            _level = GameObject.Instantiate(levelPrefab);
             await _loadingWindowController.HideLoadingWindow();
             
             _manageInputState.EnableInputSystam();
@@ -36,8 +33,6 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         public async void Exit()
         {
             _manageInputState.DisableInputSystam();
-            GameObject.Destroy(_level);
-            _level = null;
         }
     }
 }

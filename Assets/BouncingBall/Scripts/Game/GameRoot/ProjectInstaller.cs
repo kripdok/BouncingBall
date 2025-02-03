@@ -16,7 +16,6 @@ namespace BouncingBall.Scripts.Game.GameRoot
             Container.Bind<SceneLoader>().AsSingle();
             Container.Bind<GameStateMachine>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
-
         }
 
         private void BindLoadingWindow()

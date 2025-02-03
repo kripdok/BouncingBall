@@ -12,6 +12,7 @@ namespace BouncingBall.Scripts.Game.Gameplay
         [Inject]
         public void Сonstructor(InputController inputController)
         {
+            Debug.Log("Зарегестрирован указатель шара");
             _inputController = inputController;
             _inputController.PointerLocation.Skip(1).Subscribe(Tets);
             _inputController.IsWork.Skip(1).Subscribe(x => gameObject.SetActive(x));
