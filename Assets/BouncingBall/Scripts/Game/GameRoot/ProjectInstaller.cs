@@ -18,9 +18,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
             BindInputController();
             Container.Bind<SceneLoader>().AsSingle();
             Container.BindInterfacesTo<ResourcesPrefabLoadStrategy>().AsSingle();
-            Container.BindFactory<Object, Level, LevelFactory>().FromFactory<PrefabFactory<Level>>();
             Container.Bind<GameStateMachine>().AsSingle();
-            Container.Bind<LevelLoader>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
         }
 

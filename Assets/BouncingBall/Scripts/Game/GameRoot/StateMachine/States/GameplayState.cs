@@ -17,23 +17,22 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
-        private readonly LevelLoader _levelLoader;
+       // private readonly LevelLoader _levelLoader;
 
 
-        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader)
+        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy)
         {
             _attachStateUI = attachStateUI;
             _manageInputState = manageInputState;
             _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
-            _levelLoader = levelLoader;
             _prefabLoadStrategy = prefabLoadStrategy;
         }
 
         public async void Enter()
         {
-            CreateGameUI();
-            _levelLoader.LoadLevel("1");
+            //CreateGameUI();
+            //_levelLoader.LoadLevel("1");
             await _loadingWindowController.HideLoadingWindow();
 
             _manageInputState.EnableInput();

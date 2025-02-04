@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
+using UnityEngine;
+using Zenject;
 
 namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
 {
@@ -6,12 +8,13 @@ namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
     {
         [field: SerializeField] public Transform BallSpawnPoint { get; private set; }
 
-        private LevelModel _model;
+        private Ball _ball;
 
-        public void Init(LevelModel model)
+        [Inject]
+        public void Construct(Ball ball)
         {
-            _model = model;
-            _model.Ball.transform.position = BallSpawnPoint.position;
+            _ball = ball;
+            _ball.transform.position = BallSpawnPoint.position;
         }
 
     }
