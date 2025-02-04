@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BouncingBall.Scripts.InputSystem.Controller
 {
-    public class InputController: IPointingDirection
+    public class InputController: IPointingDirection , IInputInteractivityChanger
     {
         public ReadOnlyReactiveProperty<Vector3> PointerLocation { get; private set; }
         public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
@@ -13,7 +13,6 @@ namespace BouncingBall.Scripts.InputSystem.Controller
         private readonly ReactiveProperty<bool> _isDirectionSet;
         private readonly InputSystemActions _inputActions;
 
-        //TODO - подумать где будет отключаться управление. Для этого нужен Интерфейс?
         public InputController(InputSystemActions inputActions)
         {
             _inputActions = inputActions;
@@ -26,6 +25,16 @@ namespace BouncingBall.Scripts.InputSystem.Controller
 
             _inputActions.Player.Attack.started += cnt => StartMove();
             _inputActions.Player.Attack.canceled += cnt => StopMove();
+        }
+
+        public void EnableInput()
+        {
+            _inputActions.Enable();
+        }
+
+        public void DisableInput()
+        {
+            _inputActions.Disable();
         }
 
         private async void StartMove()
@@ -58,5 +67,7 @@ namespace BouncingBall.Scripts.InputSystem.Controller
             }
             while (_isDirectionSet.Value);
         }
+
+
     }
 }

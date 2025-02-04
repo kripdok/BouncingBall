@@ -36,8 +36,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
         private void BindInputController()
         {
             Container.Bind<InputSystemActions>().AsSingle();
-            Container.Bind<InputSystemManager>().AsSingle();
-            Container.Bind<InputController>().AsSingle();
+            Container.BindInterfacesTo<InputController>().AsSingle();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
     {
         private const string UIPatch = "Prefabs/UI/Containers/GameUI";
 
-        private readonly InputSystemManager _manageInputState;
+        private readonly IInputInteractivityChanger _manageInputState;
         private readonly GameStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
@@ -20,7 +20,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly LevelLoader _levelLoader;
 
 
-        public GameplayState(GameStateMachine gameStateMachine, InputSystemManager manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader)
+        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader)
         {
             _attachStateUI = attachStateUI;
             _manageInputState = manageInputState;
@@ -36,14 +36,14 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             _levelLoader.LoadLevel("1");
             await _loadingWindowController.HideLoadingWindow();
 
-            _manageInputState.EnableInputSystam();
+            _manageInputState.EnableInput();
             Debug.Log("Зашел в геймлпей");
 
         }
 
         public async UniTask Exit()
         {
-            _manageInputState.DisableInputSystam();
+            _manageInputState.DisableInput();
             await _loadingWindowController.ShowLoadingWindow();
         }
 
