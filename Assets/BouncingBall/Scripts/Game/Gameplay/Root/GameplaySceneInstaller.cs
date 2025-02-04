@@ -10,20 +10,23 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
     {
         public override void InstallBindings()
         {
-            BindBall();
-            BindPointHolder();
 
-            Container.BindFactory<LevelModel, LevelFactory>().AsCached();
-            Container.Bind<GameplayManager>().AsCached().NonLazy();
+           
+            Container.Bind<LevelLoader>().AsCached().NonLazy();
+            //BindPointHolder();
+            //BindBall();
 
         }
 
         private void BindBall()
         {
+            Debug.Log("1");
             var prefab = Resources.Load<Ball>("Prefabs/Gameplay/Ball");
             var ball = Instantiate(prefab);
             ball.Сonstructor(Container.Resolve<InputController>());
+            
             Container.Bind<Ball>().FromInstance(ball).AsCached();
+            Debug.Log("2");
         }
 
         private void BindPointHolder()
