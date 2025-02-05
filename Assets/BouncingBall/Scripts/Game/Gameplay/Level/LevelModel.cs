@@ -1,10 +1,12 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
-using Zenject;
-
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+﻿namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
 {
     public class LevelModel
     {
-        [Inject] public readonly Ball Ball;
+        public readonly string LevelName;
+
+        public LevelModel(string levelName)
+        {
+            LevelName = levelName;
+        }
     }
 }

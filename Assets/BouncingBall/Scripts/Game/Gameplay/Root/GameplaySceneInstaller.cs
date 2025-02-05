@@ -1,4 +1,5 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
+﻿using Assets.BouncingBall.Scripts.Game.Gameplay;
+using BouncingBall.Scripts.Game.Gameplay.BallSystem;
 using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine;
 using UnityEngine;
@@ -15,6 +16,8 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
             Container.Bind<GameStateMachine>().AsCached();
             Container.Bind<Ball>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball").AsCached();
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
+            Container.BindFactory<Transform,LevelViewModel, LevelView, LevelViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached();
+            Container.BindFactory<Object, StateUI, StateUIFactory>().FromFactory<PrefabFactory<StateUI>>();
         }
     }
 }

@@ -1,3 +1,4 @@
+using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.Gameplay.Root;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
 using BouncingBall.Scripts.Game.GameRoot.UI;
@@ -14,11 +15,11 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy,LevelLoader levelLoader)
+        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy,LevelLoader levelLoader,StateUIFactory stateUIFactory)
         {
             _states = new Dictionary<Type, IState>()
             {
-                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI, prefabLoadStrategy,levelLoader),
+                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI, prefabLoadStrategy,levelLoader, stateUIFactory),
                 [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy),
             };
         }

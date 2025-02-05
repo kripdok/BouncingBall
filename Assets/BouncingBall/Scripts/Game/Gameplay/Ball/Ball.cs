@@ -1,5 +1,6 @@
 ﻿using BouncingBall.Scripts.InputSystem.Controller;
 using Cysharp.Threading.Tasks;
+using System;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -14,19 +15,26 @@ namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
         [SerializeField] private float maxSpeed = 10f;
         [SerializeField] private float rotationSpeedFactor = 1f;
 
-        private IPointingDirection _inputController;
-
+        private IPointingDirection _pointingDirection;
+        private IDisposable _subscriptions;
+        private BallModel _model;
 
         [Inject]
-        public void Сonstructor(IPointingDirection inputController)
+        public void Constructor(GameInformation gameInformation)
         {
-            Debug.Log("Зарегестрирован шар");
-            _inputController = inputController;
-            _inputController.IsDirectionSet.Skip(1).Where(t => t == false).Subscribe(_ => Test());
+            _model = gameInformation.BallModel;
+        }
+
+        public void SetPointingDirection(IPointingDirection pointingDirection)
+        {
+            _subscriptions?.Dispose();
+
+            _pointingDirection = pointingDirection;
+            _subscriptions = _pointingDirection.IsDirectionSet.Skip(1).Where(t => t == false).Subscribe(_ => Test());
         }
         private void Test()
         {
-              Accelerate(_inputController.PointerLocation.Value);
+            Accelerate(_pointingDirection.PointerLocation.Value);
         }
 
 
@@ -48,6 +56,8 @@ namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
                 // Обновляем позицию мяча
                 position += direction * speed * Time.deltaTime;
                 transform.position = position;
+
+                _model.Position.Value = transform.position;
 
                 // Вращаем мяч по оси X
                 float rotationSpeed = speed * rotationSpeedFactor;

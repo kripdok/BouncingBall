@@ -1,4 +1,5 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.MainMenu.UI;
+﻿using BouncingBall.Scripts.Game.Gameplay;
+using BouncingBall.Scripts.Game.Gameplay.MainMenu.UI;
 using BouncingBall.Scripts.Game.Gameplay.Root;
 using BouncingBall.Scripts.Game.GameRoot.Constants;
 using BouncingBall.Scripts.Game.GameRoot.UI;
@@ -10,18 +11,21 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public class MainMenuState : IState
     {
-        
+        private const string LevelId = "0";
+        private const string UIPrefabPathc = "Prefabs/UI/Containers/MainMenuUI";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         private readonly SceneLoader _sceneLoader;
-        //private readonly LevelLoader _levelLoader;
+        private readonly LevelLoader _levelLoader;
+        private readonly StateUIFactory _stateUIFactory;
 
-        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy)
+        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader, StateUIFactory stateUIFactory)
         {
-        //    _levelLoader = levelLoader;
+            _stateUIFactory = stateUIFactory;
+            _levelLoader = levelLoader;
             _prefabLoadStrategy = prefabLoadStrategy;
             _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
@@ -32,7 +36,8 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         public async void Enter()
         {
             await _sceneLoader.LoadScene(SceneNames.Gameplay);
-
+            CreateMainMenuUI();
+            await _levelLoader.LoadLevel(LevelId); // Здесь должен быть лоодер, который передает модель уровня для загрузки
             await _loadingWindowController.HideLoadingWindow();
             Debug.Log("Состояние главноего меню");
         }
@@ -42,6 +47,12 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             await _loadingWindowController.ShowLoadingWindow();
         }
 
-        
+        private void CreateMainMenuUI()
+        {
+            var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
+            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
+            _attachStateUI.AttachStateUI(mainMenuUI.gameObject);
+        }
+
     }
 }

@@ -1,12 +1,10 @@
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
-using BouncingBall.Scripts.Utilities.PrefabLoad;
-using BouncingBall.Scripts.Game.GameRoot.StateMachine;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem;
 using BouncingBall.Scripts.InputSystem.Controller;
+using BouncingBall.Scripts.Utilities.PrefabLoad;
 using UnityEngine;
 using Zenject;
-using BouncingBall.Scripts.Game.Gameplay.Root;
+
 
 namespace BouncingBall.Scripts.Game.GameRoot
 {
@@ -18,7 +16,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
             BindInputController();
             Container.Bind<SceneLoader>().AsSingle();
             Container.BindInterfacesTo<ResourcesPrefabLoadStrategy>().AsSingle();
-            Container.Bind<GameStateMachine>().AsSingle();
+            Container.Bind<GameInformation>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
         }
 
@@ -33,6 +31,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
 
         private void BindInputController()
         {
+            //TODO - Сделать свой Input
             Container.Bind<InputSystemActions>().AsSingle();
             Container.BindInterfacesTo<InputController>().AsSingle();
         }
