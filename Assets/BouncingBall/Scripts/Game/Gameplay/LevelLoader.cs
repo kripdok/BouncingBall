@@ -1,5 +1,6 @@
 ﻿using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
 using BouncingBall.Scripts.Utilities.PrefabLoad;
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -14,24 +15,30 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
 
 
         private Level _concreteLevel;
+        private string _nameLoadingLevel;
 
-        public LevelLoader(LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy )
+        public LevelLoader(LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy)
         {
             _prefabLoadStrategy = prefabLoadStrategy;
             _levelFactory = levelFactory;
         }
 
-        public void LoadLevel(string id)
+        public void SetLevelForLoading(string id)
         {
-            if( _concreteLevel != null )
+            _nameLoadingLevel = id;
+        }
+
+        public async UniTask LoadLevel(string id)
+        {
+            if (_concreteLevel != null)
             {
                 GameObject.Destroy(_concreteLevel.gameObject);
             }
 
             var patch = LevelsPathc + id;
-            var prefab = _prefabLoadStrategy.LoadPrefab<Level>(patch);
+            var prefab = await _prefabLoadStrategy.AsyncLoadPrefab<Level>(patch);
 
-            if ( prefab == null )
+            if (prefab == null)
             {
                 throw new ArgumentNullException($"Level with ID {id} ​​does not exist or path to file is incorrectly specified:\n{LevelsPathc}");
             }

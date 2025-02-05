@@ -1,23 +1,24 @@
-﻿using BouncingBall.Scripts.Game.GameRoot.StateMachine;
-using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
+﻿using BouncingBall.Scripts.Game.GameRoot.Constants;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot
 {
     public class GameBootstrap
     {
-        public GameBootstrap(GameStateMachine gameStateMachine)
+        public  GameBootstrap(SceneLoader sceneLoader)
         {
-            InitStartParams();
-
-            gameStateMachine.SetState<BootstrapState>();
+            InitStartParams(sceneLoader);
         }
 
-        private void InitStartParams()
+        private async void InitStartParams(SceneLoader sceneLoader)
         {
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.multiTouchEnabled = false;
+
+            await sceneLoader.LoadScene(SceneNames.PreLoader);
+            await sceneLoader.LoadScene(SceneNames.Gameplay);
         }
+
     }
 }

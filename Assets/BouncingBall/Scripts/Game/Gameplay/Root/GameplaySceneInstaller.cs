@@ -1,5 +1,6 @@
 ﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
 using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
+using BouncingBall.Scripts.Game.GameRoot.StateMachine;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
         {
             Container.BindFactory<Object, Level, LevelFactory>().FromFactory<PrefabFactory<Level>>();
             Container.Bind<LevelLoader>().AsCached();
+            Container.Bind<GameStateMachine>().AsCached();
             Container.Bind<Ball>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball").AsCached();
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
         }
