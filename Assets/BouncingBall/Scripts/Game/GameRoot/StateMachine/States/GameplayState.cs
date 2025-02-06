@@ -1,11 +1,12 @@
 ﻿using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.Gameplay.Game.UI;
-using BouncingBall.Scripts.Game.Gameplay.Root;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem.Controller;
 using BouncingBall.Scripts.Utilities.PrefabLoad;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UniRx;
+using System;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
@@ -18,35 +19,32 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
-        private readonly LevelLoader _levelLoader;
-        private readonly GameInformation _gameInformation;
         private readonly StateUIFactory _stateUIFactory;
+        private readonly LevelLoaderMediator _levelLoaderMediator;
 
-        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader, GameInformation gameInformation, StateUIFactory stateUIFactory)
+        private IDisposable dispos;
+
+        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
         {
             _attachStateUI = attachStateUI;
             _manageInputState = manageInputState;
             _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
             _prefabLoadStrategy = prefabLoadStrategy;
-            _levelLoader = levelLoader;
-            _gameInformation = gameInformation;
+            _levelLoaderMediator = levelLoaderMediator;
             _stateUIFactory = stateUIFactory;
         }
 
         public async void Enter()
         {
+            Debug.Log("Начал входить в состояние игры");
             CreateGameUI();
-            await _levelLoader.LoadLevel(_gameInformation.EnableLevelId);
-            await _loadingWindowController.HideLoadingWindow();
-
-            _manageInputState.EnableInput();
-            Debug.Log("Зашел в геймлпей");
-
+            dispos = _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow());
         }
 
         public async UniTask Exit()
         {
+            dispos.Dispose();
             _manageInputState.DisableInput();
             await _loadingWindowController.ShowLoadingWindow();
         }
@@ -61,6 +59,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private void SetMainMenuState()
         {
             _gameStateMachine.SetState<MainMenuState>();
+        }
+
+        private void HideLoadingWindow()
+        {
+            _loadingWindowController.HideLoadingWindow();
+            _manageInputState.EnableInput();
+            Debug.Log("Зашел в геймлпей");
         }
     }
 }

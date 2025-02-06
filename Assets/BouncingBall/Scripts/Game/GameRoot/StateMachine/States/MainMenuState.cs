@@ -5,6 +5,8 @@ using BouncingBall.Scripts.Game.GameRoot.Constants;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.Utilities.PrefabLoad;
 using Cysharp.Threading.Tasks;
+using System;
+using UniRx;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
@@ -19,14 +21,16 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         private readonly SceneLoader _sceneLoader;
-        private readonly LevelLoader _levelLoader;
+        private readonly LevelLoaderMediator _levelLoaderMediator;
         private readonly StateUIFactory _stateUIFactory;
 
+        private IDisposable dispos;
 
-        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader, StateUIFactory stateUIFactory)
+
+        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator)
         {
             _stateUIFactory = stateUIFactory;
-            _levelLoader = levelLoader;
+            _levelLoaderMediator = levelLoaderMediator;
             _prefabLoadStrategy = prefabLoadStrategy;
             _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
@@ -36,15 +40,16 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 
         public async void Enter()
         {
+            Debug.Log("Начал входить в состояние главного меню");
             await _sceneLoader.LoadScene(SceneNames.Gameplay);
             CreateMainMenuUI();
-            await _levelLoader.LoadLevel(LevelId); // Здесь должен быть лоодер, который передает модель уровня для загрузки
-            await _loadingWindowController.HideLoadingWindow();
-            Debug.Log("Состояние главноего меню");
+            _levelLoaderMediator.SetLevelName(LevelId);
+            dispos = _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow());
         }
 
         public async UniTask Exit()
         {
+            dispos.Dispose();
             await _loadingWindowController.ShowLoadingWindow();
         }
 
@@ -60,5 +65,11 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             _gameStateMachine.SetState<GameplayState>();
         }
 
+        private void HideLoadingWindow()
+        {
+           
+            _loadingWindowController.HideLoadingWindow();
+            Debug.Log("Состояние главноего меню");
+        }
     }
 }

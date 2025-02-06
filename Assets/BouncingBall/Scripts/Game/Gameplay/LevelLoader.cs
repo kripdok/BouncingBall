@@ -2,6 +2,7 @@
 using BouncingBall.Scripts.Utilities.PrefabLoad;
 using Cysharp.Threading.Tasks;
 using System;
+using UniRx;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.Gameplay.Root
@@ -15,12 +16,15 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
 
 
         private Level _concreteLevel;
+        LevelLoaderMediator _levelLoaderMediator;
         private string _nameLoadingLevel;
 
-        public LevelLoader(LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy)
+        public LevelLoader(LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator)
         {
+            _levelLoaderMediator = levelLoaderMediator;
             _prefabLoadStrategy = prefabLoadStrategy;
             _levelFactory = levelFactory;
+            levelLoaderMediator.LevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
         }
 
         public void SetLevelForLoading(string id)
@@ -44,6 +48,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
             }
 
             _concreteLevel = _levelFactory.Create(prefab);
+            _levelLoaderMediator.LoadLevelAsync();
         }
     }
 }

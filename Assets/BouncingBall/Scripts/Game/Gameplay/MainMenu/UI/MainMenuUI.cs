@@ -15,6 +15,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
         private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
 
         [Inject] public LevelViewFactory LevelViewFactory;
+        [Inject] private LevelLoaderMediator _levelLoaderMediator;
         
         private void Awake()
         {
@@ -33,7 +34,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 
         private void StartLevelCommand(string levelName)
         {
-            GameInformation.EnableLevelId = levelName;
+            _levelLoaderMediator.SetLevelName(levelName);
             OnExit.Invoke();
         }
     }

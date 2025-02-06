@@ -1,12 +1,11 @@
 ﻿using UniRx;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
 {
     public class BallModel
     {
-        [JsonProperty] private int _maxHealth;
+        private int _maxHealth;
 
         public int MaxHealth => _maxHealth;
 
