@@ -4,9 +4,9 @@ using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem.Controller;
 using BouncingBall.Scripts.Utilities.PrefabLoad;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UniRx;
 using System;
+using UniRx;
+using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
@@ -53,7 +53,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         {
             var prefabGameUI = _prefabLoadStrategy.LoadPrefab<GameUI>(UIPatch);
             var gameUI = _stateUIFactory.Create(prefabGameUI, delegate { SetMainMenuState(); });
-            _attachStateUI.AttachStateUI(gameUI.gameObject);
+            _attachStateUI.AttachStateUI(gameUI);
         }
 
         private void SetMainMenuState()

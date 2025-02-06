@@ -1,6 +1,5 @@
 ﻿using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.Gameplay.MainMenu.UI;
-using BouncingBall.Scripts.Game.Gameplay.Root;
 using BouncingBall.Scripts.Game.GameRoot.Constants;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.Utilities.PrefabLoad;
@@ -57,7 +56,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         {
             var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
             var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI, delegate { SetGameplayState(); });
-            _attachStateUI.AttachStateUI(mainMenuUI.gameObject);
+            _attachStateUI.AttachStateUI(mainMenuUI);
         }
 
         private void SetGameplayState()
@@ -67,7 +66,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 
         private void HideLoadingWindow()
         {
-           
+
             _loadingWindowController.HideLoadingWindow();
             Debug.Log("Состояние главноего меню");
         }

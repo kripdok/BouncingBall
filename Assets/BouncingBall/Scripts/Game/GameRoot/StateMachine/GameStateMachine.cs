@@ -1,5 +1,4 @@
 using BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.Gameplay.Root;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem.Controller;
@@ -15,13 +14,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy,LevelLoaderMediator levelLoaderMediator,StateUIFactory stateUIFactory,GameInformation gameInformation)
+        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory, GameInformation gameInformation)
         {
             _states = new Dictionary<Type, IState>()
             {
-                [typeof(BootstrapState)] = new BootstrapState(this,sceneLoader),
+                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
                 [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI, prefabLoadStrategy, stateUIFactory, levelLoaderMediator),
-                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy,levelLoaderMediator, stateUIFactory),
+                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy, levelLoaderMediator, stateUIFactory),
             };
         }
 

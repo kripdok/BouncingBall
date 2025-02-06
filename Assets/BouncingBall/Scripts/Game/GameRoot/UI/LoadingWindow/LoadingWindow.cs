@@ -16,7 +16,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
         {
             float duration = 0.1f;
 
-            while (_loadingWindowCanvasGroup.alpha !=0)
+            while (_loadingWindowCanvasGroup.alpha != 0)
             {
                 _loadingWindowCanvasGroup.alpha -= duration;
                 await UniTask.Yield();

@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using BouncingBall.Scripts.Game.Gameplay;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.GameRoot.UI
@@ -25,7 +26,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
             await _loadingWindow.Show();
         }
 
-        public void AttachStateUI(GameObject sceneUI)
+        public void AttachStateUI(StateUI sceneUI)
         {
             ClearStateUI();
 
