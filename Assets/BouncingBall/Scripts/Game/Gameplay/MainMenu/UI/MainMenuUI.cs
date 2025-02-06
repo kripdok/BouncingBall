@@ -33,7 +33,8 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 
         private void StartLevelCommand(string levelName)
         {
-            levelLoader.LoadLevel(levelName);
+            GameInformation.EnableLevelId = levelName;
+            OnExit.Invoke();
         }
     }
 }

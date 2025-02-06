@@ -4,15 +4,16 @@ using UnityEngine.UI;
 
 namespace BouncingBall.Scripts.Game.Gameplay.Game.UI
 {
-    public class GameUI : MonoBehaviour
+    public class GameUI : StateUI
     {
         [SerializeField] private Button _BackToMenuButton;
 
         private Action _onStartPlay;
 
-        public void Init(Action OnBackToMenu)
+        public void Awake()
         {
-            _onStartPlay = OnBackToMenu;
+            _onStartPlay = OnExit;
+            GameInformation.EnableLevelId = "0";
             _BackToMenuButton.onClick.AddListener(_onStartPlay.Invoke);
         }
 

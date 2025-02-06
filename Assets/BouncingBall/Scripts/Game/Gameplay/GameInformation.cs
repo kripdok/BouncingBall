@@ -7,6 +7,8 @@ public class GameInformation
     public readonly BallModel BallModel;
     public readonly Dictionary<string, LevelModel> LevelModels;
 
+    public string EnableLevelId;
+
     public GameInformation()
     {
         BallModel = new BallModel();

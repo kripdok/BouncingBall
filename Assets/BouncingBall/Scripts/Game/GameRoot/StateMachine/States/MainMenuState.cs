@@ -22,6 +22,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly LevelLoader _levelLoader;
         private readonly StateUIFactory _stateUIFactory;
 
+
         public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoader levelLoader, StateUIFactory stateUIFactory)
         {
             _stateUIFactory = stateUIFactory;
@@ -50,8 +51,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private void CreateMainMenuUI()
         {
             var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
-            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
+            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI, delegate { SetGameplayState(); });
             _attachStateUI.AttachStateUI(mainMenuUI.gameObject);
+        }
+
+        private void SetGameplayState()
+        {
+            _gameStateMachine.SetState<GameplayState>();
         }
 
     }

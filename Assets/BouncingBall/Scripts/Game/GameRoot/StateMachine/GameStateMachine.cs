@@ -15,12 +15,12 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
         private IState _concreteState;
         private readonly Dictionary<Type, IState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy,LevelLoader levelLoader,StateUIFactory stateUIFactory)
+        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy,LevelLoader levelLoader,StateUIFactory stateUIFactory,GameInformation gameInformation)
         {
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI, prefabLoadStrategy,levelLoader, stateUIFactory),
-                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy),
+                [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy,levelLoader,gameInformation, stateUIFactory),
             };
         }
 
