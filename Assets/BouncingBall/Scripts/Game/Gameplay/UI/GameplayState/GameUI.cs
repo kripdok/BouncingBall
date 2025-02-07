@@ -13,7 +13,6 @@ namespace BouncingBall.Scripts.Game.Gameplay.Game.UI
         public void Awake()
         {
             _onStartPlay = OnExit;
-            GameInformation.EnableLevelId = "0";
             _BackToMenuButton.onClick.AddListener(_onStartPlay.Invoke);
         }
 

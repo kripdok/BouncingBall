@@ -1,6 +1,7 @@
 using Assets.BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
 using BouncingBall.Scripts.Game.Gameplay.Root;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -16,17 +17,21 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 
         [Inject] public LevelViewFactory LevelViewFactory;
         [Inject] private LevelLoaderMediator _levelLoaderMediator;
+
+        private List<LevelModel> _levelModels;
         
         private void Awake()
         {
+            _levelModels = new() { new LevelModel("1") };
+
             _levelViewModels.ObserveAdd().Subscribe(levelViewModel =>
             {
                 levelViewModel.Value.StartLevelCommand.Subscribe(levelName => StartLevelCommand(levelName)).AddTo(this);
             }).AddTo(this);
 
-            foreach (var levelModel in GameInformation.LevelModels)
+            foreach (var levelModel in _levelModels)
             {
-                var viewModel = new LevelViewModel(levelModel.Value);
+                var viewModel = new LevelViewModel(levelModel);
                 var obj = LevelViewFactory.Create(_levelViewContainer,viewModel);
                 _levelViewModels.Add(viewModel);
             }
