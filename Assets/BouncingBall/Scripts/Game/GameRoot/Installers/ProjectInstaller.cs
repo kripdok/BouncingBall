@@ -1,4 +1,5 @@
 using Assets.BouncingBall.Scripts.Game.Gameplay;
+using BouncingBall.Scripts.DataSystem;
 using BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine;
@@ -24,6 +25,8 @@ namespace BouncingBall.Scripts.Game.GameRoot
             Container.BindInterfacesTo<ResourcesPrefabLoadStrategy>().AsSingle();
             Container.Bind<GameStateMachine>().AsCached();
             Container.Bind<LevelLoaderMediator>().AsSingle();
+            Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
+            Container.Bind<GameDataManager>().AsCached();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
         }
 

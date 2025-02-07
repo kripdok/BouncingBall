@@ -1,22 +1,23 @@
-﻿using UniRx;
+﻿using Newtonsoft.Json;
+using UniRx;
 using UnityEngine;
 
 namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
 {
     public class BallModel
     {
-        private int _maxHealth;
+        [JsonProperty]private int _maxHealth;
 
-        public int MaxHealth => _maxHealth;
+        [JsonIgnore]public int MaxHealth => _maxHealth;
 
-        public ReadOnlyReactiveProperty<int> ReadConcreteHealth;
-        public ReadOnlyReactiveProperty<Vector3> ReadPosition;
-        public ReadOnlyReactiveProperty<Vector3> ReadDirection;
+        [JsonIgnore] public ReadOnlyReactiveProperty<int> ReadConcreteHealth;
+        [JsonIgnore] public ReadOnlyReactiveProperty<Vector3> ReadPosition;
+        [JsonIgnore] public ReadOnlyReactiveProperty<Vector3> ReadDirection;
 
 
-        public ReactiveProperty<int> ConcreteHealth;
-        public ReactiveProperty<Vector3> Position = new();
-        public ReactiveProperty<Vector3> Direction = new();
+        [JsonIgnore] public ReactiveProperty<int> ConcreteHealth;
+        [JsonIgnore] public ReactiveProperty<Vector3> Position = new();
+        [JsonIgnore] public ReactiveProperty<Vector3> Direction = new();
 
         public BallModel()
         {
