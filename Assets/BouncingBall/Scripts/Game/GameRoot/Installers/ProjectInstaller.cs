@@ -1,7 +1,5 @@
-using Assets.BouncingBall.Scripts.Game.Gameplay;
 using BouncingBall.Scripts.DataSystem;
 using BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
 using BouncingBall.Scripts.Game.GameRoot.StateMachine;
 using BouncingBall.Scripts.Game.GameRoot.UI;
 using BouncingBall.Scripts.InputSystem;
@@ -49,7 +47,7 @@ namespace BouncingBall.Scripts.Game.GameRoot
         private void BindFactory()
         {
             Container.BindFactory<UnityEngine.Object, Action, StateUI, StateUIFactory>().FromFactory<PrefabFactory<Action, StateUI>>();
-            Container.BindFactory<Transform, LevelViewModel, LevelView, LevelViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached();
+            //Container.BindFactory<Transform, LevelViewModel, LevelView, LevelViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached(); TODO - должна находится в MenuUI
         }
     }
 }

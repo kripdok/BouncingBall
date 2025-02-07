@@ -1,10 +1,4 @@
-using Assets.BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
-using BouncingBall.Scripts.Game.Gameplay.Root;
-using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 {
@@ -13,34 +7,34 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 
         [SerializeField] private Transform _levelViewContainer;
 
-        private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
+        //private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
 
-        [Inject] public LevelViewFactory LevelViewFactory;
-        [Inject] private LevelLoaderMediator _levelLoaderMediator;
+        //[Inject] public LevelViewFactory LevelViewFactory;
+        //[Inject] private LevelLoaderMediator _levelLoaderMediator;
 
-        private List<LevelModel> _levelModels;
-        
-        private void Awake()
-        {
-            _levelModels = new() { new LevelModel("1") };
+        //private List<LevelModel> _levelModels;
 
-            _levelViewModels.ObserveAdd().Subscribe(levelViewModel =>
-            {
-                levelViewModel.Value.StartLevelCommand.Subscribe(levelName => StartLevelCommand(levelName)).AddTo(this);
-            }).AddTo(this);
+        //private void Awake()
+        //{
+        //    _levelModels = new() { new LevelModel("1") };
 
-            foreach (var levelModel in _levelModels)
-            {
-                var viewModel = new LevelViewModel(levelModel);
-                var obj = LevelViewFactory.Create(_levelViewContainer,viewModel);
-                _levelViewModels.Add(viewModel);
-            }
-        }
+        //    _levelViewModels.ObserveAdd().Subscribe(levelViewModel =>
+        //    {
+        //        levelViewModel.Value.StartLevelCommand.Subscribe(levelName => StartLevelCommand(levelName)).AddTo(this);
+        //    }).AddTo(this);
 
-        private void StartLevelCommand(string levelName)
-        {
-            _levelLoaderMediator.SetLevelName(levelName);
-            OnExit.Invoke();
-        }
+        //    foreach (var levelModel in _levelModels)
+        //    {
+        //        var viewModel = new LevelViewModel(levelModel);
+        //        var obj = LevelViewFactory.Create(_levelViewContainer,viewModel);
+        //        _levelViewModels.Add(viewModel);
+        //    }
+        //}
+
+        //private void StartLevelCommand(string levelName)
+        //{
+        //    _levelLoaderMediator.SetLevelName(levelName);
+        //    OnExit.Invoke();
+        //}
     }
 }
