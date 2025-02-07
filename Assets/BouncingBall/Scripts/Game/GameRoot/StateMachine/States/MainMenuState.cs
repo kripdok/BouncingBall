@@ -19,14 +19,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
-        private readonly SceneLoader _sceneLoader;
         private readonly LevelLoaderMediator _levelLoaderMediator;
         private readonly StateUIFactory _stateUIFactory;
 
         private IDisposable dispos;
 
 
-        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator)
+        public MainMenuState(GameStateMachine gameStateMachine, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator)
         {
             _stateUIFactory = stateUIFactory;
             _levelLoaderMediator = levelLoaderMediator;
@@ -34,13 +33,11 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
             _attachStateUI = attachStateUI;
-            _sceneLoader = new SceneLoader();
         }
 
         public async void Enter()
         {
             Debug.Log("Начал входить в состояние главного меню");
-            await _sceneLoader.LoadScene(SceneNames.Gameplay);
             CreateMainMenuUI();
             _levelLoaderMediator.SetLevelName(LevelId);
             dispos = _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow());

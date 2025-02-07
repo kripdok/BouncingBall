@@ -18,17 +18,13 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         public async void Enter()
         {
             Debug.Log("BootstrapState");
-            await _sceneLoader.LoadScene(SceneNames.PreLoader, EnterLoadLevel);
+            await _sceneLoader.LoadScene(SceneNames.PreLoader);
+            await _sceneLoader.LoadScene(SceneNames.Gameplay);
         }
 
         public UniTask Exit()
         {
             return UniTask.CompletedTask;
-        }
-
-        private void EnterLoadLevel()
-        {
-            _gameStateMachine.SetState<MainMenuState>();
         }
     }
 }

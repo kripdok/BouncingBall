@@ -24,7 +24,6 @@ namespace BouncingBall.Scripts.Game.GameRoot
             Container.Bind<GameStateMachine>().AsCached();
             Container.Bind<LevelLoaderMediator>().AsSingle();
             Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
-            Container.Bind<GameDataManager>().AsCached();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
         }
 

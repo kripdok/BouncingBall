@@ -19,7 +19,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
-                [typeof(MainMenuState)] = new MainMenuState(this, sceneLoader, loadingWindowController, attachStateUI, prefabLoadStrategy, stateUIFactory, levelLoaderMediator),
+                [typeof(MainMenuState)] = new MainMenuState(this, loadingWindowController, attachStateUI, prefabLoadStrategy, stateUIFactory, levelLoaderMediator),
                 [typeof(GameplayState)] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy, levelLoaderMediator, stateUIFactory),
             };
         }

@@ -15,6 +15,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
         public async UniTask Hide()
         {
             float duration = 0.1f;
+            await UniTask.WaitForSeconds(1f);
 
             while (_loadingWindowCanvasGroup.alpha != 0)
             {
@@ -22,12 +23,12 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
                 await UniTask.Yield();
             }
 
-            await UniTask.WaitForSeconds(1f);
         }
 
         public async UniTask Show()
         {
             float duration = 0.1f;
+
 
             while (_loadingWindowCanvasGroup.alpha != 1)
             {
@@ -35,7 +36,6 @@ namespace BouncingBall.Scripts.Game.GameRoot.UI
                 await UniTask.Yield();
             }
 
-            await UniTask.WaitForSeconds(1f);
         }
     }
 }

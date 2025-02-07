@@ -20,9 +20,9 @@ namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
         private BallModel _model;
 
         [Inject]
-        public void Constructor(BallModel model)
+        public void Constructor(GameDataManager GameDataManager)
         {
-            _model = model;
+            _model = GameDataManager.GameData.BallModel;
         }
 
         public void SetPointingDirection(IPointingDirection pointingDirection)

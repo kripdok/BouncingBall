@@ -10,9 +10,9 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
         {
             BindFactory();
             Container.Bind<Ball>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball").AsCached();
-            Container.Bind<BallModel>().AsCached(); //TODO -должен загружаться из вне
             Container.Bind<LevelLoader>().AsCached().NonLazy();
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
+            Container.Bind<GameDataManager>().AsCached();
         }
 
         private void BindFactory()

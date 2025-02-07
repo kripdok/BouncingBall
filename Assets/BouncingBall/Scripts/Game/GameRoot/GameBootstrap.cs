@@ -6,15 +6,13 @@ namespace BouncingBall.Scripts.Game.GameRoot
 {
     public class GameBootstrap
     {
-        public GameBootstrap(GameStateMachine gameStateMachine , GameDataManager gameDataManager)
+        public GameBootstrap(GameStateMachine gameStateMachine)
         {
-            InitStartParams(gameStateMachine, gameDataManager);
+            InitStartParams(gameStateMachine);
         }
 
-        private async void InitStartParams(GameStateMachine gameStateMachine, GameDataManager gameDataManager )
+        private async void InitStartParams(GameStateMachine gameStateMachine )
         {
-            await gameDataManager.LoadGameData();
-            Debug.Log(gameDataManager.GameData);
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.multiTouchEnabled = false;
