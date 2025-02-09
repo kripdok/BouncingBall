@@ -6,14 +6,16 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 {
     public class BootstrapState : IState
     {
-        private readonly GameStateMachine _gameStateMachine;
+        private readonly IStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
 
-        public BootstrapState(GameStateMachine gameStateMachine, SceneLoader sceneLoader)
+        public BootstrapState(IStateMachine gameStateMachine, SceneLoader sceneLoader)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
         }
+
+        public string Id => GameStateNames.Bootstrap;
 
         public async void Enter()
         {

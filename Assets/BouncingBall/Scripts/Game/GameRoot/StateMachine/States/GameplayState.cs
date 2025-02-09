@@ -15,7 +15,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
         private const string UIPatch = "Prefabs/UI/Containers/GameUI";
 
         private readonly IInputInteractivityChanger _manageInputState;
-        private readonly GameStateMachine _gameStateMachine;
+        private readonly IStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
@@ -24,7 +24,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 
         private IDisposable dispos;
 
-        public GameplayState(GameStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
+        public GameplayState(IStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
         {
             _attachStateUI = attachStateUI;
             _manageInputState = manageInputState;
@@ -35,6 +35,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
             _stateUIFactory = stateUIFactory;
         }
 
+        public string Id => GameStateNames.Gameplay;
         public async void Enter()
         {
             Debug.Log("Начал входить в состояние игры");
@@ -58,7 +59,7 @@ namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
 
         private void SetMainMenuState()
         {
-            _gameStateMachine.SetState<MainMenuState>();
+            _gameStateMachine.SetState(GameStateNames.MainMenu);
         }
 
         private void HideLoadingWindow()

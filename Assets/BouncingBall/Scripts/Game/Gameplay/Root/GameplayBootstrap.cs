@@ -5,15 +5,15 @@ namespace BouncingBall.Scripts.Game.Gameplay.Root
 {
     public class GameplayBootstrap
     {
-        public GameplayBootstrap(GameDataManager gameDataManager , GameStateMachine gameStateMachine)
+        public GameplayBootstrap(GameDataManager gameDataManager , IStateMachine gameStateMachine)
         {
             LoadData(gameDataManager, gameStateMachine);
         }
 
-        private async void LoadData(GameDataManager gameDataManager, GameStateMachine gameStateMachine)
+        private async void LoadData(GameDataManager gameDataManager, IStateMachine gameStateMachine)
         {
             await gameDataManager.LoadGameData();
-            gameStateMachine.SetState<MainMenuState>();
+            gameStateMachine.SetState(GameStateNames.MainMenu);
         }
     }
 }
