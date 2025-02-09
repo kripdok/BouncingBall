@@ -12,6 +12,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
 
         [SerializeField] private Transform _levelViewContainer;
 
+        private GameDataManager data;
         //private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
 
         //[Inject] private LevelViewFactory LevelViewFactory;
