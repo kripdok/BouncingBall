@@ -1,6 +1,9 @@
-public static class GameStateNames
+namespace BouncingBall.Game.FinalStateMachine.States
 {
-    public const string Gameplay = "Gameplay";
-    public const string MainMenu = "MainMenu";
-    public const string Bootstrap = "Bootstrap";
+    public static class GameStateNames
+    {
+        public const string Gameplay = "Gameplay";
+        public const string MainMenu = "MainMenu";
+        public const string Bootstrap = "Bootstrap";
+    }
 }

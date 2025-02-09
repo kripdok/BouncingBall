@@ -1,13 +1,15 @@
-using BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
-using BouncingBall.Scripts.Game.GameRoot.UI;
-using BouncingBall.Scripts.InputSystem.Controller;
-using BouncingBall.Scripts.Utilities.PrefabLoad;
+using BouncingBall.FinalStateMachine;
+using BouncingBall.Game.FinalStateMachine.States;
+using BouncingBall.InputSystem.Controller;
+using BouncingBall.PrefabLoader;
+using BouncingBall.UI;
+using BouncingBall.UI.Root;
+using BouncingBall.Utilities;
 using System;
 using System.Collections.Generic;
 
 
-namespace BouncingBall.Scripts.Game.GameRoot.StateMachine
+namespace BouncingBall.Game.FinalStateMachine
 {
     public class GameStateMachine : IStateMachine
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.UI
 {
     public class StateUIFactory : PlaceholderFactory<UnityEngine.Object, Action, StateUI>
     {

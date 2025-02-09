@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.UI.MVVM.Level
 {
     public class LevelModel
     {
-        [JsonProperty]public readonly string LevelName;
+        [JsonProperty] public readonly string LevelName;
 
         public LevelModel(string levelName)
         {

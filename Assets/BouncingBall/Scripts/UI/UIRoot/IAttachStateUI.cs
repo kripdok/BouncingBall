@@ -1,6 +1,4 @@
-﻿using BouncingBall.Scripts.Game.Gameplay;
-
-namespace BouncingBall.Scripts.Game.GameRoot.UI
+﻿namespace BouncingBall.UI.Root
 {
     public interface IAttachStateUI
     {

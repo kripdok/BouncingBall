@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.UI
 {
     public abstract class StateUI : MonoBehaviour
     {

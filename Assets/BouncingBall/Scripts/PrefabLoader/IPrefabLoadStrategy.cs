@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Utilities.PrefabLoad
+namespace BouncingBall.PrefabLoader
 {
     public interface IPrefabLoadStrategy
     {

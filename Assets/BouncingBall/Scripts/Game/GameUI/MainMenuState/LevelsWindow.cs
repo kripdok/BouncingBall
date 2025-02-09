@@ -1,12 +1,10 @@
-﻿using Assets.BouncingBall.Scripts.Game.Gameplay;
-using Zenject;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace BouncingBall.Scripts.UI.MainMenuState
+namespace BouncingBall.Game.UI.MainMenuState
 {
-    public class LevelsWindow: MonoBehaviour
+    public class LevelsWindow : MonoBehaviour
     {
 
-      
+
     }
 }

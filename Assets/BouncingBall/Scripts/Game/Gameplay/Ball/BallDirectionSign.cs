@@ -1,9 +1,9 @@
-﻿using BouncingBall.Scripts.InputSystem.Controller;
+﻿using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
+namespace BouncingBall.Game.Gameplay.BallObject
 {
     public class BallDirectionSign : MonoBehaviour
     {

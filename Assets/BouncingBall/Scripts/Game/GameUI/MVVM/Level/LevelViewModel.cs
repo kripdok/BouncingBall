@@ -1,7 +1,6 @@
 ﻿using UniRx;
-using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.UI.MVVM.Level
 {
     public class LevelViewModel
     {

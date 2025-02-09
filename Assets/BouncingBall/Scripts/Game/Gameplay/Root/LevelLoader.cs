@@ -1,11 +1,12 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
-using BouncingBall.Scripts.Utilities.PrefabLoad;
+﻿using BouncingBall.Game.Gameplay.LevelObject;
+using BouncingBall.PrefabLoader;
+using BouncingBall.Utilities;
 using Cysharp.Threading.Tasks;
 using System;
 using UniRx;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.Gameplay.Root
+namespace BouncingBall.Game.Gameplay.Root
 {
     public class LevelLoader
     {

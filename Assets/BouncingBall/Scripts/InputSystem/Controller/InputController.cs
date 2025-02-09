@@ -2,9 +2,9 @@
 using UniRx;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.InputSystem.Controller
+namespace BouncingBall.InputSystem.Controller
 {
-    public class InputController: IPointingDirection , IInputInteractivityChanger
+    public class InputController : IPointingDirection, IInputInteractivityChanger
     {
         public ReadOnlyReactiveProperty<Vector3> PointerLocation { get; private set; }
         public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }

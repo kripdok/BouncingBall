@@ -1,8 +1,8 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
+﻿using BouncingBall.Game.Gameplay.BallObject;
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.Gameplay.LevelObject
 {
     public class Level : MonoBehaviour
     {

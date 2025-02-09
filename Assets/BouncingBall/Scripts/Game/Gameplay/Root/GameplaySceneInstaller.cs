@@ -1,8 +1,9 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.BallSystem;
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
+﻿using BouncingBall.Game.Data;
+using BouncingBall.Game.Gameplay.BallObject;
+using BouncingBall.Game.Gameplay.LevelObject;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.Root
+namespace BouncingBall.Game.Gameplay.Root
 {
     public class GameplaySceneInstaller : MonoInstaller
     {

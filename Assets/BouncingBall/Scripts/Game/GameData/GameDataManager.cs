@@ -1,18 +1,22 @@
+using BouncingBall.DataLoader;
 using Cysharp.Threading.Tasks;
 
-public class GameDataManager
+namespace BouncingBall.Game.Data
 {
-    public GameData GameData { get; private set; }
-
-    private IDataLoader _dataLoader;
-
-    public GameDataManager(IDataLoader dataLoader)
+    public class GameDataManager
     {
-        _dataLoader = dataLoader;
-    }
+        public GameData GameData { get; private set; }
 
-    public async UniTask LoadGameData()
-    {
-        GameData = await _dataLoader.LoadDataAsync<GameData>("Assets/Resources/Data.json");
+        private IDataLoader _dataLoader;
+
+        public GameDataManager(IDataLoader dataLoader)
+        {
+            _dataLoader = dataLoader;
+        }
+
+        public async UniTask LoadGameData()
+        {
+            GameData = await _dataLoader.LoadDataAsync<GameData>("Assets/Resources/Data.json");
+        }
     }
 }

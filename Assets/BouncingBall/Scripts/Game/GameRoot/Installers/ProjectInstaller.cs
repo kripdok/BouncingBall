@@ -1,16 +1,17 @@
-using BouncingBall.Scripts.DataSystem;
-using BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.GameRoot.StateMachine;
-using BouncingBall.Scripts.Game.GameRoot.UI;
-using BouncingBall.Scripts.InputSystem;
-using BouncingBall.Scripts.InputSystem.Controller;
-using BouncingBall.Scripts.Utilities.PrefabLoad;
+using BouncingBall.DataLoader;
+using BouncingBall.Game.FinalStateMachine;
+using BouncingBall.InputSystem;
+using BouncingBall.InputSystem.Controller;
+using BouncingBall.PrefabLoader;
+using BouncingBall.UI;
+using BouncingBall.UI.Root;
+using BouncingBall.Utilities;
 using System;
 using UnityEngine;
 using Zenject;
 
 
-namespace BouncingBall.Scripts.Game.GameRoot
+namespace BouncingBall.Game.GameRoot.Installers
 {
     public class ProjectInstaller : MonoInstaller
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.UI.MVVM.Level
 {
     public class LevelView : MonoBehaviour
     {
@@ -12,7 +12,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
         [SerializeField] private TMP_Text _text;
 
         [Inject]
-        private void Init(LevelViewModel viewModel,Transform transform)
+        private void Init(LevelViewModel viewModel, Transform transform)
         {
             gameObject.transform.SetParent(transform);
             _text.text = viewModel.LevelName;

@@ -1,11 +1,12 @@
-﻿using BouncingBall.Scripts.Game.GameRoot.StateMachine;
-using BouncingBall.Scripts.Game.GameRoot.StateMachine.States;
+﻿using BouncingBall.FinalStateMachine;
+using BouncingBall.Game.Data;
+using BouncingBall.Game.FinalStateMachine.States;
 
-namespace BouncingBall.Scripts.Game.Gameplay.Root
+namespace BouncingBall.Game.Gameplay.Root
 {
     public class GameplayBootstrap
     {
-        public GameplayBootstrap(GameDataManager gameDataManager , IStateMachine gameStateMachine)
+        public GameplayBootstrap(GameDataManager gameDataManager, IStateMachine gameStateMachine)
         {
             LoadData(gameDataManager, gameStateMachine);
         }

@@ -1,8 +1,9 @@
+using BouncingBall.UI;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BouncingBall.Scripts.Game.Gameplay.Game.UI
+namespace BouncingBall.Game.UI.GameplayState
 {
     public class GameUI : StateUI
     {

@@ -1,11 +1,13 @@
-﻿using BouncingBall.Scripts.InputSystem.Controller;
+﻿using BouncingBall.Game.Data;
+using BouncingBall.Game.Data.ObjectData;
+using BouncingBall.InputSystem.Controller;
 using Cysharp.Threading.Tasks;
 using System;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
+namespace BouncingBall.Game.Gameplay.BallObject
 {
     public class Ball : MonoBehaviour
     {
@@ -17,7 +19,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
 
         private IPointingDirection _pointingDirection;
         private IDisposable _subscriptions;
-        private BallModel _model;
+        private BallData _model;
 
         [Inject]
         public void Constructor(GameDataManager GameDataManager)

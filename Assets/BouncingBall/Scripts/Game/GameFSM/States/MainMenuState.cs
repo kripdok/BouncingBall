@@ -1,14 +1,15 @@
-﻿using BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.Gameplay.MainMenu.UI;
-using BouncingBall.Scripts.Game.GameRoot.Constants;
-using BouncingBall.Scripts.Game.GameRoot.UI;
-using BouncingBall.Scripts.Utilities.PrefabLoad;
+﻿using BouncingBall.FinalStateMachine;
+using BouncingBall.Game.UI.MainMenuState;
+using BouncingBall.PrefabLoader;
+using BouncingBall.UI;
+using BouncingBall.UI.Root;
+using BouncingBall.Utilities;
 using Cysharp.Threading.Tasks;
 using System;
 using UniRx;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
+namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class MainMenuState : IState
     {

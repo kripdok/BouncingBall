@@ -2,13 +2,13 @@
 using UniRx;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
+namespace BouncingBall.Game.Data.ObjectData
 {
-    public class BallModel
+    public class BallData
     {
-        [JsonProperty]private int _maxHealth;
+        [JsonProperty] private int _maxHealth;
 
-        [JsonIgnore]public int MaxHealth => _maxHealth;
+        [JsonIgnore] public int MaxHealth => _maxHealth;
 
         [JsonIgnore] public ReadOnlyReactiveProperty<int> ReadConcreteHealth;
         [JsonIgnore] public ReadOnlyReactiveProperty<Vector3> ReadPosition;
@@ -19,7 +19,7 @@ namespace BouncingBall.Scripts.Game.Gameplay.BallSystem
         [JsonIgnore] public ReactiveProperty<Vector3> Position = new();
         [JsonIgnore] public ReactiveProperty<Vector3> Direction = new();
 
-        public BallModel()
+        public BallData()
         {
             _maxHealth = 3;
             ConcreteHealth = new ReactiveProperty<int>(MaxHealth);

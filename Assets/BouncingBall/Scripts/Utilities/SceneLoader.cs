@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
-namespace BouncingBall.Scripts.Game.GameRoot
+namespace BouncingBall.Utilities
 {
     public class SceneLoader
     {

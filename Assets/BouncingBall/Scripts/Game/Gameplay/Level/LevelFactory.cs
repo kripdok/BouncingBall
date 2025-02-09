@@ -1,9 +1,9 @@
-﻿using Zenject;
-using UnityEngine;
+﻿using UnityEngine;
+using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.Gameplay.LevelObject
 {
-    public class LevelFactory : PlaceholderFactory<Object,Level>
+    public class LevelFactory : PlaceholderFactory<Object, Level>
     {
     }
 }

@@ -1,8 +1,10 @@
-﻿using BouncingBall.Scripts.Game.GameRoot.Constants;
+﻿using BouncingBall.FinalStateMachine;
+using BouncingBall.Game.GameRoot.Constants;
+using BouncingBall.Utilities;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.GameRoot.StateMachine.States
+namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class BootstrapState : IState
     {

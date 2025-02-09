@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BouncingBall.Scripts.Game.Gameplay.LevelSystem
+namespace BouncingBall.Game.Data.ObjectData
 {
     public class LevelData
     {

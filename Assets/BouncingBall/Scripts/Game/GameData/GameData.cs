@@ -1,22 +1,24 @@
-using BouncingBall.Scripts.DataSystem;
-using BouncingBall.Scripts.Game.Gameplay.BallSystem;
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
+using BouncingBall.DataLoader;
+using BouncingBall.Game.Data.ObjectData;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-public class GameData : IDownloadable
+namespace BouncingBall.Game.Data
 {
-    [JsonProperty] public BallModel BallModel { get; private set; }
-    [JsonProperty] private List<LevelData> _levelData;
-
-    public IReadOnlyList<LevelData> LevelData => _levelData;
-
-    public void Load(string jsonData)
+    public class GameData : IDownloadable
     {
-        if (jsonData == string.Empty) return;
+        [JsonProperty] public BallData BallModel { get; private set; }
+        [JsonProperty] private List<LevelData> _levelData;
 
-        var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
-        BallModel = loadedData.BallModel;
-        _levelData = loadedData._levelData;
+        public IReadOnlyList<LevelData> LevelData => _levelData;
+
+        public void Load(string jsonData)
+        {
+            if (jsonData == string.Empty) return;
+
+            var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
+            BallModel = loadedData.BallModel;
+            _levelData = loadedData._levelData;
+        }
     }
 }

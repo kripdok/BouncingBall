@@ -1,4 +1,4 @@
-﻿namespace BouncingBall.Scripts.DataSystem
+﻿namespace BouncingBall.DataLoader
 {
     public interface IDownloadable
     {

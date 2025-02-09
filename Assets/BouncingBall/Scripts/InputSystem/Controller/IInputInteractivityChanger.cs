@@ -1,4 +1,4 @@
-﻿namespace BouncingBall.Scripts.InputSystem.Controller
+﻿namespace BouncingBall.InputSystem.Controller
 {
     public interface IInputInteractivityChanger
     {

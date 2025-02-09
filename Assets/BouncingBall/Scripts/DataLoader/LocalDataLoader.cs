@@ -4,11 +4,11 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.DataSystem
+namespace BouncingBall.DataLoader
 {
     public class LocalDataLoader : IDataLoader
     {
-        public async UniTask<T> LoadDataAsync<T>(string path) where T : IDownloadable , new()
+        public async UniTask<T> LoadDataAsync<T>(string path) where T : IDownloadable, new()
         {
             TaskCompletionSource<T> task = new TaskCompletionSource<T>();
 

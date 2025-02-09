@@ -1,4 +1,4 @@
-﻿namespace BouncingBall.Scripts.Game.GameRoot.Constants
+﻿namespace BouncingBall.Game.GameRoot.Constants
 {
     public static class SceneNames
     {

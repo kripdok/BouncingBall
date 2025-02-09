@@ -1,11 +1,8 @@
-using Assets.BouncingBall.Scripts.Game.Gameplay;
-using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
-using System.Collections.Generic;
-using UniRx;
+using BouncingBall.Game.Data;
+using BouncingBall.UI;
 using UnityEngine;
-using Zenject;
 
-namespace BouncingBall.Scripts.Game.Gameplay.MainMenu.UI
+namespace BouncingBall.Game.UI.MainMenuState
 {
     public class MainMenuUI : StateUI
     {

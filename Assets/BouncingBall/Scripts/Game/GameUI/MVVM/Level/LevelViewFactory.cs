@@ -1,10 +1,9 @@
-﻿using BouncingBall.Scripts.Game.Gameplay.LevelSystem;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.Gameplay
+namespace BouncingBall.Game.UI.MVVM.Level
 {
-    public class LevelViewFactory : PlaceholderFactory<Transform,LevelViewModel, LevelView>
+    public class LevelViewFactory : PlaceholderFactory<Transform, LevelViewModel, LevelView>
     {
     }
 }

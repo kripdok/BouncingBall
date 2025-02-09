@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace BouncingBall.Scripts.Game.GameRoot.UI
+namespace BouncingBall.UI.Loading
 {
     public class LoadingWindow : MonoBehaviour
     {
