@@ -7,15 +7,16 @@ using System.Collections.Generic;
 public class GameData : IDownloadable
 {
     [JsonProperty] public BallModel BallModel { get; private set; }
-    [JsonProperty] private List<LevelModel> _levelModels;
+    [JsonProperty] private List<LevelData> _levelData;
 
-    public IReadOnlyList<LevelModel> LevelModels => _levelModels;
+    public IReadOnlyList<LevelData> LevelData => _levelData;
 
     public void Load(string jsonData)
     {
         if (jsonData == string.Empty) return;
+
         var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
         BallModel = loadedData.BallModel;
-        _levelModels = loadedData._levelModels;
+        _levelData = loadedData._levelData;
     }
 }

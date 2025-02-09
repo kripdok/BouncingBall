@@ -2,7 +2,7 @@
   "BallModel": {
     "_maxHealth": 3
   },
-  "_levelModels": [
+  "_levelData": [
     {
       "LevelName": "Level 1"
     },
