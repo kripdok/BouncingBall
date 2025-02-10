@@ -49,7 +49,7 @@ namespace BouncingBall.Game.Gameplay.Root
             }
 
             _concreteLevel = _levelFactory.Create(prefab);
-            _levelLoaderMediator.LoadLevelAsync();
+            _levelLoaderMediator.NotifyLevelIsLoaded();
         }
     }
 }

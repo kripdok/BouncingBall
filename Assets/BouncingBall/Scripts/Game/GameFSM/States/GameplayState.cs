@@ -6,7 +6,6 @@ using BouncingBall.UI;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
 using Cysharp.Threading.Tasks;
-using System;
 using UniRx;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private readonly StateUIFactory _stateUIFactory;
         private readonly LevelLoaderMediator _levelLoaderMediator;
 
-        private IDisposable dispos;
+        private CompositeDisposable _disposables;
 
         public GameplayState(IStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
         {
@@ -40,14 +39,15 @@ namespace BouncingBall.Game.FinalStateMachine.States
         public string Id => GameStateNames.Gameplay;
         public async void Enter()
         {
+            _disposables = new();
             Debug.Log("Начал входить в состояние игры");
             CreateGameUI();
-            dispos = _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow());
+            _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
         }
 
         public async UniTask Exit()
         {
-            dispos.Dispose();
+            _disposables.Dispose();
             _manageInputState.DisableInput();
             await _loadingWindowController.ShowLoadingWindow();
         }
@@ -55,7 +55,8 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private void CreateGameUI()
         {
             var prefabGameUI = _prefabLoadStrategy.LoadPrefab<GameUI>(UIPatch);
-            var gameUI = _stateUIFactory.Create(prefabGameUI, delegate { SetMainMenuState(); });
+            var gameUI = _stateUIFactory.Create(prefabGameUI);
+            gameUI.OnExit.Subscribe(_ => SetMainMenuState()).AddTo(_disposables);
             _attachStateUI.AttachStateUI(gameUI);
         }
 

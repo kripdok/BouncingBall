@@ -5,7 +5,6 @@ using BouncingBall.UI;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
 using Cysharp.Threading.Tasks;
-using System;
 using UniRx;
 using UnityEngine;
 
@@ -23,8 +22,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private readonly LevelLoaderMediator _levelLoaderMediator;
         private readonly StateUIFactory _stateUIFactory;
 
-        private IDisposable dispos;
-
+        private CompositeDisposable _disposables;
 
         public MainMenuState(IStateMachine gameStateMachine, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator)
         {
@@ -40,22 +38,24 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         public async void Enter()
         {
+            _disposables = new();
             Debug.Log("Начал входить в состояние главного меню");
             CreateMainMenuUI();
+            _levelLoaderMediator.OnLevelLoaded.Where(flag => flag ==true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _levelLoaderMediator.SetLevelName(LevelId);
-            dispos = _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow());
         }
 
         public async UniTask Exit()
         {
-            dispos.Dispose();
+            _disposables.Dispose();
             await _loadingWindowController.ShowLoadingWindow();
         }
 
         private void CreateMainMenuUI()
         {
             var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
-            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI, delegate { SetGameplayState(); });
+            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
+            mainMenuUI.OnExit.Subscribe(_ => SetGameplayState()).AddTo(_disposables);
             _attachStateUI.AttachStateUI(mainMenuUI);
         }
 
@@ -66,7 +66,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void HideLoadingWindow()
         {
-
             _loadingWindowController.HideLoadingWindow();
             Debug.Log("Состояние главноего меню");
         }

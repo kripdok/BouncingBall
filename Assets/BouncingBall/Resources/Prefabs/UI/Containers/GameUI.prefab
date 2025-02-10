@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c467616cb34798e40a0b1e8b000ef1be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _BackToMenuButton: {fileID: 7989048709305150795}
+  _backToMenuButton: {fileID: 7989048709305150795}
 --- !u!1001 &1036823814491990694
 PrefabInstance:
   m_ObjectHideFlags: 0

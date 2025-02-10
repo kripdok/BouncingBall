@@ -1,13 +1,12 @@
-﻿using System;
-using Zenject;
+﻿using Zenject;
 
 namespace BouncingBall.UI
 {
-    public class StateUIFactory : PlaceholderFactory<UnityEngine.Object, Action, StateUI>
+    public class StateUIFactory : PlaceholderFactory<UnityEngine.Object, StateUI>
     {
-        public override StateUI Create(UnityEngine.Object param, Action action)
+        public override StateUI Create(UnityEngine.Object param)
         {
-            return base.Create(param, action);
+            return base.Create(param);
         }
     }
 }

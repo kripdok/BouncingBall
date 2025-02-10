@@ -1,4 +1,5 @@
 using BouncingBall.DataLoader;
+using BouncingBall.Game.Data;
 using BouncingBall.Game.FinalStateMachine;
 using BouncingBall.InputSystem;
 using BouncingBall.InputSystem.Controller;
@@ -6,7 +7,6 @@ using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
-using System;
 using UnityEngine;
 using Zenject;
 
@@ -26,6 +26,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             Container.Bind<LevelLoaderMediator>().AsSingle();
             Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
+            Container.Bind<GameDataManager>().AsSingle();
         }
 
         private void BindLoadingWindow()
@@ -46,8 +47,7 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindFactory()
         {
-            Container.BindFactory<UnityEngine.Object, Action, StateUI, StateUIFactory>().FromFactory<PrefabFactory<Action, StateUI>>();
-            // Container.BindFactory<Transform, LevelViewModel, LevelView, LevelViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached();
+            Container.BindFactory<UnityEngine.Object, StateUI, StateUIFactory>().FromFactory<PrefabFactory<StateUI>>();
         }
     }
 }
