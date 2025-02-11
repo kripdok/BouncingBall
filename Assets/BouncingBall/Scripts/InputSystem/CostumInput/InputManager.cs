@@ -1,10 +1,20 @@
+using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 
-public class InputManager : IPointingDirection, IInputInteractivityChanger
+public class InputManager : IPointingDirection, IInputInteractivityChanger, ITestInputManager
 {
-    private IInputDevice _inputDivace;
+    private KeyboardInputDevice _testInputDevice;
+
+    public ReadOnlyReactiveProperty<float> RotationAmount { get; private set; }
+    public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
+    public ReadOnlyReactiveProperty<bool> IsDirectionSet2 { get; private set; }
+
+
+
+
+
 
     public ReadOnlyReactiveProperty<Vector2> PointerLocation { get; private set; }
     public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
@@ -20,10 +30,14 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger
 
     public InputManager()
     {
-        _inputDivace = new KeyboardInputDevice();
+        _testInputDevice = new KeyboardInputDevice();
 
         IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_isDirectionSet);
         PointerLocation = new ReadOnlyReactiveProperty<Vector2>(_pointerLocation);
+
+        RotationAmount = new(_testInputDevice.RotationAmount);
+        ZScale = new(_testInputDevice.ZScale);
+        IsDirectionSet2 = new(_testInputDevice.IsDirectionSet);
     }
 
     public void EnableInput()
@@ -39,8 +53,11 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger
 
     private void Update()
     {
-        _pointerPosition.OnNext(_inputDivace.GetMovementInput());
-       // _pointerLocation.SetValueAndForceNotify(_inputDivace.GetMovementInput());
-        _isDirectionSet.SetValueAndForceNotify(_inputDivace.GetActionInput());
+        // _pointerPosition.OnNext(_testInputDevice.GetMovementInput());
+        //// _pointerLocation.SetValueAndForceNotify(_inputDivace.GetMovementInput());
+        // _isDirectionSet.SetValueAndForceNotify(_testInputDevice.GetActionInput());
+
+        _testInputDevice.SetRotationAndScale();
+        _testInputDevice.TryDisableIsDirectionSet();
     }
 }

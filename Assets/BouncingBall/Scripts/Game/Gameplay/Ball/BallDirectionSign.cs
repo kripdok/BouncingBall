@@ -1,4 +1,5 @@
-﻿using BouncingBall.InputSystem.Controller;
+﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
+using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -10,23 +11,50 @@ namespace BouncingBall.Game.Gameplay.BallObject
         [SerializeField] private float rotationSpeed = 5f;
         [SerializeField] private float scaleSpeed = 5f;
 
-        private IPointingDirection _inputController;
+        private ITestInputManager _inputController;
         private CompositeDisposable _disposables = new CompositeDisposable();
 
         [Inject]
-        public void Constructor(IPointingDirection inputController)
+        public void Constructor(ITestInputManager inputController)
         {
             _inputController = inputController;
             gameObject.SetActive(false);
             transform.localScale = Vector3.one;
 
             // Подписка на изменение направления
-            _inputController.Position
-                .Subscribe(UpdateDirectionSign)
-                .AddTo(_disposables);
+            //_inputController.Position
+            //    .Subscribe(UpdateDirectionSign)
+            //    .AddTo(_disposables);
 
 
-            _inputController.IsDirectionSet.Subscribe(_ => Punch()).AddTo(_disposables);
+            //_inputController.IsDirectionSet.Subscribe(_ => Punch()).AddTo(_disposables);
+
+            _inputController.ZScale.Skip(1).Subscribe(UpdateScale).AddTo(_disposables);
+            _inputController.RotationAmount.Skip(1).Subscribe(UpdateRotation).AddTo(_disposables);
+            _inputController.IsDirectionSet2.Skip(1).Subscribe(Punch2).AddTo(_disposables);
+        }
+
+        private void UpdateRotation(float yAngle)
+        {
+            transform.Rotate(0, yAngle, 0);
+        }
+
+        private void UpdateScale(float zScale)
+        {
+            Vector3 newScale = transform.localScale;
+            newScale.z += zScale;
+            newScale.z = Mathf.Clamp(newScale.z, -3, 3f);
+            transform.localScale = newScale;
+        }
+
+        private void Punch2(bool flag)
+        {
+            gameObject.SetActive(flag);
+
+            if(flag == false)
+            {
+                Debug.Log("Произошел удар");
+            }
         }
 
         private void UpdateDirectionSign(Vector2 direction)
