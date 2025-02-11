@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BouncingBall.InputSystem.Controller
 {
-    public class InputController : IPointingDirection, IInputInteractivityChanger
+    public class InputController 
     {
         public ReadOnlyReactiveProperty<Vector3> PointerLocation { get; private set; }
         public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
