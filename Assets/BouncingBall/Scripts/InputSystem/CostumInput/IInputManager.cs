@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 {
-    public interface ITestInputManager
+    public interface IInputManager
     {
         public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; }
         public ReadOnlyReactiveProperty<float> ZScale { get; }
-        public ReadOnlyReactiveProperty<bool> IsDirectionSet2 { get; }
+        public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; }
+        public ISubject<Unit> InputChange { get; }
     }
 }

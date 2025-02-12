@@ -1,52 +1,30 @@
 using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
-using BouncingBall.Game.Data;
 using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 
-public class InputManager : IPointingDirection, IInputInteractivityChanger, ITestInputManager
+public class InputManager : IInputInteractivityChanger, IInputManager
 {
-    private IInputDevice _testInputDevice;
-
     public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
-    public ReadOnlyReactiveProperty<bool> IsDirectionSet2 { get; private set; }
-
-
-
-
-
-
-    public ReadOnlyReactiveProperty<Vector2> PointerLocation { get; private set; }
     public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
+    public ISubject<Unit> InputChange => _inputChange;
 
-    public ISubject<Vector2> Position => _pointerPosition;
 
-    private readonly ReactiveProperty<Vector2> _pointerLocation = new();
-    private readonly ReactiveProperty<bool> _isDirectionSet = new();
-
-    private Subject<Vector2> _pointerPosition = new();
-
+    private Subject<Unit> _inputChange = new();
     private CompositeDisposable _disposable;
+    private InputDeviceFactory _factory;
+    private IInputDevice _testInputDevice;
+    private InputDeviceName _currentInputDeviceName;
 
-    private GameDataManager _gameDataManager;
-
-    public InputManager(GameDataManager gameDataManager)
+    public InputManager(InputDeviceFactory factory)
     {
-        _gameDataManager = gameDataManager;
-        _testInputDevice = new MouseInputDevice(gameDataManager);
-
-        IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_isDirectionSet);
-        PointerLocation = new ReadOnlyReactiveProperty<Vector2>(_pointerLocation);
-
-        RotationAmount = new(_testInputDevice.Direction);
-        ZScale = new(_testInputDevice.ZScale);
-        IsDirectionSet2 = new(_testInputDevice.IsDirectionSet);
+        _factory = factory;
     }
 
     public void EnableInput()
     {
-        _disposable = new();
+        _disposable = new CompositeDisposable();
         Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
     }
 
@@ -57,7 +35,48 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger, ITes
 
     private void Update()
     {
-        _testInputDevice.SetRotationAndScale();
-        _testInputDevice.TryDisableIsDirectionSet();
+        CheckInputDevice();
+
+        _testInputDevice?.SetRotationAndScale();
+        _testInputDevice?.TryDisableIsDirectionSet();
+    }
+
+    private void CheckInputDevice()
+    {
+        InputDeviceName newInputDeviceName;
+
+        if (Input.GetMouseButton(0))
+        {
+            newInputDeviceName = InputDeviceName.Mouse;
+        }
+        else if (Input.anyKey)
+        {
+            newInputDeviceName = InputDeviceName.Keyboard;
+        }
+        else if (Input.touchCount > 0)
+        {
+            newInputDeviceName = InputDeviceName.Touchpad;
+        }
+        else
+        {
+            return;
+        }
+
+        if (newInputDeviceName != _currentInputDeviceName)
+        {
+            InitializeInputDevice(newInputDeviceName);
+        }
+    }
+
+    private void InitializeInputDevice(InputDeviceName deviceName)
+    {
+        _currentInputDeviceName = deviceName;
+        _testInputDevice = _factory.Create(deviceName);
+
+        RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_testInputDevice.Direction);
+        ZScale = new ReadOnlyReactiveProperty<float>(_testInputDevice.ZScale);
+        IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_testInputDevice.IsDirectionSet);
+
+        _inputChange.OnNext(Unit.Default);
     }
 }

@@ -1,8 +1,7 @@
+using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.FinalStateMachine;
-using BouncingBall.InputSystem;
-using BouncingBall.InputSystem.Controller;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
@@ -26,7 +25,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             Container.Bind<LevelLoaderMediator>().AsSingle();
             Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
-            Container.Bind<GameDataManager>().AsSingle(); 
+            Container.Bind<GameDataManager>().AsSingle();
         }
 
         private void BindLoadingWindow()
@@ -40,7 +39,8 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindInputController()
         {
-            Container.BindInterfacesTo<InputManager>().AsSingle().Lazy();
+            Container.BindInterfacesTo<InputManager>().AsSingle();
+            Container.Bind<InputDeviceFactory>().AsSingle();
         }
 
         private void BindFactory()
