@@ -1,9 +1,10 @@
 using UniRx;
+using UnityEngine;
 
 public interface IInputDevice
 {
     public ReactiveProperty<bool> IsDirectionSet { get; }
-    public ReactiveProperty<float> RotationAmount { get; }
+    public ReactiveProperty<Vector3> RotationAmount { get; }
     public ReactiveProperty<float> ZScale { get; }
 
     public void SetRotationAndScale();

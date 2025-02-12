@@ -7,7 +7,7 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger, ITes
 {
     private IInputDevice _testInputDevice;
 
-    public ReadOnlyReactiveProperty<float> RotationAmount { get; private set; }
+    public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
     public ReadOnlyReactiveProperty<bool> IsDirectionSet2 { get; private set; }
 
@@ -30,7 +30,7 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger, ITes
 
     public InputManager()
     {
-        _testInputDevice = new KeyboardInputDevice();
+        _testInputDevice = new MouseInputDevice();
 
         IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_isDirectionSet);
         PointerLocation = new ReadOnlyReactiveProperty<Vector2>(_pointerLocation);

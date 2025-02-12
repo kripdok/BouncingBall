@@ -1,16 +1,16 @@
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class KeyboardInputDevice : IInputDevice
 {
-
     public ReactiveProperty<bool> IsDirectionSet { get; private set; }
-    public ReactiveProperty<float> RotationAmount { get; private set; }
+    public ReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReactiveProperty<float> ZScale { get; private set; }
 
 
-    private float _rotationSpeed = 10f;
+    private float _rotationSpeed = 20f;
     private float _scaleSpeed = 5f;
 
     private bool _isCooldown;
@@ -33,12 +33,17 @@ public class KeyboardInputDevice : IInputDevice
 
         if (horizontal != 0f)
         {
-            RotationAmount.Value = _rotationSpeed * Time.deltaTime * (horizontal > 0 ? 1 : -1);
+            float rotationChange = _rotationSpeed * Time.deltaTime * (horizontal > 0 ? 1 : -1);
+            RotationAmount.Value += new Vector3(0, rotationChange, 0);
+
         }
 
         if (vertical != 0f)
         {
-            ZScale.Value = _scaleSpeed * Time.deltaTime * (vertical > 0 ? 1 : -1);
+            var scaleZ = ZScale.Value;
+            scaleZ += _scaleSpeed * Time.deltaTime * (vertical > 0 ? 1 : -1);
+            scaleZ = Mathf.Clamp(scaleZ, 0, 3f);
+            ZScale.Value = scaleZ;
         }
 
         if (horizontal != 0 || vertical != 0)

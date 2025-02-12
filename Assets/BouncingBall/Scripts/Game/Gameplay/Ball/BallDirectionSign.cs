@@ -1,5 +1,4 @@
 ﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
-using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -31,10 +30,16 @@ namespace BouncingBall.Game.Gameplay.BallObject
             transform.Rotate(0, yAngle, 0);
         }
 
+        private void UpdateRotation(Vector3 direction)
+        {
+           // Плавно поворачиваем объект к целевому направлению
+            transform.rotation = Quaternion.Euler(direction);
+        }
+
         private void UpdateScale(float zScale)
         {
             Vector3 newScale = transform.localScale;
-            newScale.z += zScale;
+            newScale.z = zScale;
             newScale.z = Mathf.Clamp(newScale.z, -3, 3f);
             transform.localScale = newScale;
         }
@@ -43,44 +48,12 @@ namespace BouncingBall.Game.Gameplay.BallObject
         {
             gameObject.SetActive(flag);
 
-            if(flag == false)
+            if (flag == false)
             {
                 Debug.Log("Произошел удар");
             }
         }
 
-        private void UpdateDirectionSign(Vector2 direction)
-        {
-            if (direction == Vector2.zero)
-                return;
-
-            gameObject.SetActive(true);
-            Debug.Log(direction);
-
-            if (direction.x != 0)
-            {
-                float rotationAmount = rotationSpeed * Time.deltaTime * (direction.x > 0 ? 1 : -1);
-                transform.Rotate(0, rotationAmount, 0);
-            }
-
-            if (direction.y != 0)
-            {
-                Vector3 newScale = transform.localScale;
-                newScale.z += scaleSpeed * Time.deltaTime * (direction.y > 0 ? 1 : -1);
-                newScale.z = Mathf.Clamp(newScale.z, -3, 3f);
-                transform.localScale = newScale;
-            }
-        }
-
-        private void Punch()
-        {
-            if (gameObject.activeSelf == false)
-                return;
-
-            gameObject.SetActive(false);
-            transform.localScale = Vector3.one;
-            Debug.Log("Произошел удар");
-        }
 
         private void OnDestroy()
         {
@@ -88,4 +61,38 @@ namespace BouncingBall.Game.Gameplay.BallObject
         }
     }
 }
+
+
+//private void UpdateDirectionSign(Vector2 direction)
+//{
+//    if (direction == Vector2.zero)
+//        return;
+
+//    gameObject.SetActive(true);
+//    Debug.Log(direction);
+
+//    if (direction.x != 0)
+//    {
+//        float rotationAmount = rotationSpeed * Time.deltaTime * (direction.x > 0 ? 1 : -1);
+//        transform.Rotate(0, rotationAmount, 0);
+//    }
+
+//    if (direction.y != 0)
+//    {
+//        Vector3 newScale = transform.localScale;
+//        newScale.z += scaleSpeed * Time.deltaTime * (direction.y > 0 ? 1 : -1);
+//        newScale.z = Mathf.Clamp(newScale.z, -3, 3f);
+//        transform.localScale = newScale;
+//    }
+//}
+
+//private void Punch()
+//{
+//    if (gameObject.activeSelf == false)
+//        return;
+
+//    gameObject.SetActive(false);
+//    transform.localScale = Vector3.one;
+//    Debug.Log("Произошел удар");
+//}
 

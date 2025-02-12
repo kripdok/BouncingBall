@@ -1,23 +1,14 @@
-﻿using Cysharp.Threading.Tasks;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 
 public class MouseInputDevice : IInputDevice
 {
     public ReactiveProperty<bool> IsDirectionSet { get; private set; }
-    public ReactiveProperty<float> RotationAmount { get; private set; }
+    public ReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReactiveProperty<float> ZScale { get; private set; }
 
-
-    private float _rotationSpeed = 10f;
-    private float _scaleSpeed = 5f;
-
+    private Plane _plane;
     private bool _isCooldown;
-
-
-
-    private Vector2 mousePosition;
-    private bool _isDirectionSet = true;
 
     public MouseInputDevice()
     {
@@ -25,53 +16,38 @@ public class MouseInputDevice : IInputDevice
         IsDirectionSet = new();
         RotationAmount = new();
         ZScale = new();
+
+        _plane = new(Vector3.up, Vector3.zero);
     }
-
-
-
-    private async void StartMove()
-    {
-        _isDirectionSet = true;
-        await Move();
-
-        //Подает сигнал для включения указателя
-    }
-
-    private void StopMove()
-    {
-        _isDirectionSet = false;
-    }
-
-    private async UniTask Move()
-    {
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-
-        do
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (plane.Raycast(ray, out float distance))
-            {
-                mousePosition = ray.GetPoint(distance);
-            }
-
-            await UniTask.Yield();
-        }
-        while (_isDirectionSet);
-    }
-
 
     public void SetRotationAndScale()
     {
-        if (_isCooldown)
-            return;
-
-       
+        IsDirectionSet.Value = Input.GetMouseButton(0);
     }
 
     public void TryDisableIsDirectionSet()
     {
-        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (_plane.Raycast(ray, out float distance))
+        {
+            var position = ray.GetPoint(distance);
+            float distanceFromCenter = Vector3.Distance(new Vector3(0, 0, 0), position);
+
+            // Устанавливаем ZScale как расстояние от центра экрана до мыши, ограниченное 0-3
+            ZScale.Value = Mathf.Clamp(distanceFromCenter, 0, 3f);
+
+            Vector3 direction = position - Vector3.zero; // Позиция объекта (например, 0,0,0)
+            direction.y = 0; // Убираем вертикальную составляющую
+
+            // Вычисляем угол поворота на основе направления
+            if (direction != Vector3.zero)
+            {
+                // Находим угол в радианах
+                float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; // Используем x и z для расчета угла
+                RotationAmount.Value = new Vector3(0, angle, 0); // Устанавливаем угол поворота только по оси Y
+            }
+        }
     }
 }
 
