@@ -22,11 +22,11 @@ namespace BouncingBall.Game.GameRoot.Installers
             BindFactory();
             Container.Bind<SceneLoader>().AsSingle();
             Container.BindInterfacesTo<ResourcesPrefabLoadStrategy>().AsSingle();
-            Container.BindInterfacesTo<GameStateMachine>().AsCached();
+            Container.BindInterfacesTo<GameStateMachine>().AsSingle();
             Container.Bind<LevelLoaderMediator>().AsSingle();
             Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
-            Container.Bind<GameDataManager>().AsSingle();
+            Container.Bind<GameDataManager>().AsSingle(); 
         }
 
         private void BindLoadingWindow()
@@ -40,9 +40,7 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindInputController()
         {
-            //TODO - Сделать свой Input
-            //Container.Bind<InputSystemActions>().AsSingle();
-            Container.BindInterfacesTo<InputManager>().AsSingle();
+            Container.BindInterfacesTo<InputManager>().AsSingle().Lazy();
         }
 
         private void BindFactory()

@@ -1,4 +1,5 @@
 using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
+using BouncingBall.Game.Data;
 using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
@@ -28,14 +29,17 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger, ITes
 
     private CompositeDisposable _disposable;
 
-    public InputManager()
+    private GameDataManager _gameDataManager;
+
+    public InputManager(GameDataManager gameDataManager)
     {
-        _testInputDevice = new MouseInputDevice();
+        _gameDataManager = gameDataManager;
+        _testInputDevice = new MouseInputDevice(gameDataManager);
 
         IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_isDirectionSet);
         PointerLocation = new ReadOnlyReactiveProperty<Vector2>(_pointerLocation);
 
-        RotationAmount = new(_testInputDevice.RotationAmount);
+        RotationAmount = new(_testInputDevice.Direction);
         ZScale = new(_testInputDevice.ZScale);
         IsDirectionSet2 = new(_testInputDevice.IsDirectionSet);
     }

@@ -1,12 +1,11 @@
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class KeyboardInputDevice : IInputDevice
 {
     public ReactiveProperty<bool> IsDirectionSet { get; private set; }
-    public ReactiveProperty<Vector3> RotationAmount { get; private set; }
+    public ReactiveProperty<Vector3> Direction { get; private set; }
     public ReactiveProperty<float> ZScale { get; private set; }
 
 
@@ -19,7 +18,7 @@ public class KeyboardInputDevice : IInputDevice
     {
         _isCooldown = false;
         IsDirectionSet = new();
-        RotationAmount = new();
+        Direction = new();
         ZScale = new();
     }
 
@@ -31,20 +30,8 @@ public class KeyboardInputDevice : IInputDevice
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        if (horizontal != 0f)
-        {
-            float rotationChange = _rotationSpeed * Time.deltaTime * (horizontal > 0 ? 1 : -1);
-            RotationAmount.Value += new Vector3(0, rotationChange, 0);
-
-        }
-
-        if (vertical != 0f)
-        {
-            var scaleZ = ZScale.Value;
-            scaleZ += _scaleSpeed * Time.deltaTime * (vertical > 0 ? 1 : -1);
-            scaleZ = Mathf.Clamp(scaleZ, 0, 3f);
-            ZScale.Value = scaleZ;
-        }
+        TryÑalculatóDirection(horizontal);
+        TryCalculationScaleZ(vertical);
 
         if (horizontal != 0 || vertical != 0)
         {
@@ -61,12 +48,30 @@ public class KeyboardInputDevice : IInputDevice
         }
     }
 
+    private void TryÑalculatóDirection(float horizontal)
+    {
+        if (horizontal != 0f)
+        {
+            float rotationChange = _rotationSpeed * Time.deltaTime * (horizontal > 0 ? 1 : -1);
+            Direction.Value += new Vector3(0, rotationChange, 0);
+        }
+    }
+
+    private void TryCalculationScaleZ(float vertical)
+    {
+        if (vertical != 0f)
+        {
+            var scaleZ = ZScale.Value;
+            scaleZ += _scaleSpeed * Time.deltaTime * (vertical > 0 ? 1 : -1);
+            scaleZ = Mathf.Clamp(scaleZ, 0, 3f);
+            ZScale.Value = scaleZ;
+        }
+    }
+
     private async void EnableCoolduwn()
     {
         _isCooldown = true;
-
         await UniTask.WaitForSeconds(1);
-
         _isCooldown = false;
     }
 }

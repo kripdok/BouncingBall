@@ -27,6 +27,11 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _model = GameDataManager.GameData.BallModel;
         }
 
+        private void Update()
+        {
+            _model.Position.Value = transform.position;
+        }
+
         public void SetPointingDirection(IPointingDirection pointingDirection)
         {
             _subscriptions?.Dispose();

@@ -1,4 +1,5 @@
 ﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
+using BouncingBall.Game.Data;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -40,7 +41,6 @@ namespace BouncingBall.Game.Gameplay.BallObject
         {
             Vector3 newScale = transform.localScale;
             newScale.z = zScale;
-            newScale.z = Mathf.Clamp(newScale.z, -3, 3f);
             transform.localScale = newScale;
         }
 
