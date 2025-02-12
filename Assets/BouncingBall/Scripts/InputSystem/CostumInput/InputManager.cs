@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InputManager : IPointingDirection, IInputInteractivityChanger, ITestInputManager
 {
-    private KeyboardInputDevice _testInputDevice;
+    private IInputDevice _testInputDevice;
 
     public ReadOnlyReactiveProperty<float> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
@@ -53,10 +53,6 @@ public class InputManager : IPointingDirection, IInputInteractivityChanger, ITes
 
     private void Update()
     {
-        // _pointerPosition.OnNext(_testInputDevice.GetMovementInput());
-        //// _pointerLocation.SetValueAndForceNotify(_inputDivace.GetMovementInput());
-        // _isDirectionSet.SetValueAndForceNotify(_testInputDevice.GetActionInput());
-
         _testInputDevice.SetRotationAndScale();
         _testInputDevice.TryDisableIsDirectionSet();
     }

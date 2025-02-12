@@ -21,14 +21,6 @@ namespace BouncingBall.Game.Gameplay.BallObject
             gameObject.SetActive(false);
             transform.localScale = Vector3.one;
 
-            // Подписка на изменение направления
-            //_inputController.Position
-            //    .Subscribe(UpdateDirectionSign)
-            //    .AddTo(_disposables);
-
-
-            //_inputController.IsDirectionSet.Subscribe(_ => Punch()).AddTo(_disposables);
-
             _inputController.ZScale.Skip(1).Subscribe(UpdateScale).AddTo(_disposables);
             _inputController.RotationAmount.Skip(1).Subscribe(UpdateRotation).AddTo(_disposables);
             _inputController.IsDirectionSet2.Skip(1).Subscribe(Punch2).AddTo(_disposables);

@@ -1,23 +1,33 @@
 ﻿using Cysharp.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 
 public class MouseInputDevice : IInputDevice
 {
+    public ReactiveProperty<bool> IsDirectionSet { get; private set; }
+    public ReactiveProperty<float> RotationAmount { get; private set; }
+    public ReactiveProperty<float> ZScale { get; private set; }
+
+
+    private float _rotationSpeed = 10f;
+    private float _scaleSpeed = 5f;
+
+    private bool _isCooldown;
+
+
+
     private Vector2 mousePosition;
     private bool _isDirectionSet = true;
 
-
-    public bool GetActionInput()
+    public MouseInputDevice()
     {
-        return Input.GetButton("Fire1");
+        _isCooldown = false;
+        IsDirectionSet = new();
+        RotationAmount = new();
+        ZScale = new();
     }
 
-    public Vector2 GetMovementInput()
-    {
-        float horizontal = Input.GetAxis("Mouse X");
-        float vertical = Input.GetAxis("Mouse Y");
-        return new Vector2(horizontal, vertical);
-    }
+
 
     private async void StartMove()
     {
@@ -48,6 +58,20 @@ public class MouseInputDevice : IInputDevice
             await UniTask.Yield();
         }
         while (_isDirectionSet);
+    }
+
+
+    public void SetRotationAndScale()
+    {
+        if (_isCooldown)
+            return;
+
+       
+    }
+
+    public void TryDisableIsDirectionSet()
+    {
+        
     }
 }
 

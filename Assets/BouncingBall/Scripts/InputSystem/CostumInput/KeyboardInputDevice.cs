@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class KeyboardInputDevice : IInputDevice
 {
-    //TODO - Сделать кулдаун
 
-    public ReactiveProperty<bool> IsDirectionSet = new();
-    public ReactiveProperty<float> RotationAmount = new();
-    public ReactiveProperty<float> ZScale = new();
+    public ReactiveProperty<bool> IsDirectionSet { get; private set; }
+    public ReactiveProperty<float> RotationAmount { get; private set; }
+    public ReactiveProperty<float> ZScale { get; private set; }
+
 
     private float _rotationSpeed = 10f;
     private float _scaleSpeed = 5f;
@@ -18,18 +18,9 @@ public class KeyboardInputDevice : IInputDevice
     public KeyboardInputDevice()
     {
         _isCooldown = false;
-    }
-
-    public Vector2 GetMovementInput()
-    {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        return new Vector2(horizontal, vertical);
-    }
-
-    public bool GetActionInput()
-    {
-        return Input.GetButton("Jump");
+        IsDirectionSet = new();
+        RotationAmount = new();
+        ZScale = new();
     }
 
     public void SetRotationAndScale()
@@ -73,5 +64,4 @@ public class KeyboardInputDevice : IInputDevice
 
         _isCooldown = false;
     }
-
 }
