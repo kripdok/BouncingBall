@@ -3,7 +3,7 @@ using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
 
-public class InputManager : IInputInteractivityChanger, IInputManager
+public class InputManager : IInputInteractivityChanger, IInputManager 
 {
     public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
@@ -31,6 +31,10 @@ public class InputManager : IInputInteractivityChanger, IInputManager
     public void DisableInput()
     {
         _disposable.Dispose();
+        RotationAmount.Dispose();
+        ZScale.Dispose();
+        IsDirectionSet.Dispose();
+        _testInputDevice = null;
     }
 
     private void Update()
@@ -79,4 +83,5 @@ public class InputManager : IInputInteractivityChanger, IInputManager
 
         _inputChange.OnNext(Unit.Default);
     }
+
 }

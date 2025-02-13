@@ -21,6 +21,8 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
                     return _container.Instantiate<MouseInputDevice>();
                 case InputDeviceName.Touchpad:
                     return _container.Instantiate<TouchpadInputDevice>();
+                case InputDeviceName.Simulator:
+                    return _container.Instantiate<PlayerInputSimulator>();
                 default:
                     return null;
 

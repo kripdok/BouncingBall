@@ -4,6 +4,7 @@
     {
         Keyboard,
         Mouse,
-        Touchpad
+        Touchpad,
+        Simulator
     }
 }
