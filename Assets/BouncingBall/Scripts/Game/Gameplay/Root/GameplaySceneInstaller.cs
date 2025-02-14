@@ -1,5 +1,4 @@
-﻿using BouncingBall.Game.Data;
-using BouncingBall.Game.Gameplay.BallObject;
+﻿using BouncingBall.Game.Gameplay.BallObject;
 using BouncingBall.Game.Gameplay.LevelObject;
 using Zenject;
 
