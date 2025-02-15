@@ -26,7 +26,7 @@ public class Example : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical"); // W/S или стрелки
 
         // –ассчитываем направление движени€
-        Vector3 direction = new Vector3(moveHorizontal, 0, moveVertical).normalized * Time.fixedDeltaTime;
+        Vector3 direction = new Vector3(moveHorizontal, 0, moveVertical).normalized * Time.fixedDeltaTime * 10;
 
         _rigidbody.AddForce(direction);
     }

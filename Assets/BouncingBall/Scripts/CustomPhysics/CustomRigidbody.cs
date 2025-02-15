@@ -5,19 +5,15 @@ public class CustomRigidbody : MonoBehaviour
     [SerializeField] private float _linearDrag;
     [SerializeField] private float _angularDrag;
     [SerializeField] private float _rayLength = 5f;
-    [SerializeField] private float pushForce = 5f; // Сила выталкивания
+
+    public Vector3 TestVelocity => _velocityForce;
 
     private const float fallAcceleration = 9.81f;
 
     private Vector3 _rotationForce;
     private Vector3 _velocityForce = Vector3.zero;
-    private float radius;
 
-    private void Awake()
-    {
-        radius = GetComponent<Collider>().bounds.extents.x; // Исправлено на использование поля radius
-        Debug.Log(radius);
-    }
+    private bool _isFall = true;
 
     private void FixedUpdate()
     {
@@ -26,13 +22,23 @@ public class CustomRigidbody : MonoBehaviour
 
         ReduceSpeedOfMovement();
         ReduceSpeedOfRotation();
-        RaycastDown();
+        TryFall();
     }
 
     public void AddForce(Vector3 direction)
     {
+        Move(direction);
+        Rotate(new Vector3(direction.z, 0, direction.x * -1));
+    }
+
+    public void Move(Vector3 direction)
+    {
         _velocityForce += direction;
-        _rotationForce += new Vector3(direction.z, 0, direction.x * -1);
+    }
+
+    public void Rotate(Vector3 direction)
+    {
+        _rotationForce += direction;
     }
 
     private void ReduceSpeedOfMovement()
@@ -57,38 +63,58 @@ public class CustomRigidbody : MonoBehaviour
         _rotationForce = Vector3.zero;
     }
 
-    void RaycastDown()
+    private void TryFall()
     {
-        if (IsGround())
-        {
-            _velocityForce.y = 0;
-        }
-        else
+        if (_isFall)
         {
             _velocityForce.y -= fallAcceleration * Time.fixedDeltaTime;
         }
+
     }
 
-    private bool IsGround()
+    private void OnCollisionEnter(Collision collision)
     {
-        Vector3 origin = transform.position;
+        Vector3 normal = collision.GetContact(0).normal;
+        CalculateBounceDirection(_velocityForce, normal);
 
-        return Physics.SphereCast(origin, radius, Vector3.down, out RaycastHit hit, _rayLength);
+        Vector3 enterDirection = (collision.GetContact(0).point - transform.position).normalized;
+        TryStopTheFall(enterDirection, collision);
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void CalculateBounceDirection(Vector3 velocity, Vector3 normal)
     {
-        foreach (ContactPoint contact in collision.contacts)
+        var reflectedVelocity = Vector3.Reflect(velocity, normal);
+        reflectedVelocity.y *= 0.5f;
+
+        if (reflectedVelocity.y < 0)
         {
-
-            Vector3 direction = contact.point - transform.position;
-            direction.Normalize();
-            Debug.Log(direction);
-            transform.position = new Vector3(transform.position.x, collision.transform.position.y + collision.transform.localScale.y + _rayLength, transform.position.z);
-
-            _velocityForce.y = 0;
-
+            reflectedVelocity.y = 0;
         }
 
+        _velocityForce = reflectedVelocity;
+        _rotationForce = new Vector3(reflectedVelocity.z, 0, reflectedVelocity.x * -1);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        var exitDirection = (collision.transform.position - transform.position).normalized;
+
+        if (exitDirection.normalized.y < 0)
+        {
+            _isFall = true;
+        }
+    }
+
+    private void TryStopTheFall(Vector3 enterDirection, Collision collision)
+    {
+
+        if (enterDirection.y < 0)
+        {
+            _isFall = false;
+            _velocityForce.y = 0;
+            var newPosition = transform.position;
+            newPosition.y = collision.GetContact(0).point.y + transform.localScale.y / 2;
+            transform.position = newPosition;
+        }
     }
 }
