@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class CustomRigidbody : MonoBehaviour
 {
-    [SerializeField] private float _linearDrag;
-    [SerializeField] private float _angularDrag;
-    [SerializeField] private float _rayLength = 5f;
+    [SerializeField] private float _mass = 1f;
+    [SerializeField] private float _vilocityDamping;
 
     public Vector3 TestVelocity => _velocityForce;
 
@@ -17,6 +16,7 @@ public class CustomRigidbody : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Обновляем позицию и вращение
         transform.position += _velocityForce * Time.fixedDeltaTime;
         transform.rotation = Quaternion.Euler(_rotationForce) * Quaternion.Euler(transform.rotation.eulerAngles);
 
@@ -27,25 +27,25 @@ public class CustomRigidbody : MonoBehaviour
 
     public void AddForce(Vector3 direction)
     {
-        Move(direction);
+        Move(direction); // Учитываем массу при добавлении силы
         Rotate(new Vector3(direction.z, 0, direction.x * -1));
     }
 
     public void Move(Vector3 direction)
     {
-        _velocityForce += direction;
+        _velocityForce += direction / _mass;
     }
 
     public void Rotate(Vector3 direction)
     {
-        _rotationForce += direction;
+        _rotationForce += direction / _mass;
     }
 
     private void ReduceSpeedOfMovement()
     {
-        if (Vector3.Distance(_velocityForce, Vector3.zero) > 0.001f)
+        if (Vector3.Distance(_velocityForce, Vector3.zero) > 0.01f)
         {
-            _velocityForce = Vector3.Lerp(_velocityForce, Vector3.zero, _linearDrag * Time.fixedDeltaTime);
+            _velocityForce = Vector3.Lerp(_velocityForce, Vector3.zero, _vilocityDamping * Time.fixedDeltaTime);
             return;
         }
 
@@ -54,9 +54,9 @@ public class CustomRigidbody : MonoBehaviour
 
     private void ReduceSpeedOfRotation()
     {
-        if (Vector3.Distance(_rotationForce, Vector3.zero) > 0.001f)
+        if (Vector3.Distance(_rotationForce, Vector3.zero) > 0.01f)
         {
-            _rotationForce = Vector3.Lerp(_rotationForce, Vector3.zero, _angularDrag * Time.fixedDeltaTime);
+            _rotationForce = Vector3.Lerp(_rotationForce, Vector3.zero, _vilocityDamping * Time.fixedDeltaTime);
             return;
         }
 
@@ -67,9 +67,8 @@ public class CustomRigidbody : MonoBehaviour
     {
         if (_isFall)
         {
-            _velocityForce.y -= fallAcceleration * Time.fixedDeltaTime;
+            _velocityForce.y -= (fallAcceleration * _mass) * Time.fixedDeltaTime; // Учитываем массу при падении
         }
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -81,25 +80,26 @@ public class CustomRigidbody : MonoBehaviour
         TryStopTheFall(enterDirection, collision);
     }
 
-    private void CalculateBounceDirection(Vector3 velocity, Vector3 normal)
+    private Vector3 CalculateBounceDirection(Vector3 velocity, Vector3 normal)
     {
-        var reflectedVelocity = Vector3.Reflect(velocity, normal);
-        reflectedVelocity.y *= 0.5f;
+        var reflectedVelocity = Vector3.Reflect(velocity, normal)  * _vilocityDamping;
 
-        if (reflectedVelocity.y < 0)
+
+        if (reflectedVelocity.y < 1)
         {
             reflectedVelocity.y = 0;
         }
 
         _velocityForce = reflectedVelocity;
         _rotationForce = new Vector3(reflectedVelocity.z, 0, reflectedVelocity.x * -1);
+        return _velocityForce;
     }
 
     private void OnCollisionExit(Collision collision)
     {
         var exitDirection = (collision.transform.position - transform.position).normalized;
 
-        if (exitDirection.normalized.y < 0)
+        if (exitDirection.y < -0.1f)
         {
             _isFall = true;
         }
@@ -107,14 +107,18 @@ public class CustomRigidbody : MonoBehaviour
 
     private void TryStopTheFall(Vector3 enterDirection, Collision collision)
     {
-
-        if (enterDirection.y < 0)
+        if (enterDirection.y < -0.1f)
         {
             _isFall = false;
-            _velocityForce.y = 0;
-            var newPosition = transform.position;
-            newPosition.y = collision.GetContact(0).point.y + transform.localScale.y / 2;
-            transform.position = newPosition;
+
+            if (_velocityForce.y < 0.1f)
+            {
+                _velocityForce.y = 0;
+                var newPosition = transform.position;
+                newPosition.y = collision.GetContact(0).point.y + transform.localScale.y / 2;
+                transform.position = newPosition;
+            }
+           
         }
     }
 }
