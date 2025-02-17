@@ -1,5 +1,6 @@
 ﻿using BouncingBall.Game.Data;
 using UniRx;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
@@ -60,8 +61,13 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 
         private void CalculationScaleZ(Vector3 position)
         {
-            float distanceFromCenter = Vector3.Distance(_ballPosition, position);
-            ZScale.Value = Mathf.Clamp(distanceFromCenter, 0, 3f);
+            ZScale.Value = Vector3.Distance(_ballPosition, position);
+
+        }
+
+        public void SetTest()
+        {
+           
         }
     }
 }

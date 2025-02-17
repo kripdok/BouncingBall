@@ -9,5 +9,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
         public ReadOnlyReactiveProperty<float> ZScale { get; }
         public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; }
         public ISubject<Unit> InputChange { get; }
+
+        public void SetTest();
     }
 }

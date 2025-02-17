@@ -37,6 +37,11 @@ public class InputManager : IInputInteractivityChanger, IInputManager
         _testInputDevice = null;
     }
 
+    public void SetTest()
+    {
+        _testInputDevice?.SetTest();
+    }
+
     private void Update()
     {
         CheckInputDevice();

@@ -74,4 +74,9 @@ public class KeyboardInputDevice : IInputDevice
         await UniTask.WaitForSeconds(1);
         _isCooldown = false;
     }
+
+    public void SetTest()
+    {
+       
+    }
 }

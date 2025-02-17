@@ -42,7 +42,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
         private void UpdateScale(float zScale)
         {
             Vector3 newScale = transform.localScale;
-            newScale.z = zScale;
+            newScale.z = Mathf.Clamp(zScale, 0, 3f); 
             transform.localScale = newScale;
         }
 

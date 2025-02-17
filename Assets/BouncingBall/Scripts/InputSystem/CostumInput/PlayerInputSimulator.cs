@@ -56,5 +56,10 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
         public void TryDisableIsDirectionSet()
         {
         }
+
+        public void SetTest()
+        {
+            
+        }
     }
 }

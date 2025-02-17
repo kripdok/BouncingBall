@@ -9,38 +9,51 @@ public class MouseInputDevice : IInputDevice
     public ReactiveProperty<float> ZScale { get; private set; }
 
     private Plane _plane;
-    private bool _isCooldown;
-
     private Vector3 _ballPosition;
-    GameDataManager _gameDataManager;
+    private GameDataManager _gameDataManager;
+
+    private bool _isTest;
 
     public MouseInputDevice(GameDataManager gameDataManager)
     {
-        _isCooldown = false;
         IsDirectionSet = new();
         Direction = new();
         ZScale = new();
 
         _plane = new(Vector3.up, new Vector3(0, 0.5f, 0));
         _gameDataManager = gameDataManager;
+
+        _isTest = false;
+    }
+
+    public void SetTest()
+    {
+        _isTest =true;
     }
 
     public void SetRotationAndScale()
     {
-        IsDirectionSet.Value = Input.GetMouseButton(0);
+        if (_isTest)
+        {
+            IsDirectionSet.Value = Input.GetMouseButton(0);
+            _isTest = IsDirectionSet.Value;
+        }
     }
 
     public void TryDisableIsDirectionSet()
     {
-        _ballPosition = _gameDataManager.GameData.BallModel.ReadPosition.Value;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (_plane.Raycast(ray, out float distance))
+        if (_isTest)
         {
-            var position = ray.GetPoint(distance);
-            CalculationScaleZ(position);
-            СalculatуDirection(position);
+            _ballPosition = _gameDataManager.GameData.BallModel.ReadPosition.Value;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (_plane.Raycast(ray, out float distance))
+            {
+                var position = ray.GetPoint(distance);
+                CalculationScaleZ(position);
+                СalculatуDirection(position);
+            }
         }
     }
 
@@ -57,8 +70,7 @@ public class MouseInputDevice : IInputDevice
 
     private void CalculationScaleZ(Vector3 position)
     {
-        float distanceFromCenter = Vector3.Distance(_ballPosition, position);
-        ZScale.Value = Mathf.Clamp(distanceFromCenter, 0, 3f);
+        ZScale.Value = Vector3.Distance(_ballPosition, position);
     }
 }
 

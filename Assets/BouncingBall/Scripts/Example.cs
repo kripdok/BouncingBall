@@ -1,8 +1,9 @@
 
 using BouncingBall.CustomPhysics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Example : MonoBehaviour
+public class Example : MonoBehaviour , IPointerClickHandler
 {
     [SerializeField] private Vector3 _direction;
 
@@ -32,5 +33,8 @@ public class Example : MonoBehaviour
         _rigidbody.AddForce(direction);
     }
 
-
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log(1);
+    }
 }
