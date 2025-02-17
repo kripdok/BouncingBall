@@ -1,22 +1,16 @@
-
 using UnityEngine;
 
-public class Example : MonoBehaviour
+public class ExampleRigidbody : MonoBehaviour
 {
     [SerializeField] private Vector3 _direction;
 
 
-    private CustomRigidbody _rigidbody;
+    private Rigidbody _rigidbody;
 
 
     private void Start()
     {
-        _rigidbody = GetComponent<CustomRigidbody>();
-    }
-
-    public void SetForce()
-    {
-        _rigidbody.AddForce(_direction);
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     public void Update()
@@ -26,10 +20,8 @@ public class Example : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical"); // W/S или стрелки
 
         // –ассчитываем направление движени€
-        Vector3 direction = new Vector3(moveHorizontal, 0, moveVertical).normalized * Time.fixedDeltaTime * 50;
+        Vector3 direction = new Vector3(moveHorizontal, 0, moveVertical).normalized * Time.fixedDeltaTime * 10;
 
         _rigidbody.AddForce(direction);
     }
-
-
 }
