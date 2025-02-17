@@ -7,6 +7,7 @@ public class MouseInputDevice : IInputDevice
     public ReactiveProperty<bool> IsDirectionSet { get; private set; }
     public ReactiveProperty<Vector3> Direction { get; private set; }
     public ReactiveProperty<float> ZScale { get; private set; }
+    public ReactiveProperty<float> Angle { get; private set; }
 
     private Plane _plane;
     private Vector3 _ballPosition;
@@ -19,16 +20,17 @@ public class MouseInputDevice : IInputDevice
         IsDirectionSet = new();
         Direction = new();
         ZScale = new();
+        Angle = new();
 
-        _plane = new(Vector3.up, new Vector3(0, 0.5f, 0));
+        _plane = new(Vector3.up, Vector3.zero);
         _gameDataManager = gameDataManager;
-
+        _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
         _isTest = false;
     }
 
     public void SetTest()
     {
-        _isTest =true;
+        _isTest = true;
     }
 
     public void SetRotationAndScale()
@@ -44,8 +46,6 @@ public class MouseInputDevice : IInputDevice
     {
         if (_isTest)
         {
-            _ballPosition = _gameDataManager.GameData.BallModel.ReadPosition.Value;
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (_plane.Raycast(ray, out float distance))
@@ -65,12 +65,20 @@ public class MouseInputDevice : IInputDevice
         {
             float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             Direction.Value = new Vector3(0, angle, 0);
+            Direction.Value = new Vector3(direction.x, 0, direction.z);
+            Angle.Value = angle;
         }
     }
 
     private void CalculationScaleZ(Vector3 position)
     {
         ZScale.Value = Vector3.Distance(_ballPosition, position);
+    }
+
+    private void SetBallPositionAndPlanePoint(Vector3 position)
+    {
+        _ballPosition = position;
+        _plane.SetNormalAndPosition(Vector3.up, position);
     }
 }
 

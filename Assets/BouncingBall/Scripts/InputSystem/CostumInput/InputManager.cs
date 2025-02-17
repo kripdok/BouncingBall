@@ -8,6 +8,7 @@ public class InputManager : IInputInteractivityChanger, IInputManager
     public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
     public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
+    public ReadOnlyReactiveProperty<float> Angle { get; private set; }
     public ISubject<Unit> InputChange => _inputChange;
 
 
@@ -34,6 +35,7 @@ public class InputManager : IInputInteractivityChanger, IInputManager
         RotationAmount.Dispose();
         ZScale.Dispose();
         IsDirectionSet.Dispose();
+        Angle.Dispose();
         _testInputDevice = null;
     }
 
@@ -85,6 +87,7 @@ public class InputManager : IInputInteractivityChanger, IInputManager
         RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_testInputDevice.Direction);
         ZScale = new ReadOnlyReactiveProperty<float>(_testInputDevice.ZScale);
         IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_testInputDevice.IsDirectionSet);
+        Angle = new ReadOnlyReactiveProperty<float>(_testInputDevice.Angle);
 
         _inputChange.OnNext(Unit.Default);
     }

@@ -8,6 +8,7 @@ public class KeyboardInputDevice : IInputDevice
     public ReactiveProperty<Vector3> Direction { get; private set; }
     public ReactiveProperty<float> ZScale { get; private set; }
 
+    public ReactiveProperty<float> Angle { get; private set; }
 
     private float _rotationSpeed = 20f;
     private float _scaleSpeed = 5f;
@@ -20,6 +21,7 @@ public class KeyboardInputDevice : IInputDevice
         IsDirectionSet = new();
         Direction = new();
         ZScale = new();
+        Angle = new();
     }
 
     public void SetRotationAndScale()

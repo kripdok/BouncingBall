@@ -11,6 +11,8 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
         public ReactiveProperty<Vector3> Direction { get; private set; }
         public ReactiveProperty<float> ZScale { get; private set; }
 
+        public ReactiveProperty<float> Angle { get; private set; }
+
         private Plane _plane;
         private Vector3 _ballPosition;
         private GameDataManager _gameDataManager;
@@ -20,6 +22,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
             IsDirectionSet = new ReactiveProperty<bool>();
             Direction = new ReactiveProperty<Vector3>();
             ZScale = new ReactiveProperty<float>();
+            Angle = new();
 
             _plane = new Plane(Vector3.up, new Vector3(0, 0.5f, 0));
             _gameDataManager = gameDataManager;

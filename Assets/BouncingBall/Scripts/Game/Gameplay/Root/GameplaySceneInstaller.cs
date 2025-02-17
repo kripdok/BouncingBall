@@ -10,6 +10,7 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             BindFactory();
             Container.Bind<Ball>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball").AsCached();
+            Container.Bind<BallDirectionSign>().FromComponentInNewPrefabResource("Prefabs/Gameplay/PointHolder").AsCached().NonLazy();
             Container.Bind<LevelLoader>().AsCached().NonLazy();
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
         }

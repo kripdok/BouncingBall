@@ -10,6 +10,8 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
         public ReactiveProperty<Vector3> Direction { get; private set; }
         public ReactiveProperty<float> ZScale { get; private set; }
 
+        public ReactiveProperty<float> Angle { get; private set; }
+
         private float _changeSpeed = 1.0f; // Скорость изменения значений
         private float _cooldownTime; // Время кулдауна
         private float _minCooldown = 1.0f; // Минимальное время кулдауна
@@ -20,6 +22,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
             IsDirectionSet = new ReactiveProperty<bool>(false);
             Direction = new ReactiveProperty<Vector3>(Vector3.zero);
             ZScale = new ReactiveProperty<float>(0f);
+            Angle = new();
         }
 
 
