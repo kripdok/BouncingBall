@@ -1,5 +1,4 @@
-﻿using BouncingBall.FinalStateMachine;
-using BouncingBall.Game.UI.MainMenuState;
+﻿using BouncingBall.Game.UI.MainMenuState;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
@@ -10,12 +9,11 @@ using UnityEngine;
 
 namespace BouncingBall.Game.FinalStateMachine.States
 {
-    public class MainMenuState : IState
+    public class MainMenuState : AbstractGameState
     {
         private const string LevelId = "0";
         private const string UIPrefabPathc = "Prefabs/UI/Containers/MainMenuUI";
 
-        private readonly IStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
@@ -24,28 +22,25 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private CompositeDisposable _disposables;
 
-        public MainMenuState(IStateMachine gameStateMachine, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator)
+        public MainMenuState(ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator) : base(GameStateNames.MainMenu)
         {
             _stateUIFactory = stateUIFactory;
             _levelLoaderMediator = levelLoaderMediator;
             _prefabLoadStrategy = prefabLoadStrategy;
-            _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
             _attachStateUI = attachStateUI;
         }
 
-        public string Id => GameStateNames.MainMenu;
-
-        public async void Enter()
+        public override async void Enter()
         {
             _disposables = new();
             Debug.Log("Начал входить в состояние главного меню");
             CreateMainMenuUI();
-            _levelLoaderMediator.OnLevelLoaded.Where(flag => flag ==true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
+            _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _levelLoaderMediator.SetLevelName(LevelId);
         }
 
-        public async UniTask Exit()
+        public override async UniTask Exit()
         {
             _disposables.Dispose();
             await _loadingWindowController.ShowLoadingWindow();
@@ -61,7 +56,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void SetGameplayState()
         {
-            _gameStateMachine.SetState(GameStateNames.Gameplay);
+            OnExit.OnNext(GameStateNames.Gameplay);
         }
 
         private void HideLoadingWindow()

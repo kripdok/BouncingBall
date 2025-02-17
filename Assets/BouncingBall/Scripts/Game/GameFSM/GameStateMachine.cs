@@ -1,12 +1,8 @@
 using BouncingBall.FinalStateMachine;
 using BouncingBall.Game.FinalStateMachine.States;
-using BouncingBall.InputSystem.Controller;
-using BouncingBall.PrefabLoader;
-using BouncingBall.UI;
-using BouncingBall.UI.Root;
-using BouncingBall.Utilities;
 using System;
 using System.Collections.Generic;
+using UniRx;
 
 
 namespace BouncingBall.Game.FinalStateMachine
@@ -14,16 +10,24 @@ namespace BouncingBall.Game.FinalStateMachine
     public class GameStateMachine : IStateMachine
     {
         private IState _concreteState;
-        private readonly Dictionary<string, IState> _states;
+        private readonly Dictionary<string, AbstractGameState> _states;
+        private readonly GameStateFactory _stateFactory;
 
-        public GameStateMachine(SceneLoader sceneLoader, IAttachStateUI attachStateUI, ILoadingWindowController loadingWindowController, IInputInteractivityChanger manageInputState, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
+        public GameStateMachine(GameStateFactory stateFactory)
         {
-            _states = new Dictionary<string, IState>()
+            _stateFactory = stateFactory;
+
+            _states = new Dictionary<string, AbstractGameState>()
             {
-                [GameStateNames.Bootstrap] = new BootstrapState(this, sceneLoader),
-                [GameStateNames.MainMenu] = new MainMenuState(this, loadingWindowController, attachStateUI, prefabLoadStrategy, stateUIFactory, levelLoaderMediator),
-                [GameStateNames.Gameplay] = new GameplayState(this, manageInputState, loadingWindowController, attachStateUI, prefabLoadStrategy, levelLoaderMediator, stateUIFactory),
+                [GameStateNames.Bootstrap] = _stateFactory.Create(GameStateNames.Bootstrap),
+                [GameStateNames.MainMenu] = _stateFactory.Create(GameStateNames.MainMenu),
+                [GameStateNames.Gameplay] = _stateFactory.Create(GameStateNames.Gameplay),
             };
+
+            foreach(var state in _states.Values)
+            {
+                state.IOnExit.Subscribe(SetState);
+            }
         }
 
         public async void SetState(string id)
@@ -40,7 +44,7 @@ namespace BouncingBall.Game.FinalStateMachine
             }
             else
             {
-                throw new NullReferenceException("");
+                throw new NullReferenceException($"There is no game state with id {id}!");
             }
         }
     }

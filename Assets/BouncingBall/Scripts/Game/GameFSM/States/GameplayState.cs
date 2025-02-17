@@ -1,5 +1,4 @@
-﻿using BouncingBall.FinalStateMachine;
-using BouncingBall.Game.UI.GameplayState;
+﻿using BouncingBall.Game.UI.GameplayState;
 using BouncingBall.InputSystem.Controller;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
@@ -11,12 +10,11 @@ using UnityEngine;
 
 namespace BouncingBall.Game.FinalStateMachine.States
 {
-    public class GameplayState : IState
+    public class GameplayState : AbstractGameState
     {
         private const string UIPatch = "Prefabs/UI/Containers/GameUI";
 
         private readonly IInputInteractivityChanger _manageInputState;
-        private readonly IStateMachine _gameStateMachine;
         private readonly ILoadingWindowController _loadingWindowController;
         private readonly IAttachStateUI _attachStateUI;
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
@@ -25,19 +23,17 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private CompositeDisposable _disposables;
 
-        public GameplayState(IStateMachine gameStateMachine, IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory)
+        public GameplayState(IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory) : base(GameStateNames.Gameplay)
         {
             _attachStateUI = attachStateUI;
             _manageInputState = manageInputState;
-            _gameStateMachine = gameStateMachine;
             _loadingWindowController = loadingWindowController;
             _prefabLoadStrategy = prefabLoadStrategy;
             _levelLoaderMediator = levelLoaderMediator;
             _stateUIFactory = stateUIFactory;
         }
 
-        public string Id => GameStateNames.Gameplay;
-        public async void Enter()
+        public override async void Enter()
         {
             _disposables = new();
             Debug.Log("Начал входить в состояние игры");
@@ -45,7 +41,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
             _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
         }
 
-        public async UniTask Exit()
+        public override async UniTask Exit()
         {
             _disposables.Dispose();
             _manageInputState.DisableInput();
@@ -62,14 +58,13 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void SetMainMenuState()
         {
-            _gameStateMachine.SetState(GameStateNames.MainMenu);
+            OnExit.OnNext(GameStateNames.MainMenu);
         }
 
         private void HideLoadingWindow()
         {
             _loadingWindowController.HideLoadingWindow();
             _manageInputState.EnableInput();
-            Debug.Log("Зашел в геймлпей");
         }
     }
 }
