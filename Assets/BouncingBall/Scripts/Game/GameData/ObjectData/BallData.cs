@@ -7,6 +7,7 @@ namespace BouncingBall.Game.Data.ObjectData
     public class BallData
     {
         [JsonProperty] private int _maxHealth;
+        [JsonIgnore] public int MaxSpeed = 5;
 
         [JsonIgnore] public int MaxHealth => _maxHealth;
 

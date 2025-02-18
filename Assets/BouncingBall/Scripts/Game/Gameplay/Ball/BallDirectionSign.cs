@@ -1,5 +1,6 @@
 ﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.Game.Data;
+using BouncingBall.Game.Data.ObjectData;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
     {
         private IInputManager _inputController;
         private CompositeDisposable _inputDeviceDisposable;
+        private BallData _ballData;
 
         [Inject]
         public void Constructor(GameDataManager gameDataManager,IInputManager inputController)
@@ -18,7 +20,8 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _inputController = inputController;
             gameObject.SetActive(false);
             transform.localScale = Vector3.one;
-            gameDataManager.GameData.BallModel.Position.Subscribe(x => transform.position = x).AddTo(this);
+            _ballData = gameDataManager.GameData.BallModel;
+            _ballData.Position.Subscribe(x => transform.position = x).AddTo(this);
             _inputController.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
         }
 
@@ -40,7 +43,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
         private void UpdateScale(float zScale)
         {
             Vector3 newScale = transform.localScale;
-            newScale.z = Mathf.Clamp(zScale, 0, 3f); 
+            newScale.z = Mathf.Clamp(zScale, 0, _ballData.MaxSpeed); 
             transform.localScale = newScale;
         }
 

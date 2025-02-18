@@ -15,6 +15,8 @@ namespace BouncingBall.Game.Gameplay.BallObject
     [RequireComponent(typeof(CustomRigidbody))]
     public class Ball : MonoBehaviour, IPointerDownHandler
     {
+        [SerializeField] private float _speedMultiplier = 200;
+
         private CustomRigidbody _rigidbody;
         private BallData _model;
 
@@ -26,10 +28,11 @@ namespace BouncingBall.Game.Gameplay.BallObject
         [Inject]
         public void Constructor(GameDataManager GameDataManager, IInputManager inputManager)
         {
+            _rigidbody = GetComponent<CustomRigidbody>();
             _model = GameDataManager.GameData.BallModel;
             _inputManager = inputManager;
+
             _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
-            _rigidbody = GetComponent<CustomRigidbody>();
             Observable.EveryUpdate().Subscribe(_ => _model.Position.Value = transform.position).AddTo(this);
             Observable.EveryUpdate().Subscribe(_ => _model.Direction.Value = _rigidbody.TestVelocity).AddTo(this);
         }
@@ -50,15 +53,14 @@ namespace BouncingBall.Game.Gameplay.BallObject
 
         private void SetSpeer(float speed)
         {
-            _speed = Math.Clamp(speed, 0, 3);
+            _speed = Math.Clamp(speed, 0, _model.MaxSpeed);
         }
 
         private void Punch2(bool flag)
         {
-
             if (flag == false)
             {
-                _rigidbody.AddForce(_moveDirection * 50);
+                _rigidbody.AddForce(_moveDirection * _speed * _speedMultiplier);
             }
         }
 

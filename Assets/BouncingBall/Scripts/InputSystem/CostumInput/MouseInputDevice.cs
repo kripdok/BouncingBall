@@ -24,7 +24,7 @@ public class MouseInputDevice : IInputDevice
 
         _plane = new(Vector3.up, Vector3.zero);
         _gameDataManager = gameDataManager;
-        _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
+        _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint); // TODO - добавить отписку
         _isTest = false;
     }
 
@@ -63,10 +63,8 @@ public class MouseInputDevice : IInputDevice
 
         if (direction != Vector3.zero)
         {
-            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            Direction.Value = new Vector3(0, angle, 0);
-            Direction.Value = new Vector3(direction.x, 0, direction.z);
-            Angle.Value = angle;
+            Direction.Value = new Vector3(direction.x, 0, direction.z).normalized;
+            Angle.Value = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         }
     }
 

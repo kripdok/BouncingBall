@@ -7,9 +7,9 @@ namespace BouncingBall.Game.GameRoot
 {
     public class GameBootstrap
     {
-        public GameBootstrap(GameDataManager gameDataManager,IStateMachine gameStateMachine, CameraHolder cameraHolder)
+        public GameBootstrap(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder)
         {
-            InitStartParams(gameDataManager,gameStateMachine, cameraHolder);
+            InitStartParams(gameDataManager, gameStateMachine, cameraHolder);
         }
 
         private async void InitStartParams(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder)
@@ -20,7 +20,7 @@ namespace BouncingBall.Game.GameRoot
 
             await gameDataManager.LoadGameData();
             cameraHolder.Init();
-             gameStateMachine.SetState(GameStateNames.Bootstrap);
+            gameStateMachine.SetState(GameStateNames.Bootstrap);
         }
     }
 }
