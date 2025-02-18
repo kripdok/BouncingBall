@@ -11,6 +11,4 @@ public interface IInputDevice
     public void SetRotationAndScale();
 
     public void TryDisableIsDirectionSet();
-
-    public void SetTest();
 }

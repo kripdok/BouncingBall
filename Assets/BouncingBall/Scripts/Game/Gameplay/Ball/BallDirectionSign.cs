@@ -23,6 +23,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _ballData = gameDataManager.GameData.BallModel;
             _ballData.Position.Subscribe(x => transform.position = x).AddTo(this);
             _inputController.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
+            SubscribeToInput();
         }
 
         private void SubscribeToInput()

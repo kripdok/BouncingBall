@@ -27,6 +27,7 @@ public class CameraHolder : MonoBehaviour
         _ballData.ReadPosition.Subscribe(SetPosition).AddTo(this);
         _ballData.ReadDirection.Subscribe(UpdateCameraPosition).AddTo(this);
         _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
+        SubscribeToInput();
     }
 
     private void SubscribeToInput()

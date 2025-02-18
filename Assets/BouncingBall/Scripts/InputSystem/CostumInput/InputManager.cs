@@ -2,6 +2,7 @@ using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : IInputInteractivityChanger, IInputManager 
 {
@@ -21,6 +22,7 @@ public class InputManager : IInputInteractivityChanger, IInputManager
     public InputManager(InputDevicePool factory)
     {
         _factory = factory;
+        InitializeInputDevice(InputDeviceName.Keyboard);
     }
 
     public void EnableInput()
@@ -39,9 +41,12 @@ public class InputManager : IInputInteractivityChanger, IInputManager
         _testInputDevice = null;
     }
 
-    public void SetTest()
+    public void EnableControllable()
     {
-        _testInputDevice?.SetTest();
+        if (_testInputDevice is IControllable controllableDevice)
+        {
+            controllableDevice.EnableControllable(); // Вызов метода включения управляемости
+        }
     }
 
     private void Update()

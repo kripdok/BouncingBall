@@ -68,7 +68,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 
         }
 
-        public void SetTest()
+        public void EnableControllable()
         {
            
         }

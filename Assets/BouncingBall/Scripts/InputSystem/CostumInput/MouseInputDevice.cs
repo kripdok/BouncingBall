@@ -1,8 +1,9 @@
-﻿using BouncingBall.Game.Data;
+﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
+using BouncingBall.Game.Data;
 using UniRx;
 using UnityEngine;
 
-public class MouseInputDevice : IInputDevice
+public class MouseInputDevice : IInputDevice, IControllable
 {
     public ReactiveProperty<bool> IsDirectionSet { get; private set; }
     public ReactiveProperty<Vector3> Direction { get; private set; }
@@ -13,7 +14,7 @@ public class MouseInputDevice : IInputDevice
     private Vector3 _ballPosition;
     private GameDataManager _gameDataManager;
 
-    private bool _isTest;
+    public bool IsControllable { get; private set; }
 
     public MouseInputDevice(GameDataManager gameDataManager)
     {
@@ -24,27 +25,27 @@ public class MouseInputDevice : IInputDevice
 
         _plane = new(Vector3.up, Vector3.zero);
         _gameDataManager = gameDataManager;
-        _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint); // TODO - добавить отписку
-        _isTest = false;
+        _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
+        IsControllable = false;
     }
 
-    public void SetTest()
+    public void EnableControllable()
     {
-        _isTest = true;
+        IsControllable = true;
     }
 
     public void SetRotationAndScale()
     {
-        if (_isTest)
+        if (IsControllable)
         {
             IsDirectionSet.Value = Input.GetMouseButton(0);
-            _isTest = IsDirectionSet.Value;
+            IsControllable = IsDirectionSet.Value;
         }
     }
 
     public void TryDisableIsDirectionSet()
     {
-        if (_isTest)
+        if (IsControllable)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -52,12 +53,12 @@ public class MouseInputDevice : IInputDevice
             {
                 var position = ray.GetPoint(distance);
                 CalculationScaleZ(position);
-                СalculatуDirection(position);
+                CalculateDirection(position);
             }
         }
     }
 
-    private void СalculatуDirection(Vector3 position)
+    private void CalculateDirection(Vector3 position)
     {
         Vector3 direction = position - _ballPosition;
 

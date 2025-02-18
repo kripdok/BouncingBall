@@ -11,6 +11,6 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
         public ReadOnlyReactiveProperty<float> Angle { get;}
         public ISubject<Unit> InputChange { get; }
 
-        public void SetTest();
+        public void EnableControllable();
     }
 }

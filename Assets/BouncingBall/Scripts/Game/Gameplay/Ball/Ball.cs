@@ -35,6 +35,8 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
             Observable.EveryUpdate().Subscribe(_ => _model.Position.Value = transform.position).AddTo(this);
             Observable.EveryUpdate().Subscribe(_ => _model.Direction.Value = _rigidbody.TestVelocity).AddTo(this);
+
+            SubscribeToInput();
         }
 
         private void SubscribeToInput()
@@ -48,7 +50,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            _inputManager.SetTest();
+            _inputManager.EnableControllable();
         }
 
         private void SetSpeer(float speed)
