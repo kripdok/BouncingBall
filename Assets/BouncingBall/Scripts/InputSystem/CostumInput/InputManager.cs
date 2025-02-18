@@ -14,11 +14,11 @@ public class InputManager : IInputInteractivityChanger, IInputManager
 
     private Subject<Unit> _inputChange = new();
     private CompositeDisposable _disposable;
-    private InputDeviceFactory _factory;
+    private InputDevicePool _factory;
     private IInputDevice _testInputDevice;
     private InputDeviceName _currentInputDeviceName;
 
-    public InputManager(InputDeviceFactory factory)
+    public InputManager(InputDevicePool factory)
     {
         _factory = factory;
     }

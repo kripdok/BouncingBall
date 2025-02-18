@@ -4,7 +4,6 @@ using BouncingBall.Game.Data.ObjectData;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Zenject;
 
 public class CameraHolder : MonoBehaviour
