@@ -29,7 +29,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
 
             _inputController.ZScale.Subscribe(UpdateScale).AddTo(_inputDeviceDisposable);
             _inputController.Angle.Subscribe(UpdateRotation).AddTo(_inputDeviceDisposable);
-            _inputController.IsDirectionSet.Skip(1).Subscribe(Punch2).AddTo(_inputDeviceDisposable);
+            _inputController.IsDirectionSet.Skip(1).Subscribe(flag => gameObject.SetActive(flag)).AddTo(_inputDeviceDisposable);
         }
 
         private void UpdateRotation(float angle)
@@ -43,17 +43,6 @@ namespace BouncingBall.Game.Gameplay.BallObject
             newScale.z = Mathf.Clamp(zScale, 0, 3f); 
             transform.localScale = newScale;
         }
-
-        private void Punch2(bool flag)
-        {
-            gameObject.SetActive(flag);
-
-            if (flag == false)
-            {
-                Debug.Log("Произошел удар");
-            }
-        }
-
 
         private void OnDestroy()
         {

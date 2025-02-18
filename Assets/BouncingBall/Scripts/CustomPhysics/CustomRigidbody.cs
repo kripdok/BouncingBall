@@ -11,11 +11,12 @@ namespace BouncingBall.CustomPhysics
         private const float MinYvelocity = 1;
         private const float MinDistanceToReduceSpeed = 0.01f;
 
-        public Vector3 TestVelocity => _velocityForce;
+        public Vector3 TestVelocity;
 
         private Vector3 _rotationForce;
         private Vector3 _velocityForce;
         private bool _isFall = true;
+        private ContactPoint _lastContact;
 
         private void FixedUpdate()
         {
@@ -28,8 +29,12 @@ namespace BouncingBall.CustomPhysics
         }
         private void OnCollisionEnter(Collision collision)
         {
-            CalculateBounceDirection(collision);
-            TryStopTheFall(collision);
+            _lastContact = collision.GetContact(0);
+
+            CalculateBounceDirection(_lastContact);
+            TryStopTheFall(_lastContact);
+
+            //TODO - здесь надо сделать проверку на то, пересекается ли объект с точкой контакта
         }
 
         private void OnCollisionExit(Collision collision)
@@ -46,6 +51,7 @@ namespace BouncingBall.CustomPhysics
         public void Move(Vector3 direction)
         {
             _velocityForce += direction / _mass * Time.fixedDeltaTime;
+            TestVelocity = _velocityForce;
         }
 
         public void Rotate(Vector3 direction)
@@ -62,6 +68,7 @@ namespace BouncingBall.CustomPhysics
             }
 
             _velocityForce = Vector3.zero;
+            TestVelocity = _velocityForce;
         }
 
         private void ReduceSpeedOfRotation()
@@ -83,18 +90,19 @@ namespace BouncingBall.CustomPhysics
             }
         }
 
-        private void CalculateBounceDirection(Collision collision)
+        private void CalculateBounceDirection(ContactPoint contact)
         {
-            Vector3 normal = collision.GetContact(0).normal;
+            Vector3 normal = contact.normal;
 
             _velocityForce = Vector3.Reflect(_velocityForce, normal);
             _velocityForce.y *= _vilocityDamping;
+            TestVelocity = _velocityForce;
             _rotationForce = new Vector3(_velocityForce.z, 0, _velocityForce.x * -1);
         }
 
-        private void TryStopTheFall(Collision collision)
+        private void TryStopTheFall(ContactPoint contact)
         {
-            var enterDirection = (collision.GetContact(0).point - transform.position).normalized;
+            var enterDirection = (contact.point - transform.position).normalized;
             float minYDirection = -0.1f;
 
             if (enterDirection.y < minYDirection)
@@ -105,7 +113,7 @@ namespace BouncingBall.CustomPhysics
                 {
                     _velocityForce.y = 0;
                     var newPosition = transform.position;
-                    newPosition.y = collision.GetContact(0).point.y + transform.localScale.y / 2;
+                    newPosition.y = contact.point.y + transform.localScale.y / 2;
                     transform.position = newPosition;
                 }
             }
@@ -113,7 +121,7 @@ namespace BouncingBall.CustomPhysics
 
         private void TryStartTheFall(Collision collision)
         {
-            var exitDirection = (collision.transform.position - transform.position).normalized;
+            var exitDirection = (_lastContact.point - transform.position).normalized;
             float minYDirection = -0.1f;
 
             if (exitDirection.y < minYDirection)

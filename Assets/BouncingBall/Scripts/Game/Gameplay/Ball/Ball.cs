@@ -29,8 +29,9 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _model = GameDataManager.GameData.BallModel;
             _inputManager = inputManager;
             _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
-            _rigidbody = GetComponent<CustomRigidbody>(); 
-            Observable.EveryUpdate().Subscribe(_=> _model.Position.Value = transform.position).AddTo(this);
+            _rigidbody = GetComponent<CustomRigidbody>();
+            Observable.EveryUpdate().Subscribe(_ => _model.Position.Value = transform.position).AddTo(this);
+            Observable.EveryUpdate().Subscribe(_ => _model.Direction.Value = _rigidbody.TestVelocity).AddTo(this);
         }
 
         private void SubscribeToInput()
@@ -57,7 +58,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
 
             if (flag == false)
             {
-                _rigidbody.AddForce(_moveDirection * _speed);
+                _rigidbody.AddForce(_moveDirection * 50);
             }
         }
 

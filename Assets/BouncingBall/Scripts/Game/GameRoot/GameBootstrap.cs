@@ -7,18 +7,20 @@ namespace BouncingBall.Game.GameRoot
 {
     public class GameBootstrap
     {
-        public GameBootstrap(GameDataManager gameDataManager,IStateMachine gameStateMachine)
+        public GameBootstrap(GameDataManager gameDataManager,IStateMachine gameStateMachine, CameraHolder cameraHolder)
         {
-            InitStartParams(gameDataManager,gameStateMachine);
+            InitStartParams(gameDataManager,gameStateMachine, cameraHolder);
         }
 
-        private async void InitStartParams(GameDataManager gameDataManager, IStateMachine gameStateMachine)
+        private async void InitStartParams(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder)
         {
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.multiTouchEnabled = false;
+
             await gameDataManager.LoadGameData();
-            gameStateMachine.SetState(GameStateNames.Bootstrap);
+            cameraHolder.Init();
+             gameStateMachine.SetState(GameStateNames.Bootstrap);
         }
     }
 }

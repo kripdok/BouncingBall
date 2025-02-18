@@ -21,6 +21,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             BindInputController();
             BindFactory();
             BindGameFSM();
+            BindCamera();
             Container.Bind<SceneLoader>().AsSingle();
             Container.BindInterfacesTo<ResourcesPrefabLoadStrategy>().AsSingle();
             Container.Bind<LevelLoaderMediator>().AsSingle();
@@ -31,11 +32,16 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindLoadingWindow()
         {
-            var uiRootViewPrefab = Resources.Load<UIRootHolder>("Prefabs/UI/UIRoot");
-            var uiRootView = Instantiate(uiRootViewPrefab);
-            DontDestroyOnLoad(uiRootView);
+            //var uiRootViewPrefab = Resources.Load<UIRootHolder>("Prefabs/UI/UIRoot");
+            //var uiRootView = Instantiate(uiRootViewPrefab);
+            //DontDestroyOnLoad(uiRootView);
 
-            Container.BindInterfacesTo<UIRootHolder>().FromInstance(uiRootView).AsSingle();
+            Container.BindInterfacesTo<UIRootHolder>().FromComponentInNewPrefabResource("Prefabs/UI/UIRoot").AsSingle().NonLazy();
+        }
+
+        private void BindCamera()
+        {
+            Container.Bind<CameraHolder>().FromComponentInNewPrefabResource("Prefabs/CameraHolder").AsSingle().NonLazy();
         }
 
         private void BindInputController()
