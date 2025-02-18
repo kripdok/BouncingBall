@@ -4,6 +4,7 @@ using BouncingBall.Game.Data.ObjectData;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
 public class CameraHolder : MonoBehaviour
@@ -14,6 +15,7 @@ public class CameraHolder : MonoBehaviour
 
     private BallData _ballData;
     private CompositeDisposable _inputDeviceDisposable;
+    private float _yPosition;
 
 
     [Inject] private GameDataManager _gameDataManager;
@@ -21,6 +23,7 @@ public class CameraHolder : MonoBehaviour
 
     public void Init()
     {
+        _yPosition = transform.position.y;
         _ballData = _gameDataManager.GameData.BallModel;
         _ballData.ReadPosition.Subscribe(SetPosition).AddTo(this);
         _ballData.ReadDirection.Subscribe(UpdateCameraPosition).AddTo(this);
@@ -43,7 +46,7 @@ public class CameraHolder : MonoBehaviour
     private void SetPosition(Vector3 position)
     {
         var newPosition = position;
-        newPosition.y = transform.position.y;
+        newPosition.y += _yPosition;
         transform.position = newPosition;
     }
 
