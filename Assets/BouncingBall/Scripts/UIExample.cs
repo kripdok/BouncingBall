@@ -11,7 +11,7 @@ public class UIExample : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _position.text = rigidbody.transform.position.ToString();
-        _vilocity.text = rigidbody.TestVelocity.ToString();
+        //_position.text = rigidbody.transform.position.ToString();
+        //_vilocity.text = rigidbody.TestVelocity.ToString();
     }
 }

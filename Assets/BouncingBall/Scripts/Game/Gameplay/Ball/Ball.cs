@@ -25,6 +25,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
         private Vector3 _moveDirection;
         private float _speed;
 
+
         [Inject]
         public void Constructor(GameDataManager GameDataManager, IInputManager inputManager)
         {
@@ -35,7 +36,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
             _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
             Observable.EveryUpdate().Subscribe(_ => _model.Position.Value = transform.position).AddTo(this);
             Observable.EveryUpdate().Subscribe(_ => _model.Direction.Value = _rigidbody.TestVelocity).AddTo(this);
-
+        
             SubscribeToInput();
         }
 

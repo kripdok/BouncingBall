@@ -4,6 +4,7 @@ namespace BouncingBall.CustomPhysics
 {
     public class CustomRigidbody : MonoBehaviour
     {
+        [SerializeField] private Transform _body;
         [SerializeField] private float _mass = 1f;
         [SerializeField, Range(0, 10)] private float _vilocityDamping;
 
@@ -14,23 +15,21 @@ namespace BouncingBall.CustomPhysics
         public Vector3 TestVelocity;
 
         private Vector3 _rotationForce;
-        private Vector3 _velocityForce;
+        public Vector3 _velocityForce;
         private bool _isFall = true;
         private ContactPoint _lastContact;
 
         private void FixedUpdate()
         {
             transform.position += _velocityForce * Time.fixedDeltaTime;
-            transform.rotation = Quaternion.Euler(_rotationForce) * Quaternion.Euler(transform.rotation.eulerAngles);
-
+            _body.rotation = Quaternion.Euler(_rotationForce) * Quaternion.Euler(_body.rotation.eulerAngles);
             ReduceSpeedOfMovement();
-            ReduceSpeedOfRotation();
+           ReduceSpeedOfRotation();
             TryFall();
         }
         private void OnCollisionEnter(Collision collision)
         {
             _lastContact = collision.GetContact(0);
-
             CalculateBounceDirection(_lastContact);
             TryStopTheFall(_lastContact);
 
@@ -93,11 +92,13 @@ namespace BouncingBall.CustomPhysics
         private void CalculateBounceDirection(ContactPoint contact)
         {
             Vector3 normal = contact.normal;
-
             _velocityForce = Vector3.Reflect(_velocityForce, normal);
-            _velocityForce.y *= _vilocityDamping;
             TestVelocity = _velocityForce;
+            //_velocityForce.y *= _vilocityDamping;
+            _velocityForce = Vector3.zero;
             _rotationForce = new Vector3(_velocityForce.z, 0, _velocityForce.x * -1);
+
+
         }
 
         private void TryStopTheFall(ContactPoint contact)
