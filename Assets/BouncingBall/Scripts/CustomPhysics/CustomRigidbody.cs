@@ -51,6 +51,13 @@ namespace BouncingBall.CustomPhysics
             TryStartTheFall(collision);
         }
 
+        public void Reset()
+        {
+            _isFall = true;
+            _velocityForce = Vector3.zero;
+            _rotationForce = Vector3.zero;
+        }
+
         public void AddForce(Vector3 direction)
         {
             Move(direction);

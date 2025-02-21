@@ -2,6 +2,7 @@
 using BouncingBall.CustomPhysics;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
+using BouncingBall.Utilities.Reset;
 using System;
 using UniRx;
 using UnityEngine;
@@ -13,7 +14,7 @@ using Zenject;
 namespace BouncingBall.Game.Gameplay.BallObject
 {
     [RequireComponent(typeof(CustomRigidbody))]
-    public class Ball : MonoBehaviour, IPointerDownHandler
+    public class Ball : MonoBehaviour, IPointerDownHandler, IResettable
     {
         [SerializeField] private float _speedMultiplier = 200;
 
@@ -27,8 +28,9 @@ namespace BouncingBall.Game.Gameplay.BallObject
 
 
         [Inject]
-        public void Constructor(GameDataManager GameDataManager, IInputManager inputManager)
+        public void Constructor(GameDataManager GameDataManager, IInputManager inputManager, ResetManager resetManager)
         {
+            resetManager.Add(this);
             _rigidbody = GetComponent<CustomRigidbody>();
             _model = GameDataManager.GameData.BallModel;
             _inputManager = inputManager;
@@ -67,5 +69,9 @@ namespace BouncingBall.Game.Gameplay.BallObject
             }
         }
 
+        void IResettable.Reset()
+        {
+            _rigidbody.Reset();
+        }
     }
 }

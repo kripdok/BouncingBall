@@ -3,6 +3,7 @@ using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
+using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -19,16 +20,18 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         private readonly LevelLoaderMediator _levelLoaderMediator;
         private readonly StateUIFactory _stateUIFactory;
+        private readonly ResetManager _resetManager;
 
         private CompositeDisposable _disposables;
 
-        public MainMenuState(ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator) : base(GameStateNames.MainMenu)
+        public MainMenuState(ResetManager resetManager,ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator) : base(GameStateNames.MainMenu)
         {
             _stateUIFactory = stateUIFactory;
             _levelLoaderMediator = levelLoaderMediator;
             _prefabLoadStrategy = prefabLoadStrategy;
             _loadingWindowController = loadingWindowController;
             _attachStateUI = attachStateUI;
+            _resetManager = resetManager;
         }
 
         public override async void Enter()
@@ -38,6 +41,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
             CreateMainMenuUI();
             _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _levelLoaderMediator.SetLevelName(LevelId);
+            _resetManager.Reset();
         }
 
         public override async UniTask Exit()

@@ -2,12 +2,11 @@ using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.FinalStateMachine;
-using BouncingBall.Game.FinalStateMachine.States;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
-using UnityEngine;
+using BouncingBall.Utilities.Reset;
 using Zenject;
 
 
@@ -28,14 +27,11 @@ namespace BouncingBall.Game.GameRoot.Installers
             Container.Bind<IDataLoader>().To<LocalDataLoader>().AsSingle();
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
             Container.Bind<GameDataManager>().AsSingle();
+            Container.Bind<ResetManager>().AsSingle();
         }
 
         private void BindLoadingWindow()
         {
-            //var uiRootViewPrefab = Resources.Load<UIRootHolder>("Prefabs/UI/UIRoot");
-            //var uiRootView = Instantiate(uiRootViewPrefab);
-            //DontDestroyOnLoad(uiRootView);
-
             Container.BindInterfacesTo<UIRootHolder>().FromComponentInNewPrefabResource("Prefabs/UI/UIRoot").AsSingle().NonLazy();
         }
 
