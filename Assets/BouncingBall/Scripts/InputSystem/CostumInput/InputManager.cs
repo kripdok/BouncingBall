@@ -2,9 +2,8 @@ using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.InputSystem.Controller;
 using UniRx;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class InputManager : IInputInteractivityChanger, IInputManager 
+public class InputManager : IInputInteractivityChanger, IInputManager
 {
     public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
     public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
@@ -29,6 +28,11 @@ public class InputManager : IInputInteractivityChanger, IInputManager
     {
         _disposable = new CompositeDisposable();
         Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
+
+        if (_testInputDevice == null)
+        {
+            InitializeInputDevice(_currentInputDeviceName);
+        }
     }
 
     public void DisableInput()
