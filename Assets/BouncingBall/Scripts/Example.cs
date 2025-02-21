@@ -19,7 +19,7 @@ public class Example : MonoBehaviour
 
     public void SetForce()
     {
-        _rigidbody.AddForce(_direction);
+       // _rigidbody.AddForce(_direction,1);
     }
 
     private async void OnCollisionEnter(Collision collision)
@@ -28,10 +28,8 @@ public class Example : MonoBehaviour
         var directionOfCompression = Vector3.one;
 
         Vector3 normal = collision.GetContact(0).normal;
-        Debug.Log($"1/   локальный поворот{_transfo.rotation}   обычный{_transfo.localRotation}\n ____________");
         var sumRotation = _transfo.rotation;
         transform.rotation = Quaternion.Euler(collision.transform.eulerAngles);
-        Debug.Log($"2/  локальный поворот{_transfo.rotation}   обычный{_transfo.localRotation}");
         _transfo.rotation = sumRotation;
         if (normal.y == 1)
             return;
@@ -58,7 +56,7 @@ public class Example : MonoBehaviour
         }
 
         transform.localScale = Vector3.one;
-        _rigidbody.AddForce(Vector3.Reflect(velocity * 50, normal));
+      //  _rigidbody.AddForce(Vector3.Reflect(velocity * 50, normal).normalized, 0.1f);
     }
 
     public void Update()
@@ -73,7 +71,7 @@ public class Example : MonoBehaviour
         // Рассчитываем направление движения
         Vector3 direction = new Vector3(moveHorizontal, 0, moveVertical).normalized * Time.fixedDeltaTime * 200;
 
-        _rigidbody.AddForce(direction);
+     //   _rigidbody.AddForce(direction.normalized,0.1f);
       
     }
 }

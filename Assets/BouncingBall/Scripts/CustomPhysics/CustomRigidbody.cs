@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.CustomPhysics
@@ -7,33 +8,40 @@ namespace BouncingBall.CustomPhysics
         [SerializeField] private Transform _body;
         [SerializeField] private float _mass = 1f;
         [SerializeField, Range(0, 10)] private float _vilocityDamping;
+        [SerializeField, Range(0, 10)] private float _maximumCompression;
+        [SerializeField, Range(0, 1)] private float _compressionDuration;
 
         private const float FallAcceleration = 9.81f;
         private const float MinYvelocity = 1;
         private const float MinDistanceToReduceSpeed = 0.01f;
 
         public Vector3 TestVelocity;
+        public Vector3 _velocityForce;
 
         private Vector3 _rotationForce;
-        public Vector3 _velocityForce;
         private bool _isFall = true;
         private ContactPoint _lastContact;
+        private Vector3 _originalScale;
+
+        private void Awake()
+        {
+            _originalScale = transform.localScale;
+        }
 
         private void FixedUpdate()
         {
             transform.position += _velocityForce * Time.fixedDeltaTime;
             _body.rotation = Quaternion.Euler(_rotationForce) * Quaternion.Euler(_body.rotation.eulerAngles);
+
             ReduceSpeedOfMovement();
-           ReduceSpeedOfRotation();
+            ReduceSpeedOfRotation();
             TryFall();
         }
         private void OnCollisionEnter(Collision collision)
         {
             _lastContact = collision.GetContact(0);
-            CalculateBounceDirection(_lastContact);
             TryStopTheFall(_lastContact);
-
-            //TODO - здесь надо сделать проверку на то, пересекается ли объект с точкой контакта
+            ReactToCollision(collision);
         }
 
         private void OnCollisionExit(Collision collision)
@@ -89,18 +97,6 @@ namespace BouncingBall.CustomPhysics
             }
         }
 
-        private void CalculateBounceDirection(ContactPoint contact)
-        {
-            Vector3 normal = contact.normal;
-            _velocityForce = Vector3.Reflect(_velocityForce, normal);
-            TestVelocity = _velocityForce;
-            //_velocityForce.y *= _vilocityDamping;
-            _velocityForce = Vector3.zero;
-            _rotationForce = new Vector3(_velocityForce.z, 0, _velocityForce.x * -1);
-
-
-        }
-
         private void TryStopTheFall(ContactPoint contact)
         {
             var enterDirection = (contact.point - transform.position).normalized;
@@ -118,6 +114,72 @@ namespace BouncingBall.CustomPhysics
                     transform.position = newPosition;
                 }
             }
+        }
+
+        private async void ReactToCollision(Collision collision)
+        {
+            Vector3 normal = _lastContact.normal;
+            ChangeRotate(normal);
+
+            var newVelocity = Vector3.Reflect(_velocityForce, normal);
+            _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
+
+            await CompressScale(newVelocity);
+            await UnclenchScale();
+
+            TestVelocity = _velocityForce;
+        }
+
+        private void ChangeRotate(Vector3 eulerAngle)
+        {
+            var sumRotation = _body.rotation;
+            transform.rotation = Quaternion.LookRotation(eulerAngle);
+            _body.rotation = sumRotation;
+        }
+
+        private async UniTask CompressScale(Vector3 newVelocity)
+        {
+            var powerCompression = GetVelocityForcePowerCompression();
+            var compressionScale = GetCinoressScale(powerCompression);
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _compressionDuration)
+            {
+                float lerpT = elapsedTime / _compressionDuration;
+                transform.localScale = Vector3.Lerp(transform.localScale, compressionScale, lerpT);
+                _velocityForce = Vector3.Lerp(_velocityForce, newVelocity, lerpT);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield();
+            }
+        }
+
+        private async UniTask UnclenchScale()
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _compressionDuration)
+            {
+                float lerpT = elapsedTime / _compressionDuration;
+                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, lerpT);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield();
+            }
+
+            transform.localScale = Vector3.one;
+        }
+
+        private float GetVelocityForcePowerCompression()
+        {
+            var number = Vector3.Distance(Vector3.zero, _velocityForce);
+            return Mathf.Clamp(number, 0, _maximumCompression);
+        }
+
+        private Vector3 GetCinoressScale(float powerCompression)
+        {
+            var scale = transform.localScale;
+            scale.z = scale.z - (powerCompression / 10);
+            return scale;
         }
 
         private void TryStartTheFall(Collision collision)
