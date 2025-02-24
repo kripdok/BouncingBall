@@ -5,6 +5,6 @@ namespace BouncingBall.UI
 {
     public abstract class StateUI : MonoBehaviour
     {
-        public readonly Subject<Unit> OnExit = new();
+        public readonly Subject<string> OnExit = new();
     }
 }

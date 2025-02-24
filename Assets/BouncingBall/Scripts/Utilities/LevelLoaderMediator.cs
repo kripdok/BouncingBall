@@ -20,8 +20,8 @@ namespace BouncingBall.Utilities
 
         public void SetLevelName(string levelName)
         {
-            _levelName.Value = levelName;
             _onLevelLoaded.Value = false;
+            _levelName.Value = levelName;
         }
 
         public void NotifyLevelIsLoaded()

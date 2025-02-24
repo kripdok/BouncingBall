@@ -23,8 +23,9 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private readonly ResetManager _resetManager;
 
         private CompositeDisposable _disposables;
+        private string _levelName;
 
-        public MainMenuState(ResetManager resetManager,ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator) : base(GameStateNames.MainMenu)
+        public MainMenuState(ResetManager resetManager, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, StateUIFactory stateUIFactory, LevelLoaderMediator levelLoaderMediator) : base(GameStateNames.MainMenu)
         {
             _stateUIFactory = stateUIFactory;
             _levelLoaderMediator = levelLoaderMediator;
@@ -48,18 +49,20 @@ namespace BouncingBall.Game.FinalStateMachine.States
         {
             _disposables.Dispose();
             await _loadingWindowController.ShowLoadingWindow();
+            _levelLoaderMediator.SetLevelName(_levelName);
         }
 
         private void CreateMainMenuUI()
         {
             var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
             var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
-            mainMenuUI.OnExit.Subscribe(_ => SetGameplayState()).AddTo(_disposables);
+            mainMenuUI.OnExit.Subscribe(SetGameplayState).AddTo(_disposables);
             _attachStateUI.AttachStateUI(mainMenuUI);
         }
 
-        private void SetGameplayState()
+        private void SetGameplayState(string levelName)
         {
+            _levelName = levelName;
             OnExit.OnNext(GameStateNames.Gameplay);
         }
 

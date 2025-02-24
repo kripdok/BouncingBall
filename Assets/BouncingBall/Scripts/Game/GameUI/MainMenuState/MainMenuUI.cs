@@ -42,8 +42,7 @@ namespace BouncingBall.Game.UI.MainMenuState
 
         private void StartLevelCommand(string levelName)
         {
-            _levelLoaderMediator.SetLevelName(levelName);
-            OnExit.OnNext(Unit.Default);
+            OnExit.OnNext(levelName);
         }
     }
 }

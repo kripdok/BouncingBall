@@ -12,7 +12,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
         public void Awake()
         {
-            _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext(Unit.Default)).AddTo(this);
+            _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
         }
     }
 }
