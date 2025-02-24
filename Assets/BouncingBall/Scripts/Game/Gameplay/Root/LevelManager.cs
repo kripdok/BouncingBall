@@ -63,6 +63,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 var coins = _coinsPool.Spawn(coinData);
                 coins.transform.position = spawns[i].position;
                 _coinsCache.Add(coinData,coins);
+                coinData.Reword.Subscribe(count => _gameDataManager.PlayerData.CoinsCount.Value += count).AddTo(_compositeDisposable);
             }
 
             //Настроить отслеживание подбора для UI?
