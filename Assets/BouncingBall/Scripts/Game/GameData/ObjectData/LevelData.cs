@@ -1,19 +1,22 @@
-﻿using Newtonsoft.Json;
+﻿using BouncingBall.DataLoader;
+using Newtonsoft.Json;
 
 namespace BouncingBall.Game.Data.ObjectData
 {
-    public class LevelData
+    public class LevelData: IDownloadable
     {
-        [JsonProperty] public readonly string LevelName;
+        [JsonProperty] public string LevelName { get; private set; }
+        [JsonProperty] public int CoinsCount { get; private set; }
+        [JsonProperty] public int CoinsForEnableExit { get; private set; }
 
-        [JsonProperty] public readonly int CoinsCount;
-        [JsonProperty] public readonly int CoinsForEnableExit;
-
-        public LevelData(string levelName)
+        public void Load(string jsonData)
         {
-            LevelName = levelName;
-            CoinsCount = 0;
-            CoinsForEnableExit = 0;
+            if (jsonData == string.Empty) return;
+
+            var loadedData = JsonConvert.DeserializeObject<LevelData>(jsonData);
+            LevelName = loadedData.LevelName;
+            CoinsCount = loadedData.CoinsCount;
+            CoinsForEnableExit = loadedData.CoinsForEnableExit;
         }
     }
 }

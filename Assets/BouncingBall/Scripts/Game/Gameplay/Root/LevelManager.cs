@@ -23,7 +23,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private Level _level;
         private LevelData _levelData;
-        private Dictionary<CoinData, Coin> _coins = new();
+
         private CompositeDisposable _compositeDisposable;
 
         private ReactiveDictionary<CoinData, Coin> _coinsCache = new();
