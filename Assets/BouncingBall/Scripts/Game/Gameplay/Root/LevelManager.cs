@@ -59,7 +59,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
             for (var i = 0; i < levelData.CoinsCount; i++)
             {
-                var coinData = new CoinData(10);
+                var coinData = new CoinData(_gameDataManager.GameData.NominalCoiny);
                 var coins = _coinsPool.Spawn(coinData);
                 coins.transform.position = spawns[i].position;
                 _coinsCache.Add(coinData,coins);

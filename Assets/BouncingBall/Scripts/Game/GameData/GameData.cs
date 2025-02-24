@@ -8,6 +8,7 @@ namespace BouncingBall.Game.Data
     public class GameData : IDownloadable
     {
         [JsonProperty] public BallData BallModel { get; private set; }
+        [JsonProperty] public int NominalCoiny { get; private set; }
         [JsonProperty] private List<string> _levelName;
 
         public IReadOnlyList<string> LevelName => _levelName;
@@ -18,6 +19,7 @@ namespace BouncingBall.Game.Data
 
             var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
             BallModel = loadedData.BallModel;
+            NominalCoiny = loadedData.NominalCoiny;
             _levelName = loadedData._levelName;
         }
     }
