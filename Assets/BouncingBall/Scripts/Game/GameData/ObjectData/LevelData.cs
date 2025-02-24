@@ -6,9 +6,14 @@ namespace BouncingBall.Game.Data.ObjectData
     {
         [JsonProperty] public readonly string LevelName;
 
+        [JsonProperty] public readonly int CoinsCount;
+        [JsonProperty] public readonly int CoinsForEnableExit;
+
         public LevelData(string levelName)
         {
             LevelName = levelName;
+            CoinsCount = 0;
+            CoinsForEnableExit = 0;
         }
     }
 }

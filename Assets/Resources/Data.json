@@ -4,7 +4,9 @@
   },
   "_levelData": [
     {
-      "LevelName": "1"
+      "LevelName": "1",
+      "CoinsCount": 2,
+      "CoinsForEnableExit": 1
     }
   ]
 }

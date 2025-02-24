@@ -1,6 +1,7 @@
-﻿using BouncingBall.Game.Gameplay.BallObject;
+﻿using System;
+using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace BouncingBall.Game.Gameplay.LevelObject
 {
@@ -8,14 +9,24 @@ namespace BouncingBall.Game.Gameplay.LevelObject
     {
         [field: SerializeField] public Transform BallSpawnPoint { get; private set; }
 
-        private Ball _ball;
+        [SerializeField] private List<Transform> _coinsSpawnPoint;
+        [SerializeField] private List<Transform> _enemySpawnPoint;
+        [SerializeField] private LevelExit _levelExit;
+        //Добавить Тригер окончания уровня 
 
-        [Inject]
-        public void Construct(Ball ball)
+        public IReadOnlyList<Transform> CoinsSpawnPoint => _coinsSpawnPoint;
+        public IReadOnlyList<Transform> EnemySpawnPoint => _enemySpawnPoint;
+        public IObservable<Unit> ExitTriggerHit => _levelExit.OnExit;
+
+        private void Awake()
         {
-            _ball = ball;
-            _ball.transform.position = BallSpawnPoint.position;
+            _levelExit?.gameObject.SetActive(false);
         }
 
+        public void EnableExit()
+        {
+            Debug.Log("Выход открыт");
+            _levelExit?.gameObject.SetActive(true);
+        }
     }
 }

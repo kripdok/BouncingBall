@@ -14,14 +14,16 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         private readonly LevelFactory _levelFactory;
+        private readonly LevelManager _manager;
 
 
         private Level _concreteLevel;
         LevelLoaderMediator _levelLoaderMediator;
         private string _nameLoadingLevel;
 
-        public LevelLoader(LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator)
+        public LevelLoader(LevelManager manager,LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator)
         {
+            _manager = manager;
             _levelLoaderMediator = levelLoaderMediator;
             _prefabLoadStrategy = prefabLoadStrategy;
             _levelFactory = levelFactory;
@@ -49,6 +51,7 @@ namespace BouncingBall.Game.Gameplay.Root
             }
 
             _concreteLevel = _levelFactory.Create(prefab);
+             _manager.InitLevel(_concreteLevel, id);
             _levelLoaderMediator.NotifyLevelIsLoaded();
         }
     }

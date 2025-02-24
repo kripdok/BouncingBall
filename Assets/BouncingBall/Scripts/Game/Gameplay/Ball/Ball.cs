@@ -69,7 +69,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
             }
         }
 
-        void IResettable.Reset()
+        public void Reset()
         {
             _rigidbody.Reset();
         }

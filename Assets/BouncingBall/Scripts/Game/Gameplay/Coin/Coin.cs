@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Game.Gameplay.BallObject;
+using UnityEngine;
 using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Coins
@@ -10,7 +11,12 @@ namespace BouncingBall.Game.Gameplay.Coins
 
 
         private Rigidbody _rigidbody;
-        [Inject] private CoinData _data;
+        private CoinData _data;
+
+        public void SetData(CoinData data)
+        {
+            _data = data;
+        }
 
         private void Awake()
         {
@@ -26,9 +32,13 @@ namespace BouncingBall.Game.Gameplay.Coins
 
         private void OnTriggerEnter(Collider other)
         {
-            _data.SendReword();
-            //TODO - Происходит вызов подбора монетки + анимация
-            PlayDisappearingAnimation();
+            Debug.Log(other.gameObject);
+            if(other.TryGetComponent<Ball>(out var ball))
+            {
+                _data.SendReword();
+                PlayDisappearingAnimation();
+            }
+            
         }
 
         private void PlayDisappearingAnimation()

@@ -7,6 +7,7 @@ namespace BouncingBall.Game.Gameplay.Coins
         protected override void Reinitialize(CoinData p1, Coin item)
         {
             base.Reinitialize(p1, item);
+            item.SetData(p1);
             item.Reset();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Game.Gameplay.BallObject;
+using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.LevelObject;
 using Zenject;
 
@@ -13,6 +14,8 @@ namespace BouncingBall.Game.Gameplay.Root
             Container.Bind<BallDirectionSign>().FromComponentInNewPrefabResource("Prefabs/Gameplay/PointHolder").AsCached().NonLazy();
             Container.Bind<LevelLoader>().AsCached().NonLazy();
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
+            Container.BindMemoryPool<Coin, CoinsPool>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Coins/Coin").UnderTransformGroup("Coins").AsCached();
+            Container.Bind<LevelManager>().AsCached();
         }
 
         private void BindFactory()
