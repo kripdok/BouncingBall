@@ -29,18 +29,18 @@ namespace BouncingBall.Game.Gameplay.Root
         private ReactiveDictionary<CoinData, Coin> _coinsCache = new();
         private int _coinsCount;
         
-        public void InitLevel(Level level, string id)
+        public async UniTask InitLevel(Level level, string id)
         {
             _compositeDisposable = new();
             _levelData = null; //Добавить в ресет
             _level = level;
-            _levelData = _gameDataManager.GameData.LevelData.FirstOrDefault(level => level.LevelName == id);
+            _levelData = await _gameDataManager.LoadLevel(id);
 
 
 
             _ball.transform.position = level.BallSpawnPoint.position;
 
-            if (_levelData != null)
+            if (_levelData.LevelName != "0")
             {
                 CreateCoins(_levelData, level.CoinsSpawnPoint);
 

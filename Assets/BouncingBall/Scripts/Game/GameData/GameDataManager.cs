@@ -11,7 +11,7 @@ namespace BouncingBall.Game.Data
 
         private IDataLoader _dataLoader;
 
-        private Dictionary<string, LevelData> _levelData;
+        private Dictionary<string, LevelData> _levelData = new();
 
         public GameDataManager(IDataLoader dataLoader)
         {
@@ -25,10 +25,10 @@ namespace BouncingBall.Game.Data
 
         public async UniTask<LevelData> LoadLevel(string name)
         {
-            if(_levelData.ContainsKey(name)) 
-                return _levelData[name];
+            if (_levelData.TryGetValue(name, out var level))
+                return level;
 
-            var level = await _dataLoader.LoadDataAsync<LevelData>($"Assets/Resources/Levels/Level_{name}.json");
+            level = await _dataLoader.LoadDataAsync<LevelData>($"Assets/Resources/Levels/Level_{name}.json");
             _levelData[name] = level;
             return level;
         }

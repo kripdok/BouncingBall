@@ -8,9 +8,9 @@ namespace BouncingBall.Game.Data
     public class GameData : IDownloadable
     {
         [JsonProperty] public BallData BallModel { get; private set; }
-        [JsonProperty] private List<LevelData> _levelData;
+        [JsonProperty] private List<string> _levelName;
 
-        public IReadOnlyList<LevelData> LevelData => _levelData;
+        public IReadOnlyList<string> LevelName => _levelName;
 
         public void Load(string jsonData)
         {
@@ -18,7 +18,7 @@ namespace BouncingBall.Game.Data
 
             var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
             BallModel = loadedData.BallModel;
-            _levelData = loadedData._levelData;
+            _levelName = loadedData._levelName;
         }
     }
 }

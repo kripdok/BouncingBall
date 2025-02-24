@@ -31,7 +31,7 @@ namespace BouncingBall.Game.UI.MainMenuState
 
         private void CreateLevelViewModel()
         {
-            foreach (var levelData in _gameDataManager.GameData.LevelData)
+            foreach (var levelData in _gameDataManager.GameData.LevelName)
             {
                 var model = new LevelModel(levelData);
                 var viewModel = new LevelViewModel(model);

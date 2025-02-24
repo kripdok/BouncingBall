@@ -2,11 +2,6 @@
   "BallModel": {
     "_maxHealth": 3
   },
-  "_levelData": [
-    {
-      "LevelName": "1",
-      "CoinsCount": 2,
-      "CoinsForEnableExit": 1
-    }
+  "_levelName": ["1"
   ]
 }

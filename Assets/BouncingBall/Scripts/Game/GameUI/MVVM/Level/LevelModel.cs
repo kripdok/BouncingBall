@@ -7,9 +7,9 @@ namespace BouncingBall.Game.UI.MVVM.Level
     {
         [JsonProperty] public readonly string LevelName;
 
-        public LevelModel(LevelData levelData)
+        public LevelModel(string levelName)
         {
-            LevelName = levelData.LevelName;
+            LevelName = levelName;
         }
     }
 }
