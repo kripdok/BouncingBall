@@ -1,4 +1,5 @@
-﻿using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
+﻿using Assets.BouncingBall.Scripts.Game.Gameplay;
+using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.CustomPhysics;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
@@ -14,7 +15,7 @@ using Zenject;
 namespace BouncingBall.Game.Gameplay.BallObject
 {
     [RequireComponent(typeof(CustomRigidbody))]
-    public class Ball : MonoBehaviour, IPointerDownHandler, IResettable
+    public class Ball : MonoBehaviour, IPointerDownHandler, IResettable, IDamageable
     {
         [SerializeField] private float _speedMultiplier = 200;
 
@@ -72,6 +73,17 @@ namespace BouncingBall.Game.Gameplay.BallObject
         public void Reset()
         {
             _rigidbody.Reset();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if(damage <= 0)
+            {
+                Debug.LogError($"Object can't take negative damage! Damage: {damage}");
+                return;
+            }
+
+            _model.AddDamage(damage);
         }
     }
 }
