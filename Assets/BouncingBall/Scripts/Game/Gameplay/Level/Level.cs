@@ -28,5 +28,10 @@ namespace BouncingBall.Game.Gameplay.LevelObject
             Debug.Log("Выход открыт");
             _levelExit?.gameObject.SetActive(true);
         }
+
+        public void Reset()
+        {
+            _levelExit?.gameObject.SetActive(false);
+        }
     }
 }

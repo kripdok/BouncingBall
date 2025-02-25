@@ -33,5 +33,11 @@ namespace BouncingBall.Game.Data
             _levelData[name] = level;
             return level;
         }
+
+        public async UniTask ResetPlayerData()
+        {
+            var playerData = await _dataLoader.LoadDataAsync<PlayerData>("Assets/Resources/PlayerData.json");
+            PlayerData.CoinsCount.Value = playerData.CoinsCount.Value;
+        }
     }
 }

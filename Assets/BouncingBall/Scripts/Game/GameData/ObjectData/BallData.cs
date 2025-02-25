@@ -25,6 +25,7 @@ namespace BouncingBall.Game.Data.ObjectData
             ReadConcreteHealth = new(ConcreteHealth);
             ReadPosition = new(Position);
             ReadDirection = new(Direction);
+            ResetHealth();
         }
 
         public void AddDamage(int damage)
@@ -32,7 +33,7 @@ namespace BouncingBall.Game.Data.ObjectData
             ConcreteHealth.Value -= damage;
         }
 
-        public void RestoreHealth()
+        public void ResetHealth()
         {
             ConcreteHealth.Value = MaxHealth;
         }

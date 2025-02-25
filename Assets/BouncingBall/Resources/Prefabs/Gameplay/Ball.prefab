@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedMultiplier: 100
+  _body: {fileID: 1586001351574961064}
 --- !u!114 &5766222152222108221
 MonoBehaviour:
   m_ObjectHideFlags: 0

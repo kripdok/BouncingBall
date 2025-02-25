@@ -45,10 +45,15 @@ namespace BouncingBall.Game.UI.GameplayState
             _lossPopup.gameObject.SetActive(true);
         }
 
-        private void InitPopup()
+        public void DisablePopup()
         {
             _winPopup.gameObject.SetActive(false);
             _lossPopup.gameObject.SetActive(false);
+        }
+
+        private void InitPopup()
+        {
+            DisablePopup();
 
             _winPopup.SetExitButton(OnExit);
             _lossPopup.SetExitButton(OnExit);
@@ -63,14 +68,20 @@ namespace BouncingBall.Game.UI.GameplayState
             }
         }
 
-        private void UpdateHealthDisplays(int count)
+        private void UpdateHealthDisplays(int currentHealth)
         {
-            var number = _gameDataManager.GameData.BallModel.MaxHealth - count;
-            number = number <= 0 ? 0 : number - 1;
+            int maxHealth = _gameDataManager.GameData.BallModel.MaxHealth;
 
-            for (int i = number; i >= 0; i--)
+            for (int i = 0; i < maxHealth; i++)
             {
-                _playerHealthCells[i].DisableCell();
+                if (i < currentHealth)
+                {
+                    _playerHealthCells[i].EnableCell();
+                }
+                else
+                {
+                    _playerHealthCells[i].DisableCell();
+                }
             }
         }
     }

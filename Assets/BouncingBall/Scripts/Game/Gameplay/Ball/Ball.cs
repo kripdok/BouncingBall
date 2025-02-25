@@ -18,6 +18,7 @@ namespace BouncingBall.Game.Gameplay.BallObject
     public class Ball : MonoBehaviour, IPointerDownHandler, IResettable, IDamageable
     {
         [SerializeField] private float _speedMultiplier = 200;
+        [SerializeField] private Transform _body;
 
         private CustomRigidbody _rigidbody;
         private BallData _model;
@@ -73,6 +74,8 @@ namespace BouncingBall.Game.Gameplay.BallObject
         public void Reset()
         {
             _rigidbody.Reset();
+            _body.rotation = Quaternion.identity;
+            _model.ResetHealth();
         }
 
         public void TakeDamage(int damage)

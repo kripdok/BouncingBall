@@ -34,6 +34,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         public async UniTask InitLevel(Level level, string id)
         {
+            _coinsCount = 0;
             _compositeDisposable = new();
             _levelData = null; //Добавить в ресет
             _level = level;
@@ -83,11 +84,20 @@ namespace BouncingBall.Game.Gameplay.Root
 
         }
 
-        private void RestartLevel()
+        private async void RestartLevel()
         {
             _ball.Reset();
             _ball.transform.position = _level.BallSpawnPoint.position;
-            Debug.Log("Restart");
+            _gameUI.DisablePopup();
+            _level.Reset();
+            _coinsCount = 0;
+
+            foreach (var  coin in _coinsCache.Values)
+            {
+                coin.Reset();
+            }
+
+            await _gameDataManager.ResetPlayerData();
             /* Сброс мяча (его здоровье, положение, вращение и остановка ускарения)
              * Сброс UI(Ячейки здоровья, отключения всех pupop)
              * Сброс Данных игрока (Собранные монеты)

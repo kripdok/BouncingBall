@@ -7,14 +7,19 @@ namespace BouncingBall.Game.UI.GameplayState
     {
         [SerializeField] private Image _cell;
 
-        public void Awake()
+        private void Awake()
         {
-            _cell.gameObject.SetActive(true);
+            EnableCell();
         }
 
         public void DisableCell()
         {
             _cell.gameObject.SetActive(false);
+        }
+
+        public void EnableCell()
+        {
+            _cell.gameObject.SetActive(true);
         }
 
     }
