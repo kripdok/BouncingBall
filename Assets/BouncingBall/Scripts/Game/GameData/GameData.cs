@@ -19,6 +19,7 @@ namespace BouncingBall.Game.Data
 
             var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
             BallModel = loadedData.BallModel;
+            BallModel.RestoreHealth();
             NominalCoiny = loadedData.NominalCoiny;
             _levelName = loadedData._levelName;
         }

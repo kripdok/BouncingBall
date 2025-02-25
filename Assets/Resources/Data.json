@@ -1,6 +1,6 @@
 {
   "BallModel": {
-    "_maxHealth": 3
+    "MaxHealth": 1
   },
   "NominalCoiny":  10,
   "_levelName": [

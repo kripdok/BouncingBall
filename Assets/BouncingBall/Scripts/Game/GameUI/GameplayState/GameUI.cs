@@ -24,8 +24,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
         [Inject] private GameDataManager _gameDataManager;
 
-        public IObservable<Unit> OnRestart => _onRestart;
-        private Subject<Unit> _onRestart = new();
+        public Subject<Unit> OnRestart = new();
 
         public void Awake()
         {
@@ -53,7 +52,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
             _winPopup.SetExitButton(OnExit);
             _lossPopup.SetExitButton(OnExit);
-            _lossPopup.SetRestartButton(_onRestart);
+            _lossPopup.SetRestartButton(OnRestart);
         }
 
         private void CreatePlayerhealthCell()
@@ -67,9 +66,9 @@ namespace BouncingBall.Game.UI.GameplayState
         private void UpdateHealthDisplays(int count)
         {
             var number = _gameDataManager.GameData.BallModel.MaxHealth - count;
-            Debug.Log(number);
+            number = number <= 0 ? 0 : number - 1;
 
-            for (int i = number-1; i >= 0; i--)
+            for (int i = number; i >= 0; i--)
             {
                 _playerHealthCells[i].DisableCell();
             }

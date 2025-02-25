@@ -6,10 +6,9 @@ namespace BouncingBall.Game.Data.ObjectData
 {
     public class BallData
     {
-        [JsonProperty] private int _maxHealth;
+        [JsonProperty] public int MaxHealth { get; private set; }
         [JsonIgnore] public int MaxSpeed = 5;
 
-        [JsonIgnore] public int MaxHealth => _maxHealth;
 
         [JsonIgnore] public ReadOnlyReactiveProperty<int> ReadConcreteHealth;
         [JsonIgnore] public ReadOnlyReactiveProperty<Vector3> ReadPosition;
@@ -22,7 +21,6 @@ namespace BouncingBall.Game.Data.ObjectData
 
         public BallData()
         {
-            _maxHealth = 3;
             ConcreteHealth = new ReactiveProperty<int>(MaxHealth);
             ReadConcreteHealth = new(ConcreteHealth);
             ReadPosition = new(Position);
@@ -36,7 +34,7 @@ namespace BouncingBall.Game.Data.ObjectData
 
         public void RestoreHealth()
         {
-            ConcreteHealth.Value = _maxHealth;
+            ConcreteHealth.Value = MaxHealth;
         }
     }
 }

@@ -51,11 +51,10 @@ namespace BouncingBall.Game.Gameplay.Root
                 _gameDataManager.GameData.BallModel.ReadConcreteHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
             }
 
-            if(_attachStateUI.StateUI as GameUI)
+            if(_attachStateUI.StateUI is GameUI gameUI)
             {
-                _gameUI = _attachStateUI.StateUI.GetComponent<GameUI>();
-                _gameUI.OnRestart.Subscribe(_=> RestartLevel()).AddTo(_compositeDisposable);
-                
+                _gameUI = gameUI;
+                _gameUI.OnRestart.Subscribe(_ => RestartLevel());
             }
         }
 
@@ -88,7 +87,11 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             _ball.Reset();
             _ball.transform.position = _level.BallSpawnPoint.position;
-            //
+            Debug.Log("Restart");
+            /* Сброс мяча (его здоровье, положение, вращение и остановка ускарения)
+             * Сброс UI(Ячейки здоровья, отключения всех pupop)
+             * Сброс Данных игрока (Собранные монеты)
+             */
         }
 
         private void EnableLevelExit()
@@ -116,6 +119,7 @@ namespace BouncingBall.Game.Gameplay.Root
         public void Reset()
         {
             _compositeDisposable.Dispose();
+           // _gameUI.OnRestart -= RestartLevel;
         }
     }
 }
