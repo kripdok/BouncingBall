@@ -54,6 +54,7 @@ namespace BouncingBall.Game.Gameplay.Root
             if(_attachStateUI.StateUI as GameUI)
             {
                 _gameUI = _attachStateUI.StateUI.GetComponent<GameUI>();
+                _gameUI.OnRestart.Subscribe(_=> RestartLevel()).AddTo(_compositeDisposable);
                 
             }
         }
@@ -105,11 +106,11 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void TryEnableLoseUI(int healthCount)
         {
-            if (healthCount < 0)
+            if (healthCount <= 0)
             {
-
+                _gameUI.EnableLossPopup();
             }
-            //Нужен UI
+
         }
 
         public void Reset()

@@ -39,7 +39,6 @@ namespace BouncingBall.CustomPhysics
         }
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("Enter");
             _lastContact = collision.GetContact(0);
             TryStopTheFall(_lastContact);
             ReactToCollision(collision);
@@ -47,7 +46,6 @@ namespace BouncingBall.CustomPhysics
 
         private void OnCollisionExit(Collision collision)
         {
-            Debug.Log("Exit");
             TryStartTheFall(collision);
         }
 

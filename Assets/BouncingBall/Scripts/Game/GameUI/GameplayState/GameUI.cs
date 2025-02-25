@@ -1,5 +1,6 @@
 using BouncingBall.Game.Data;
 using BouncingBall.UI;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UniRx;
@@ -14,6 +15,7 @@ namespace BouncingBall.Game.UI.GameplayState
         [SerializeField] private Button _backToMenuButton;
         [SerializeField] private TMP_Text _coinsCount;
         [SerializeField] private WinPopup _winPopup;
+        [SerializeField] private LossPopup _lossPopup;
         [Header("Player health")]
         [SerializeField] private PlayerHealthCell _playerHealthCellPrefab;
         [SerializeField] private Transform _playerHeatlthContainer;
@@ -22,10 +24,12 @@ namespace BouncingBall.Game.UI.GameplayState
 
         [Inject] private GameDataManager _gameDataManager;
 
+        public IObservable<Unit> OnRestart => _onRestart;
+        private Subject<Unit> _onRestart = new();
+
         public void Awake()
         {
-            _winPopup.gameObject.SetActive(false);
-            _winPopup.SetExitButton(OnExit);
+            InitPopup();
             _gameDataManager.PlayerData.CoinsCount.Subscribe(count => _coinsCount.text = count.ToString()).AddTo(this);
             _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
             _gameDataManager.GameData.BallModel.ConcreteHealth.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
@@ -35,6 +39,21 @@ namespace BouncingBall.Game.UI.GameplayState
         public void EnableWinPopup()
         {
             _winPopup.gameObject.SetActive(true);
+        }
+
+        public void EnableLossPopup()
+        {
+            _lossPopup.gameObject.SetActive(true);
+        }
+
+        private void InitPopup()
+        {
+            _winPopup.gameObject.SetActive(false);
+            _lossPopup.gameObject.SetActive(false);
+
+            _winPopup.SetExitButton(OnExit);
+            _lossPopup.SetExitButton(OnExit);
+            _lossPopup.SetRestartButton(_onRestart);
         }
 
         private void CreatePlayerhealthCell()
