@@ -8,6 +8,7 @@ namespace BouncingBall.UI.Root
     {
         [SerializeField] private LoadingWindow _loadingWindow;
         [SerializeField] private Transform _uiSceneContainer;
+        public StateUI StateUI { get; private set; }
 
         public void Awake()
         {
@@ -29,7 +30,7 @@ namespace BouncingBall.UI.Root
         public void AttachStateUI(StateUI sceneUI)
         {
             ClearStateUI();
-
+            StateUI = sceneUI;
             sceneUI.transform.SetParent(_uiSceneContainer, false);
         }
 

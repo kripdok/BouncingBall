@@ -3,11 +3,11 @@ using BouncingBall.Game.Data.ObjectData;
 using BouncingBall.Game.Gameplay.BallObject;
 using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.LevelObject;
-using BouncingBall.Game.UI.MVVM.Level;
+using BouncingBall.Game.UI.GameplayState;
+using BouncingBall.UI.Root;
 using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -20,6 +20,7 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private GameDataManager _gameDataManager;
         [Inject] private CoinsPool _coinsPool;
         [Inject] private Ball _ball;
+        [Inject] private IAttachStateUI _attachStateUI;
 
         private Level _level;
         private LevelData _levelData;
@@ -28,7 +29,9 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private ReactiveDictionary<CoinData, Coin> _coinsCache = new();
         private int _coinsCount;
-        
+
+        private GameUI _gameUI;
+
         public async UniTask InitLevel(Level level, string id)
         {
             _compositeDisposable = new();
@@ -47,6 +50,12 @@ namespace BouncingBall.Game.Gameplay.Root
                 _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
                 _gameDataManager.GameData.BallModel.ReadConcreteHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
             }
+
+            if(_attachStateUI.StateUI as GameUI)
+            {
+                _gameUI = _attachStateUI.StateUI.GetComponent<GameUI>();
+                
+            }
         }
 
         private void CreateCoins(LevelData levelData, IReadOnlyList<Transform> spawns)
@@ -62,7 +71,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 var coinData = new CoinData(_gameDataManager.GameData.NominalCoiny);
                 var coins = _coinsPool.Spawn(coinData);
                 coins.transform.position = spawns[i].position;
-                _coinsCache.Add(coinData,coins);
+                _coinsCache.Add(coinData, coins);
                 coinData.Reword.Subscribe(count => _gameDataManager.PlayerData.CoinsCount.Value += count).AddTo(_compositeDisposable);
             }
 
@@ -84,15 +93,14 @@ namespace BouncingBall.Game.Gameplay.Root
         private void EnableLevelExit()
         {
             _coinsCount++;
-            if (_coinsCount >= _levelData.CoinsCount) 
-            //TODO - сделать проверку на собраныне монеты и на количество необходимое для открытия уровыня
-            _level.EnableExit();
+            if (_coinsCount >= _levelData.CoinsCount)
+                //TODO - сделать проверку на собраныне монеты и на количество необходимое для открытия уровыня
+                _level.EnableExit();
         }
 
         private void EnableWinUI()
         {
-            //Нужен UI
-            //
+            _gameUI.EnableWinPopup();
         }
 
         private void TryEnableLoseUI(int healthCount)
