@@ -64,13 +64,13 @@ namespace BouncingBall.CustomPhysics
 
         public void Move(Vector3 direction)
         {
-            _velocityForce += direction / _mass * Time.fixedDeltaTime;
+            _velocityForce += direction / _mass;
             TestVelocity = _velocityForce;
         }
 
         public void Rotate(Vector3 direction)
         {
-            _rotationForce += direction / _mass * Time.fixedDeltaTime;
+            _rotationForce += direction / _mass;
         }
 
         private void ReduceSpeedOfMovement()
@@ -130,6 +130,7 @@ namespace BouncingBall.CustomPhysics
 
             var newVelocity = Vector3.Reflect(_velocityForce, normal);
             _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
+
 
             await CompressScale(newVelocity);
             await UnclenchScale();

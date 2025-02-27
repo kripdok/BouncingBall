@@ -16,7 +16,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
     {
         private const string UIPatch = "Prefabs/UI/Containers/GameUI";
 
-        [Inject] private readonly IInputInteractivityChanger _manageInputState;
         [Inject] private readonly ILoadingWindowController _loadingWindowController;
         [Inject] private readonly IAttachStateUI _attachStateUI;
         [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
@@ -39,7 +38,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
         public override async UniTask Exit()
         {
             _disposables.Dispose();
-            _manageInputState.DisableInput();
             await _loadingWindowController.ShowLoadingWindow();
         }
 
@@ -59,7 +57,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
         private void HideLoadingWindow()
         {
             _loadingWindowController.HideLoadingWindow();
-            _manageInputState.EnableInput();
         }
     }
 }

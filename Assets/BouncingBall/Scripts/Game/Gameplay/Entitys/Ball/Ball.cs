@@ -14,7 +14,6 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
     [RequireComponent(typeof(CustomRigidbody))]
     public class Ball : MonoBehaviour, IPointerDownHandler, IResettable, IDamageable
     {
-        [SerializeField] private float _speedMultiplier = 200;
         [SerializeField] private Transform _body;
 
         [Inject] private IInputManager _inputManager;
@@ -89,7 +88,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             if (flag == false)
             {
-                _rigidbody.AddForce(_moveDirection * _speed * _speedMultiplier);
+                _rigidbody.AddForce(_moveDirection * _speed);
             }
         }
     }
