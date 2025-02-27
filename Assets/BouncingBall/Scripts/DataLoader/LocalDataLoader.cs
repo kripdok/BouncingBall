@@ -16,9 +16,6 @@ namespace BouncingBall.DataLoader
 
             if (File.Exists(path) == false)
             {
-                //Debug.LogWarning($"Cannot load file at {path}. File does not exist!");
-                //task.SetResult(data);
-                //return task.Task.Result;
                 throw new FileNotFoundException($"{path} does not exist!");
             }
 

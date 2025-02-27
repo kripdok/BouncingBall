@@ -13,6 +13,8 @@ namespace BouncingBall.Game.Gameplay.Coins
         private Rigidbody _rigidbody;
         private CoinData _data;
 
+        [Inject] private CoinsPool _pool;
+
         public void SetData(CoinData data)
         {
             _data = data;
@@ -28,6 +30,11 @@ namespace BouncingBall.Game.Gameplay.Coins
         public void Reset()
         {
             gameObject.SetActive(true);
+        }
+
+        private void OnDisable()
+        {
+            _pool.Despawn(this);
         }
 
         private void OnTriggerEnter(Collider other)

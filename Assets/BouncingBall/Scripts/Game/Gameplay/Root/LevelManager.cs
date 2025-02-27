@@ -32,6 +32,11 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private GameUI _gameUI;
 
+        public LevelManager(ResetManager resetManager)
+        {
+            resetManager.Add(this);
+        }
+
         public async UniTask InitLevel(Level level, string id)
         {
             _coinsCount = 0;
@@ -128,8 +133,16 @@ namespace BouncingBall.Game.Gameplay.Root
 
         public void Reset()
         {
-            _compositeDisposable.Dispose();
-           // _gameUI.OnRestart -= RestartLevel;
+            _compositeDisposable?.Dispose();
+
+            foreach(var coin in _coinsCache.Values)
+            {
+                coin.gameObject.SetActive(false);
+            }
+
+            _coinsCache.Clear();
+
+            Debug.Log("reset");
         }
     }
 }
