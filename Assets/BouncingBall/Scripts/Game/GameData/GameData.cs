@@ -9,6 +9,7 @@ namespace BouncingBall.Game.Data
     {
         [JsonProperty] public BallData BallModel { get; private set; }
         [JsonProperty] public int NominalCoiny { get; private set; }
+
         [JsonProperty] private List<string> _levelName;
 
         public IReadOnlyList<string> LevelName => _levelName;
