@@ -17,7 +17,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
         public void SetRestartButton(IObserver<Unit> OnRestart)
         {
-            _restartButton.onClick.AsObservable().Subscribe(_=> OnRestart.OnNext(Unit.Default)).AddTo(this);
+            _restartButton.onClick.AsObservable().Subscribe(_ => OnRestart.OnNext(Unit.Default)).AddTo(this);
         }
     }
 }

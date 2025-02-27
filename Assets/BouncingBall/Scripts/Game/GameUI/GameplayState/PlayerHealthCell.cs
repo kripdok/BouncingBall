@@ -21,6 +21,5 @@ namespace BouncingBall.Game.UI.GameplayState
         {
             _cell.gameObject.SetActive(true);
         }
-
     }
 }

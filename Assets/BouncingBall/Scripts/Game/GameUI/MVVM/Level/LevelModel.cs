@@ -1,5 +1,4 @@
-﻿using BouncingBall.Game.Data.ObjectData;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BouncingBall.Game.UI.MVVM.Level
 {

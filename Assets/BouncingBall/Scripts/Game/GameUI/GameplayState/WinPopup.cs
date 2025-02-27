@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEngine;
 using UniRx;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BouncingBall.Game.UI.GameplayState

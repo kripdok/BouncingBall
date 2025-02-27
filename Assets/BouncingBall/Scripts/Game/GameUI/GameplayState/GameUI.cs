@@ -1,6 +1,5 @@
 using BouncingBall.Game.Data;
 using BouncingBall.UI;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UniRx;
@@ -20,18 +19,16 @@ namespace BouncingBall.Game.UI.GameplayState
         [SerializeField] private PlayerHealthCell _playerHealthCellPrefab;
         [SerializeField] private Transform _playerHeatlthContainer;
 
-        private List<PlayerHealthCell> _playerHealthCells = new();
-
         [Inject] private GameDataManager _gameDataManager;
+
+        private List<PlayerHealthCell> _playerHealthCells = new();
 
         public Subject<Unit> OnRestart = new();
 
         public void Awake()
         {
             InitPopup();
-            _gameDataManager.PlayerData.CoinsCount.Subscribe(count => _coinsCount.text = count.ToString()).AddTo(this);
-            _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
-            _gameDataManager.GameData.BallModel.ConcreteHealth.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
+            Subsctibe();
             CreatePlayerhealthCell();
         }
 
@@ -49,6 +46,13 @@ namespace BouncingBall.Game.UI.GameplayState
         {
             _winPopup.gameObject.SetActive(false);
             _lossPopup.gameObject.SetActive(false);
+        }
+
+        private void Subsctibe()
+        {
+            _gameDataManager.PlayerData.CoinsCount.Subscribe(count => _coinsCount.text = count.ToString()).AddTo(this);
+            _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
+            _gameDataManager.GameData.BallModel.ConcreteHealth.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
         }
 
         private void InitPopup()

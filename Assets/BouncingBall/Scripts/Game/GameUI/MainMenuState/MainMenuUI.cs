@@ -1,7 +1,6 @@
 using BouncingBall.Game.Data;
 using BouncingBall.Game.UI.MVVM.Level;
 using BouncingBall.UI;
-using BouncingBall.Utilities;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -10,14 +9,12 @@ namespace BouncingBall.Game.UI.MainMenuState
 {
     public class MainMenuUI : StateUI
     {
-
         [SerializeField] private Transform _levelViewContainer;
 
-        private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
-
         [Inject] private LevelViewFactory LevelViewFactory;
-        [Inject] private LevelLoaderMediator _levelLoaderMediator;
         [Inject] private GameDataManager _gameDataManager;
+
+        private readonly ReactiveCollection<LevelViewModel> _levelViewModels = new();
 
         private void Awake()
         {
