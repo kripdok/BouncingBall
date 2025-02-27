@@ -13,8 +13,8 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         public override async void Enter()
         {
-            await _sceneLoader.LoadScene(SceneNames.PreLoader);
-            await _sceneLoader.LoadScene(SceneNames.Gameplay);
+            await _sceneLoader.LoadScene(SceneTag.PreLoader);
+            await _sceneLoader.LoadScene(SceneTag.Gameplay);
         }
 
         public override UniTask Exit()
