@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Root
 {
@@ -12,27 +13,18 @@ namespace BouncingBall.Game.Gameplay.Root
     {
         private const string LevelsPathc = "Prefabs/Gameplay/Levels/Level_";
 
-        private readonly IPrefabLoadStrategy _prefabLoadStrategy;
-        private readonly LevelFactory _levelFactory;
-        private readonly LevelManager _manager;
+        [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
+        [Inject] private readonly LevelFactory _levelFactory;
+        [Inject] private readonly LevelManager _manager;
 
+        private readonly LevelLoaderMediator _levelLoaderMediator;
 
         private Level _concreteLevel;
-        LevelLoaderMediator _levelLoaderMediator;
-        private string _nameLoadingLevel;
 
-        public LevelLoader(LevelManager manager,LevelFactory levelFactory, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator)
+        public LevelLoader(LevelLoaderMediator levelLoaderMediator)
         {
-            _manager = manager;
             _levelLoaderMediator = levelLoaderMediator;
-            _prefabLoadStrategy = prefabLoadStrategy;
-            _levelFactory = levelFactory;
-            levelLoaderMediator.LevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
-        }
-
-        public void SetLevelForLoading(string id)
-        {
-            _nameLoadingLevel = id;
+            _levelLoaderMediator.LevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
         }
 
         public async UniTask LoadLevel(string id)
@@ -42,17 +34,25 @@ namespace BouncingBall.Game.Gameplay.Root
                 GameObject.Destroy(_concreteLevel.gameObject);
             }
 
-            var patch = LevelsPathc + id;
-            var prefab = await _prefabLoadStrategy.AsyncLoadPrefab<Level>(patch);
-
-            if (prefab == null)
-            {
-                throw new ArgumentNullException($"Level with ID {id} ​​does not exist or path to file is incorrectly specified:\n{LevelsPathc}");
-            }
+            var prefab = await LoadPrefab(id);
 
             _concreteLevel = _levelFactory.Create(prefab);
             await _manager.InitLevel(_concreteLevel, id);
             _levelLoaderMediator.NotifyLevelIsLoaded();
+        }
+
+        private async UniTask<Level> LoadPrefab(string id)
+        {
+            var patch = LevelsPathc + id;
+
+            try
+            {
+                return await _prefabLoadStrategy.AsyncLoadPrefab<Level>(patch);
+            }
+            catch
+            {
+                throw new ArgumentNullException($"Level with ID {id} ​​does not exist or path to file is incorrectly specified:\n{LevelsPathc}");
+            }
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using System;
 using UniRx;
-using UnityEngine;
 
 namespace BouncingBall.Game.Gameplay.Coins
 {
     public class CoinData
     {
-        public IObservable<int> Reword => _reword;
-
         private readonly int _rewordCount;
         private readonly Subject<int> _reword;
+
+        public IObservable<int> Reword => _reword;
 
         public CoinData(int reword)
         {
@@ -19,8 +18,6 @@ namespace BouncingBall.Game.Gameplay.Coins
 
         public void SendReword()
         {
-
-            Debug.Log($"Получил {_rewordCount} монет");
             _reword.OnNext(_rewordCount);
         }
     }

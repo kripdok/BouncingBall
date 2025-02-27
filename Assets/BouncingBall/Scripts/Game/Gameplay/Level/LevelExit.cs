@@ -1,4 +1,4 @@
-﻿using BouncingBall.Game.Gameplay.BallObject;
+﻿using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using System;
 using UniRx;
 using UnityEngine;
@@ -8,9 +8,10 @@ namespace BouncingBall.Game.Gameplay.LevelObject
     [RequireComponent(typeof(Rigidbody))]
     public class LevelExit : MonoBehaviour
     {
-        public IObservable<Unit> OnExit => _onExit;
         private ReactiveCommand _onExit = new();
         private Rigidbody _rigidbody;
+
+        public IObservable<Unit> OnExit => _onExit;
 
         private void Awake()
         {

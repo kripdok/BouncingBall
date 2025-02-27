@@ -12,11 +12,16 @@ namespace BouncingBall.Game.Gameplay.LevelObject
         [SerializeField] private List<Transform> _coinsSpawnPoint;
         [SerializeField] private List<Transform> _enemySpawnPoint;
         [SerializeField] private LevelExit _levelExit;
-        //Добавить Тригер окончания уровня 
 
         public IReadOnlyList<Transform> CoinsSpawnPoint => _coinsSpawnPoint;
         public IReadOnlyList<Transform> EnemySpawnPoint => _enemySpawnPoint;
         public IObservable<Unit> ExitTriggerHit => _levelExit.OnExit;
+
+
+        public void Reset()
+        {
+            _levelExit?.gameObject.SetActive(false);
+        }
 
         private void Awake()
         {
@@ -25,13 +30,8 @@ namespace BouncingBall.Game.Gameplay.LevelObject
 
         public void EnableExit()
         {
-            Debug.Log("Выход открыт");
+            Debug.Log("The exit is open");
             _levelExit?.gameObject.SetActive(true);
-        }
-
-        public void Reset()
-        {
-            _levelExit?.gameObject.SetActive(false);
         }
     }
 }

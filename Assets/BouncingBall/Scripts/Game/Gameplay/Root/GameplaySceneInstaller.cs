@@ -1,5 +1,5 @@
-﻿using BouncingBall.Game.Gameplay.BallObject;
-using BouncingBall.Game.Gameplay.Coins;
+﻿using BouncingBall.Game.Gameplay.Coins;
+using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using Zenject;
 

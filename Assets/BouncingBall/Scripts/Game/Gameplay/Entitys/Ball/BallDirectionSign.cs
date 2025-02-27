@@ -6,23 +6,38 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace BouncingBall.Game.Gameplay.BallObject
+namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 {
     public class BallDirectionSign : MonoBehaviour
     {
-        private IInputManager _inputController;
+        [Inject] private IInputManager _inputController;
         private CompositeDisposable _inputDeviceDisposable;
         private BallData _ballData;
 
         [Inject]
-        public void Constructor(GameDataManager gameDataManager,IInputManager inputController)
+        private void Constructor(GameDataManager gameDataManager)
         {
-            _inputController = inputController;
+            _ballData = gameDataManager.GameData.BallModel;
+        }
+
+        private void Awake()
+        {
             gameObject.SetActive(false);
             transform.localScale = Vector3.one;
-            _ballData = gameDataManager.GameData.BallModel;
+
+            Subscribe();
+        }
+
+        private void OnDestroy()
+        {
+            _inputDeviceDisposable?.Dispose();
+        }
+
+        private void Subscribe()
+        {
             _ballData.Position.Subscribe(x => transform.position = x).AddTo(this);
             _inputController.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
+
             SubscribeToInput();
         }
 
@@ -44,13 +59,8 @@ namespace BouncingBall.Game.Gameplay.BallObject
         private void UpdateScale(float zScale)
         {
             Vector3 newScale = transform.localScale;
-            newScale.z = Mathf.Clamp(zScale, 0, _ballData.MaxSpeed); 
+            newScale.z = Mathf.Clamp(zScale, 0, _ballData.MaxSpeed);
             transform.localScale = newScale;
-        }
-
-        private void OnDestroy()
-        {
-            _inputDeviceDisposable?.Dispose();
         }
     }
 }

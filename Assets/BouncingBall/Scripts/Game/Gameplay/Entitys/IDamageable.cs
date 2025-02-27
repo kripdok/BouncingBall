@@ -1,4 +1,4 @@
-﻿namespace Assets.BouncingBall.Scripts.Game.Gameplay
+﻿namespace BouncingBall.Game.Gameplay.Entities
 {
     public interface IDamageable
     {

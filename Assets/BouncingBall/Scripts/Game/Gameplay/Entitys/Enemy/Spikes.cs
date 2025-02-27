@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.BouncingBall.Scripts.Game.Gameplay.Enemy
+namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
     public class Spikes : MonoBehaviour
     {
