@@ -3,6 +3,7 @@ using BouncingBall.Game.FinalStateMachine.States;
 using System;
 using System.Collections.Generic;
 using UniRx;
+using UnityEngine;
 
 
 namespace BouncingBall.Game.FinalStateMachine
@@ -19,12 +20,12 @@ namespace BouncingBall.Game.FinalStateMachine
 
             _states = new Dictionary<string, AbstractGameState>()
             {
-                [GameStateNames.Bootstrap] = _stateFactory.Create(GameStateNames.Bootstrap),
-                [GameStateNames.MainMenu] = _stateFactory.Create(GameStateNames.MainMenu),
-                [GameStateNames.Gameplay] = _stateFactory.Create(GameStateNames.Gameplay),
+                [GameStateTag.Bootstrap] = _stateFactory.Create(GameStateTag.Bootstrap),
+                [GameStateTag.MainMenu] = _stateFactory.Create(GameStateTag.MainMenu),
+                [GameStateTag.Gameplay] = _stateFactory.Create(GameStateTag.Gameplay),
             };
 
-            foreach(var state in _states.Values)
+            foreach (var state in _states.Values)
             {
                 state.IOnExit.Subscribe(SetState);
             }
@@ -41,6 +42,7 @@ namespace BouncingBall.Game.FinalStateMachine
 
                 _concreteState = newState;
                 _concreteState.Enter();
+                Debug.Log($"State {id} entered");
             }
             else
             {

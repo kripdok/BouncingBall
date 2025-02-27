@@ -1,6 +1,6 @@
 ﻿using BouncingBall.FinalStateMachine;
 using BouncingBall.Game.Data;
-using BouncingBall.Game.FinalStateMachine.States;
+using BouncingBall.Game.FinalStateMachine;
 using UnityEngine;
 
 namespace BouncingBall.Game.GameRoot
@@ -20,7 +20,7 @@ namespace BouncingBall.Game.GameRoot
 
             await gameDataManager.LoadGameData();
             cameraHolder.Init();
-            gameStateMachine.SetState(GameStateNames.Bootstrap);
+            gameStateMachine.SetState(GameStateTag.Bootstrap);
         }
     }
 }

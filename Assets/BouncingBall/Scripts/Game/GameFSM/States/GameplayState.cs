@@ -8,6 +8,7 @@ using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace BouncingBall.Game.FinalStateMachine.States
 {
@@ -15,31 +16,21 @@ namespace BouncingBall.Game.FinalStateMachine.States
     {
         private const string UIPatch = "Prefabs/UI/Containers/GameUI";
 
-        private readonly IInputInteractivityChanger _manageInputState;
-        private readonly ILoadingWindowController _loadingWindowController;
-        private readonly IAttachStateUI _attachStateUI;
-        private readonly IPrefabLoadStrategy _prefabLoadStrategy;
-        private readonly StateUIFactory _stateUIFactory;
-        private readonly LevelLoaderMediator _levelLoaderMediator;
-        private readonly ResetManager _resetManager;
+        [Inject] private readonly IInputInteractivityChanger _manageInputState;
+        [Inject] private readonly ILoadingWindowController _loadingWindowController;
+        [Inject] private readonly IAttachStateUI _attachStateUI;
+        [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
+        [Inject] private readonly StateUIFactory _stateUIFactory;
+        [Inject] private readonly LevelLoaderMediator _levelLoaderMediator;
+        [Inject] private readonly ResetManager _resetManager;
 
         private CompositeDisposable _disposables;
 
-        public GameplayState(ResetManager resetManager,IInputInteractivityChanger manageInputState, ILoadingWindowController loadingWindowController, IAttachStateUI attachStateUI, IPrefabLoadStrategy prefabLoadStrategy, LevelLoaderMediator levelLoaderMediator, StateUIFactory stateUIFactory) : base(GameStateNames.Gameplay)
-        {
-            _attachStateUI = attachStateUI;
-            _manageInputState = manageInputState;
-            _loadingWindowController = loadingWindowController;
-            _prefabLoadStrategy = prefabLoadStrategy;
-            _levelLoaderMediator = levelLoaderMediator;
-            _stateUIFactory = stateUIFactory;
-            _resetManager = resetManager;
-        }
+        public GameplayState() : base(GameStateTag.Gameplay) { }
 
         public override async void Enter()
         {
             _disposables = new();
-            Debug.Log("Начал входить в состояние игры");
             CreateGameUI();
             _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _resetManager.Reset();
@@ -62,7 +53,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void SetMainMenuState()
         {
-            OnExit.OnNext(GameStateNames.MainMenu);
+            OnExit.OnNext(GameStateTag.MainMenu);
         }
 
         private void HideLoadingWindow()

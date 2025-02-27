@@ -1,15 +1,16 @@
 ﻿using BouncingBall.FinalStateMachine;
 using Cysharp.Threading.Tasks;
+using System;
 using UniRx;
 
 namespace BouncingBall.Game.FinalStateMachine.States
 {
     public abstract class AbstractGameState : IState
     {
-        public ISubject<string> IOnExit => OnExit;
+        public IObservable<string> IOnExit => OnExit;
 
         public readonly string Id;
-        protected readonly Subject<string> OnExit;        
+        protected readonly Subject<string> OnExit;
 
         public AbstractGameState(string id)
         {

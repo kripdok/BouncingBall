@@ -1,5 +1,5 @@
 ﻿using BouncingBall.FinalStateMachine;
-using BouncingBall.Game.FinalStateMachine.States;
+using BouncingBall.Game.FinalStateMachine;
 
 namespace BouncingBall.Game.Gameplay.Root
 {
@@ -7,7 +7,7 @@ namespace BouncingBall.Game.Gameplay.Root
     {
         public GameplayBootstrap(IStateMachine gameStateMachine)
         {
-            gameStateMachine.SetState(GameStateNames.MainMenu);
+            gameStateMachine.SetState(GameStateTag.MainMenu);
         }
     }
 }

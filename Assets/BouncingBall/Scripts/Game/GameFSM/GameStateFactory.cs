@@ -1,5 +1,4 @@
-﻿using BouncingBall.FinalStateMachine;
-using BouncingBall.Game.FinalStateMachine.States;
+﻿using BouncingBall.Game.FinalStateMachine.States;
 using Zenject;
 
 namespace BouncingBall.Game.FinalStateMachine
@@ -17,11 +16,11 @@ namespace BouncingBall.Game.FinalStateMachine
         {
             switch (param)
             {
-                case GameStateNames.Bootstrap:
+                case GameStateTag.Bootstrap:
                     return _container.Instantiate<BootstrapState>();
-                case GameStateNames.MainMenu:
+                case GameStateTag.MainMenu:
                     return _container.Instantiate<MainMenuState>();
-                case GameStateNames.Gameplay:
+                case GameStateTag.Gameplay:
                     return _container.Instantiate<GameplayState>();
                 default:
                     return null;
