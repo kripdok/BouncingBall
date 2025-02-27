@@ -1,4 +1,4 @@
-﻿namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
+﻿namespace BouncingBall.InputSystem.Device
 {
     public interface IControllable
     {

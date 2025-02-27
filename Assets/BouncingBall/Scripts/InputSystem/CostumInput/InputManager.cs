@@ -1,104 +1,106 @@
-using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.InputSystem.Controller;
+using BouncingBall.InputSystem.Device;
 using UniRx;
 using UnityEngine;
 
-public class InputManager : IInputInteractivityChanger, IInputManager
+namespace BouncingBall.InputSystem
 {
-    public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
-    public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
-    public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
-    public ReadOnlyReactiveProperty<float> Angle { get; private set; }
-    public ISubject<Unit> InputChange => _inputChange;
-
-
-    private Subject<Unit> _inputChange = new();
-    private CompositeDisposable _disposable;
-    private InputDevicePool _factory;
-    private IInputDevice _testInputDevice;
-    private InputDeviceName _currentInputDeviceName;
-
-    public InputManager(InputDevicePool factory)
+    public class InputManager : IInputInteractivityChanger, IInputManager
     {
-        _factory = factory;
-        InitializeInputDevice(InputDeviceName.Keyboard);
-    }
+        public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
+        public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
+        public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
+        public ReadOnlyReactiveProperty<float> Angle { get; private set; }
 
-    public void EnableInput()
-    {
-        _disposable = new CompositeDisposable();
-        Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
+        private Subject<Unit> _inputChange = new();
+        private CompositeDisposable _disposable;
+        private InputDevicePool _factory;
+        private IInputDevice _testInputDevice;
+        private InputDeviceTag _currentInputDeviceName;
 
-        if (_testInputDevice == null)
+        public ISubject<Unit> InputChange => _inputChange;
+
+        public InputManager(InputDevicePool factory)
         {
-            InitializeInputDevice(_currentInputDeviceName);
-        }
-    }
-
-    public void DisableInput()
-    {
-        _disposable.Dispose();
-        RotationAmount.Dispose();
-        ZScale.Dispose();
-        IsDirectionSet.Dispose();
-        Angle.Dispose();
-        _testInputDevice = null;
-    }
-
-    public void EnableControllable()
-    {
-        if (_testInputDevice is IControllable controllableDevice)
-        {
-            controllableDevice.EnableControllable(); // Вызов метода включения управляемости
-        }
-    }
-
-    private void Update()
-    {
-        CheckInputDevice();
-
-        _testInputDevice?.SetRotationAndScale();
-        _testInputDevice?.TryDisableIsDirectionSet();
-    }
-
-    private void CheckInputDevice()
-    {
-        InputDeviceName newInputDeviceName;
-
-        if (Input.GetMouseButton(0))
-        {
-            newInputDeviceName = InputDeviceName.Mouse;
-        }
-        else if (Input.anyKey)
-        {
-            newInputDeviceName = InputDeviceName.Keyboard;
-        }
-        else if (Input.touchCount > 0)
-        {
-            newInputDeviceName = InputDeviceName.Touchpad;
-        }
-        else
-        {
-            return;
+            _factory = factory;
+            InitializeInputDevice(InputDeviceTag.Keyboard);
         }
 
-        if (newInputDeviceName != _currentInputDeviceName)
+        public void EnableInput()
         {
-            InitializeInputDevice(newInputDeviceName);
+            _disposable = new CompositeDisposable();
+            Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
+
+            if (_testInputDevice == null)
+            {
+                InitializeInputDevice(_currentInputDeviceName);
+            }
+        }
+
+        public void DisableInput()
+        {
+            _disposable.Dispose();
+            RotationAmount.Dispose();
+            ZScale.Dispose();
+            IsDirectionSet.Dispose();
+            Angle.Dispose();
+            _testInputDevice = null;
+        }
+
+        public void EnableControllable()
+        {
+            if (_testInputDevice is IControllable controllableDevice)
+            {
+                controllableDevice.EnableControllable();
+            }
+        }
+
+        private void Update()
+        {
+            CheckInputDevice();
+
+            _testInputDevice?.SetRotationAndScale();
+            _testInputDevice?.TryDisableIsDirectionSet();
+        }
+
+        private void CheckInputDevice()
+        {
+            InputDeviceTag newInputDeviceName;
+
+            if (Input.GetMouseButton(0))
+            {
+                newInputDeviceName = InputDeviceTag.Mouse;
+            }
+            else if (Input.anyKey)
+            {
+                newInputDeviceName = InputDeviceTag.Keyboard;
+            }
+            else if (Input.touchCount > 0)
+            {
+                newInputDeviceName = InputDeviceTag.Touchpad;
+            }
+            else
+            {
+                return;
+            }
+
+            if (newInputDeviceName != _currentInputDeviceName)
+            {
+                InitializeInputDevice(newInputDeviceName);
+            }
+        }
+
+        private void InitializeInputDevice(InputDeviceTag deviceName)
+        {
+            _currentInputDeviceName = deviceName;
+            _testInputDevice = _factory.Create(deviceName);
+
+            RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_testInputDevice.Direction);
+            ZScale = new ReadOnlyReactiveProperty<float>(_testInputDevice.ZScale);
+            IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_testInputDevice.IsDirectionSet);
+            Angle = new ReadOnlyReactiveProperty<float>(_testInputDevice.Angle);
+
+            _inputChange.OnNext(Unit.Default);
         }
     }
-
-    private void InitializeInputDevice(InputDeviceName deviceName)
-    {
-        _currentInputDeviceName = deviceName;
-        _testInputDevice = _factory.Create(deviceName);
-
-        RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_testInputDevice.Direction);
-        ZScale = new ReadOnlyReactiveProperty<float>(_testInputDevice.ZScale);
-        IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_testInputDevice.IsDirectionSet);
-        Angle = new ReadOnlyReactiveProperty<float>(_testInputDevice.Angle);
-
-        _inputChange.OnNext(Unit.Default);
-    }
-
 }

@@ -1,19 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using BouncingBall.InputSystem.Device;
+using System.Collections.Generic;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
+namespace BouncingBall.InputSystem
 {
-    public class InputDevicePool : IFactory<InputDeviceName, IInputDevice>
+    public class InputDevicePool : IFactory<InputDeviceTag, IInputDevice>
     {
         private DiContainer _container;
-        private Dictionary<InputDeviceName, IInputDevice> _devices = new();
+        private Dictionary<InputDeviceTag, IInputDevice> _devices = new();
 
         public InputDevicePool(DiContainer container)
         {
             _container = container;
         }
 
-        public IInputDevice Create(InputDeviceName param)
+        public IInputDevice Create(InputDeviceTag param)
         {
             if (_devices.TryGetValue(param, out var inputDevice))
             {
@@ -22,13 +23,13 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 
             switch (param)
             {
-                case InputDeviceName.Keyboard:
+                case InputDeviceTag.Keyboard:
                     return CreateNewInputDevice<KeyboardInputDevice>(param);
-                case InputDeviceName.Mouse:
+                case InputDeviceTag.Mouse:
                     return CreateNewInputDevice<MouseInputDevice>(param);
-                case InputDeviceName.Touchpad:
+                case InputDeviceTag.Touchpad:
                     return CreateNewInputDevice<TouchpadInputDevice>(param);
-                case InputDeviceName.Simulator:
+                case InputDeviceTag.Simulator:
                     return CreateNewInputDevice<PlayerInputSimulator>(param);
                 default:
                     return null;
@@ -36,7 +37,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
             }
         }
 
-        private IInputDevice CreateNewInputDevice<T>(InputDeviceName name) where T : IInputDevice
+        private IInputDevice CreateNewInputDevice<T>(InputDeviceTag name) where T : IInputDevice
         {
             var inputDevuce = _container.Instantiate<T>();
             _devices.Add(name, inputDevuce);

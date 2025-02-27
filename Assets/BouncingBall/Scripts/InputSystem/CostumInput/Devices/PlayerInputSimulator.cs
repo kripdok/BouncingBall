@@ -1,8 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 
-namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
+namespace BouncingBall.InputSystem.Device
 {
     public class PlayerInputSimulator : IInputDevice
     {
@@ -62,7 +61,7 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 
         public void EnableControllable()
         {
-            
+
         }
     }
 }

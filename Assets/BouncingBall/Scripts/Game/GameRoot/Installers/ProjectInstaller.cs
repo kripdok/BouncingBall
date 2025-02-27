@@ -1,7 +1,7 @@
-using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.FinalStateMachine;
+using BouncingBall.InputSystem;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;

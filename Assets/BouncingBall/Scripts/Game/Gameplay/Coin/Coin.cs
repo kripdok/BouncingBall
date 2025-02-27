@@ -11,7 +11,6 @@ namespace BouncingBall.Game.Gameplay.Coins
         [Inject] private CoinsPool _pool;
 
         private Rigidbody _rigidbody;
-        private Collider _collider;
         private CoinData _data;
 
         public IObservable<int> Reword => _data.Reword;

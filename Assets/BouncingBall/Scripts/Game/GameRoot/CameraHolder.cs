@@ -1,6 +1,6 @@
-using Assets.BouncingBall.Scripts.InputSystem.CostumInput;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
+using BouncingBall.InputSystem;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;

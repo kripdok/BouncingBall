@@ -1,9 +1,8 @@
 ﻿using BouncingBall.Game.Data;
 using UniRx;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
-namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
+namespace BouncingBall.InputSystem.Device
 {
     public class TouchpadInputDevice : IInputDevice
     {
@@ -68,9 +67,5 @@ namespace Assets.BouncingBall.Scripts.InputSystem.CostumInput
 
         }
 
-        public void EnableControllable()
-        {
-           
-        }
     }
 }
