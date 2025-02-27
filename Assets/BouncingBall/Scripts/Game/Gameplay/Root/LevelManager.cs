@@ -27,7 +27,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private CompositeDisposable _compositeDisposable;
 
-        private ReactiveDictionary<CoinData, Coin> _coinsCache = new();
+        private ReactiveCollection<Coin> _coinsCache = new();
         private int _coinsCount;
 
         private GameUI _gameUI;
@@ -66,19 +66,17 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void CreateCoins(LevelData levelData, IReadOnlyList<Transform> spawns)
         {
-            _coinsCount = 0;
             _coinsCache.ObserveAdd().Subscribe(levelViewModel =>
             {
-                levelViewModel.Key.Reword.Subscribe(levelName => EnableLevelExit()).AddTo(_compositeDisposable);
+                levelViewModel.Value.Reword.Subscribe(levelName => EnableLevelExit()).AddTo(_compositeDisposable);
+                levelViewModel.Value.Reword.Subscribe(count => _gameDataManager.PlayerData.CoinsCount.Value += count).AddTo(_compositeDisposable);
             }).AddTo(_compositeDisposable);
 
             for (var i = 0; i < levelData.CoinsCount; i++)
             {
-                var coinData = new CoinData(_gameDataManager.GameData.NominalCoiny);
-                var coins = _coinsPool.Spawn(coinData);
+                var coins = _coinsPool.Spawn();
                 coins.transform.position = spawns[i].position;
-                _coinsCache.Add(coinData, coins);
-                coinData.Reword.Subscribe(count => _gameDataManager.PlayerData.CoinsCount.Value += count).AddTo(_compositeDisposable);
+                _coinsCache.Add(coins);
             }
 
             //Настроить отслеживание подбора для UI?
@@ -97,7 +95,7 @@ namespace BouncingBall.Game.Gameplay.Root
             _level.Reset();
             _coinsCount = 0;
 
-            foreach (var  coin in _coinsCache.Values)
+            foreach (var  coin in _coinsCache)
             {
                 coin.Reset();
             }
@@ -135,7 +133,7 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             _compositeDisposable?.Dispose();
 
-            foreach(var coin in _coinsCache.Values)
+            foreach(var coin in _coinsCache)
             {
                 coin.gameObject.SetActive(false);
             }

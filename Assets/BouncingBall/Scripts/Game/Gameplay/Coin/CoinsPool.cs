@@ -1,13 +1,16 @@
-﻿using Zenject;
+﻿using BouncingBall.Game.Data;
+using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Coins
 {
-    public class CoinsPool : MemoryPool<CoinData, Coin>
+    public class CoinsPool : MemoryPool< Coin>
     {
-        protected override void Reinitialize(CoinData p1, Coin item)
+        [Inject] GameDataManager _gameDataManager;
+
+        protected override void Reinitialize(Coin item)
         {
-            base.Reinitialize(p1, item);
-            item.SetData(p1);
+            base.Reinitialize( item);
+            item.SetData(new CoinData(_gameDataManager.GameData.NominalCoiny));
             item.Reset();
         }
     }

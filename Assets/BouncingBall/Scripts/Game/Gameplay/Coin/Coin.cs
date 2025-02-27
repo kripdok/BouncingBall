@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Game.Gameplay.BallObject;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ namespace BouncingBall.Game.Gameplay.Coins
     {
         [SerializeField] private Collider _collider;
 
-
+        public IObservable<int> Reword => _data.Reword;
         private Rigidbody _rigidbody;
         private CoinData _data;
 
