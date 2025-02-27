@@ -5,15 +5,15 @@ namespace BouncingBall.CustomPhysics
 {
     public class CustomRigidbody : MonoBehaviour
     {
+        private const float FallAcceleration = 9.81f;
+        private const float MinYvelocity = 1;
+        private const float MinDistanceToReduceSpeed = 0.01f;
+
         [SerializeField] private Transform _body;
         [SerializeField] private float _mass = 1f;
         [SerializeField, Range(0, 10)] private float _vilocityDamping;
         [SerializeField, Range(0, 10)] private float _maximumCompression;
         [SerializeField, Range(0, 1)] private float _compressionDuration;
-
-        private const float FallAcceleration = 9.81f;
-        private const float MinYvelocity = 1;
-        private const float MinDistanceToReduceSpeed = 0.01f;
 
         public Vector3 TestVelocity;
         public Vector3 _velocityForce;
