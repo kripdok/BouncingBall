@@ -1,5 +1,6 @@
 ﻿using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -8,20 +9,24 @@ namespace BouncingBall.Game.Gameplay.Coins
     [RequireComponent(typeof(Rigidbody))]
     public class Coin : MonoBehaviour
     {
+        [SerializeField] private float _duration = 0.5f; 
+
         [Inject] private CoinsPool _pool;
 
         private Rigidbody _rigidbody;
         private CoinData _data;
+        private Vector3 _defoltScale;
+        private bool _isColliderDetected;
 
         public IObservable<int> Reword => _data.Reword;
 
-        public void SetData(CoinData data)
-        {
-            _data = data;
-        }
+
         public void Reset()
         {
             gameObject.SetActive(true);
+            transform.rotation = Quaternion.identity;
+            transform.localScale = _defoltScale;
+            _isColliderDetected = true;
         }
 
         private void Awake()
@@ -31,13 +36,17 @@ namespace BouncingBall.Game.Gameplay.Coins
 
             var collider = GetComponent<Collider>();
             collider.isTrigger = true;
+
+            _defoltScale = transform.localScale;
+            _isColliderDetected = true ;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<Ball>(out var ball))
+            if (other.TryGetComponent<Ball>(out var ball)&& _isColliderDetected)
             {
                 _data.SendReword();
+                _isColliderDetected = false;
                 PlayDisappearingAnimation();
             }
         }
@@ -47,8 +56,28 @@ namespace BouncingBall.Game.Gameplay.Coins
             _pool.Despawn(this);
         }
 
-        private void PlayDisappearingAnimation()
+        public void SetData(CoinData data)
         {
+            _data = data;
+        }
+
+        private async void PlayDisappearingAnimation()
+        {
+            Vector3 initialPosition = transform.position;
+            Vector3 initialScale = _defoltScale;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _duration)
+            {
+                float t = elapsedTime / _duration;
+                transform.position = initialPosition + new Vector3(0, t, 0);
+                transform.Rotate(Vector3.up, 360 * Time.deltaTime / _duration);
+                transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
+                elapsedTime += Time.deltaTime;
+                await Task.Yield();
+            }
+
             gameObject.SetActive(false);
         }
     }
