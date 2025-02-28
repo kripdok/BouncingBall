@@ -182,8 +182,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1837249305976655250}
+  - component: {fileID: 5078740186192092019}
   m_Layer: 0
-  m_Name: Coin
+  m_Name: CoinCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,6 +211,21 @@ RectTransform:
   m_AnchoredPosition: {x: 1.2803955, y: -1.5}
   m_SizeDelta: {x: -1.1192627, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5078740186192092019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2865167991971418778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ad1ac15522dba45bc54c5cbd4131c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _count: {fileID: 3471650577905392077}
+  _scaleMultiplier: 1.2
+  _animationPlayerTime: 0.25
 --- !u!1 &3145629378821192080
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backToMenuButton: {fileID: 7989048709305150795}
-  _coinsCount: {fileID: 3471650577905392077}
+  _coinsCount: {fileID: 5078740186192092019}
   _winPopup: {fileID: 7472773249364338127}
   _lossPopup: {fileID: 6048775922583227738}
   _playerHealthCellPrefab: {fileID: 4382111101686057056, guid: 524ca7ac63753284e8dda4e1ccddad40, type: 3}

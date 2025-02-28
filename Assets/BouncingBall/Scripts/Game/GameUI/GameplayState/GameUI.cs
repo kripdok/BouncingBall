@@ -1,7 +1,7 @@
 using BouncingBall.Game.Data;
+using BouncingBall.Game.UI.GameplayState.MVVM;
 using BouncingBall.UI;
 using System.Collections.Generic;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +12,7 @@ namespace BouncingBall.Game.UI.GameplayState
     public class GameUI : StateUI
     {
         [SerializeField] private Button _backToMenuButton;
-        [SerializeField] private TMP_Text _coinsCount;
+        [SerializeField] private CoinCounterViewModel _coinsCount;
         [SerializeField] private WinPopup _winPopup;
         [SerializeField] private LossPopup _lossPopup;
         [Header("Player health")]
@@ -22,6 +22,7 @@ namespace BouncingBall.Game.UI.GameplayState
         [Inject] private GameDataManager _gameDataManager;
 
         private List<PlayerHealthCell> _playerHealthCells = new();
+        private CoinCounterView _coinsCounterView;
 
         public Subject<Unit> OnRestart = new();
 
@@ -29,6 +30,7 @@ namespace BouncingBall.Game.UI.GameplayState
         {
             InitPopup();
             Subsctibe();
+            InitCoinCounter();
             CreatePlayerhealthCell();
         }
 
@@ -48,11 +50,22 @@ namespace BouncingBall.Game.UI.GameplayState
             _lossPopup.gameObject.SetActive(false);
         }
 
+        public void AddCoin(int coin)
+        {
+            _coinsCounterView.AddCoin(coin);
+        }
+
         private void Subsctibe()
         {
-            _gameDataManager.PlayerData.CoinsCount.Subscribe(count => _coinsCount.text = count.ToString()).AddTo(this);
             _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
             _gameDataManager.GameData.BallModel.ConcreteHealth.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
+        }
+
+        private void InitCoinCounter()
+        {
+            var CoinCounterModel = new CoinCounterModel(_gameDataManager.PlayerData);
+            _coinsCounterView = new CoinCounterView(CoinCounterModel);
+            _coinsCount.Init(_coinsCounterView);
         }
 
         private void InitPopup()

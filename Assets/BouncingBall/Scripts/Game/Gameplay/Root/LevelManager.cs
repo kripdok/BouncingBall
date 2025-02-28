@@ -58,7 +58,13 @@ namespace BouncingBall.Game.Gameplay.Root
             _level = level;
             _levelData = await _gameDataManager.LoadLevel(id);
             _ball.transform.position = level.BallSpawnPoint.position;
-            _ball.Reset();
+            _ball.Reset();           
+
+            if (_attachStateUI.StateUI is GameUI gameUI)
+            {
+                _gameUI = gameUI;
+                _gameUI.OnRestart.Subscribe(_ => RestartLevel());
+            }
 
             if (_levelData.LevelName != MainMenuLevelName)
             {
@@ -67,7 +73,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 _coinsCache.ObserveAdd().Subscribe(levelViewModel =>
                 {
                     levelViewModel.Value.Reword.Subscribe(levelName => EnableLevelExit()).AddTo(_compositeDisposable);
-                    levelViewModel.Value.Reword.Subscribe(count => _gameDataManager.PlayerData.CoinsCount.Value += count).AddTo(_compositeDisposable);
+                    levelViewModel.Value.Reword.Subscribe(count => _gameUI.AddCoin(count)).AddTo(_compositeDisposable);
                 }).AddTo(_compositeDisposable);
 
                 CreateCoins(_levelData, _level.CoinsSpawnPoint);
@@ -75,17 +81,10 @@ namespace BouncingBall.Game.Gameplay.Root
                 _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
                 _gameDataManager.GameData.BallModel.ReadConcreteHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
             }
-
-            if (_attachStateUI.StateUI is GameUI gameUI)
-            {
-                _gameUI = gameUI;
-                _gameUI.OnRestart.Subscribe(_ => RestartLevel());
-            }
         }
 
         private void CreateCoins(LevelData levelData, IReadOnlyList<Transform> spawns)
         {
-           
 
             for (var i = 0; i < levelData.CoinsCount; i++)
             {
@@ -113,7 +112,6 @@ namespace BouncingBall.Game.Gameplay.Root
             CreateCoins(_levelData, _level.CoinsSpawnPoint);
 
             _manageInputState.EnableInput();
-            await _gameDataManager.ResetPlayerData();
         }
 
         private void EnableWinUI()
