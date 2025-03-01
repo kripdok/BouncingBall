@@ -50,6 +50,14 @@ namespace BouncingBall.InputSystem.Device
             }
         }
 
+        public void Reset()
+        {
+            ZScale.Value = 0;
+            Angle.Value = 0;
+            Direction.Value = Vector3.zero;
+            IsDirectionSet.Value = false;
+        }
+
         private void CalculateDirection(Vector3 position)
         {
             Vector3 direction = position - _ballPosition;

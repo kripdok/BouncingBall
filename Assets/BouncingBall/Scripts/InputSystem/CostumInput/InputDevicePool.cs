@@ -18,6 +18,7 @@ namespace BouncingBall.InputSystem
         {
             if (_devices.TryGetValue(param, out var inputDevice))
             {
+                inputDevice.Reset();
                 return inputDevice;
             }
 

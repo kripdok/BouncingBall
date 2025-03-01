@@ -13,5 +13,7 @@ namespace BouncingBall.InputSystem.Device
         public void SetRotationAndScale();
 
         public void TryDisableIsDirectionSet();
+
+        public void Reset();
     }
 }

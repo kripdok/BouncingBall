@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace BouncingBall.InputSystem.Device
 {
@@ -31,18 +32,17 @@ namespace BouncingBall.InputSystem.Device
         public async void Simulate()
         {
             _isWork = true;
-            ZScale.Value = 0;
-            Angle.Value = 0;
-            Direction.Value = Vector3.zero;
-            IsDirectionSet.Value = false;
 
             while (_isWork)
             {
                 ZScale.Value = 0;
+                Angle.Value = 0;
+
                 var newZScale = Random.Range(1, _maxScale);
                 var newAngle = Random.Range(0, 360);
 
                 float elapsedTime = 0f;
+                await UniTask.WaitForSeconds(2);
                 IsDirectionSet.Value = true;
 
                 while (elapsedTime < _durationOfSettingValues)
@@ -66,13 +66,10 @@ namespace BouncingBall.InputSystem.Device
                 Angle.Value = newAngle;
                 UpdateDirection();
 
-                await UniTask.WaitForSeconds(1);
+                await UniTask.WaitForSeconds(0.5f);
 
                 IsDirectionSet.Value = false;
-
-                await UniTask.WaitForSeconds(2);
             }
-
         }
 
         public void Disable()
@@ -100,6 +97,15 @@ namespace BouncingBall.InputSystem.Device
 
             var direction = new Vector3(x, 0, z);
             Direction.Value = direction.normalized;
+        }
+
+        public void Reset()
+        {
+
+            ZScale.Value = 0;
+            Angle.Value = 0;
+            Direction.Value = Vector3.zero;
+            IsDirectionSet.Value = false;
         }
     }
 }

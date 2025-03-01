@@ -79,6 +79,14 @@ namespace BouncingBall.InputSystem.Device
             _ballPosition = position;
             _plane.SetNormalAndPosition(Vector3.up, position);
         }
+
+        public void Reset()
+        {
+            ZScale.Value = 0;
+            Angle.Value = 0;
+            Direction.Value = Vector3.zero;
+            IsDirectionSet.Value = false;
+        }
     }
 }
 
