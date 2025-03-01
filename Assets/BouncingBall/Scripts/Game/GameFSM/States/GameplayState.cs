@@ -22,6 +22,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
         [Inject] private readonly StateUIFactory _stateUIFactory;
         [Inject] private readonly LevelLoaderMediator _levelLoaderMediator;
         [Inject] private readonly ResetManager _resetManager;
+        [Inject] private readonly IInputInteractivityChanger _manageInputState;
 
         private CompositeDisposable _disposables;
 
@@ -29,6 +30,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         public override async void Enter()
         {
+            _manageInputState.EnableInput();
             _disposables = new();
             CreateGameUI();
             _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
@@ -38,11 +40,13 @@ namespace BouncingBall.Game.FinalStateMachine.States
         public override async UniTask Exit()
         {
             _disposables.Dispose();
+            _manageInputState.DisableInput();
             await _loadingWindowController.ShowLoadingWindow();
         }
 
         private void CreateGameUI()
         {
+            
             var prefabGameUI = _prefabLoadStrategy.LoadPrefab<GameUI>(UIPatch);
             var gameUI = _stateUIFactory.Create(prefabGameUI);
             gameUI.OnExit.Subscribe(_ => SetMainMenuState()).AddTo(_disposables);

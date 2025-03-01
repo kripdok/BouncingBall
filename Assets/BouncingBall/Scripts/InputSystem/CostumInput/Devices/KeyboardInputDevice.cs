@@ -1,3 +1,4 @@
+using BouncingBall.Game.Data;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -15,9 +16,11 @@ namespace BouncingBall.InputSystem.Device
         private float _scaleSpeed = 5f;
 
         private bool _isCooldown;
+        private float _maxScale;
 
-        public KeyboardInputDevice()
+        public KeyboardInputDevice(GameDataManager gameDataManager)
         {
+            _maxScale = gameDataManager.GameData.BallModel.MaxSpeed;
             _isCooldown = false;
             IsDirectionSet = new();
             Direction = new();
@@ -67,7 +70,7 @@ namespace BouncingBall.InputSystem.Device
             {
                 var scaleZ = ZScale.Value;
                 scaleZ += _scaleSpeed * Time.deltaTime * (vertical > 0 ? 1 : -1);
-                scaleZ = Mathf.Clamp(scaleZ, 0, 3f);
+                scaleZ = Mathf.Clamp(scaleZ, 0, _maxScale);
                 ZScale.Value = scaleZ;
             }
         }

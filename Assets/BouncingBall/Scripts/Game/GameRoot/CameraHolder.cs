@@ -58,7 +58,7 @@ public class CameraHolder : MonoBehaviour
         _inputDeviceDisposable?.Dispose();
         _inputDeviceDisposable = new();
 
-        _inputManager.ZScale.Subscribe(UpdateSpeed).AddTo(_inputDeviceDisposable);
+        _inputManager.ZScale?.Subscribe(UpdateSpeed).AddTo(_inputDeviceDisposable);
     }
 
     private Vector3 CalculateNewCameraPosition(Vector3 targetPosition)

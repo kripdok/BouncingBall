@@ -1,4 +1,6 @@
-﻿using UniRx;
+﻿using BouncingBall.Game.Data;
+using Cysharp.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 
 namespace BouncingBall.InputSystem.Device
@@ -8,60 +10,96 @@ namespace BouncingBall.InputSystem.Device
         public ReactiveProperty<bool> IsDirectionSet { get; private set; }
         public ReactiveProperty<Vector3> Direction { get; private set; }
         public ReactiveProperty<float> ZScale { get; private set; }
-
         public ReactiveProperty<float> Angle { get; private set; }
 
-        private float _changeSpeed = 1.0f; // Скорость изменения значений
-        private float _cooldownTime; // Время кулдауна
-        private float _minCooldown = 1.0f; // Минимальное время кулдауна
-        private float _maxCooldown = 3.0f; // Максимальное время кулдауна
+        private float _maxScale;
 
-        public PlayerInputSimulator()
+        private bool _isWork;
+        private float _durationOfSettingValues = 2f;
+
+        public PlayerInputSimulator(GameDataManager gameDataManager)
         {
+            _maxScale = gameDataManager.GameData.BallModel.MaxSpeed;
             IsDirectionSet = new ReactiveProperty<bool>(false);
             Direction = new ReactiveProperty<Vector3>(Vector3.zero);
             ZScale = new ReactiveProperty<float>(0f);
             Angle = new();
+
+            Simulate();
         }
 
+        public async void Simulate()
+        {
+            _isWork = true;
+            ZScale.Value = 0;
+            Angle.Value = 0;
+            Direction.Value = Vector3.zero;
+            IsDirectionSet.Value = false;
 
-        private float elapsedTime;
-        private Vector3 randomDirection;
-        private float randomZScale;
-        private Vector3 initialDirection;
-        private float initialZScale;
+            while (_isWork)
+            {
+                ZScale.Value = 0;
+                var newZScale = Random.Range(1, _maxScale);
+                var newAngle = Random.Range(0, 360);
+
+                float elapsedTime = 0f;
+                IsDirectionSet.Value = true;
+
+                while (elapsedTime < _durationOfSettingValues)
+                {
+                    float lerpT = elapsedTime / _durationOfSettingValues;
+                    ZScale.Value = Mathf.Lerp(ZScale.Value, newZScale, lerpT);
+                    Angle.Value = Mathf.Lerp(Angle.Value, newAngle, lerpT);
+                    UpdateDirection();
+
+                    elapsedTime += Time.deltaTime;
+                    await UniTask.Yield();
+
+                    if (!_isWork)
+                        break;
+                }
+
+                if (!_isWork)
+                    break;
+
+                ZScale.Value = newZScale;
+                Angle.Value = newAngle;
+                UpdateDirection();
+
+                await UniTask.WaitForSeconds(1);
+
+                IsDirectionSet.Value = false;
+
+                await UniTask.WaitForSeconds(2);
+            }
+
+        }
+
+        public void Disable()
+        {
+            _isWork = false;
+
+        }
 
         public void SetRotationAndScale()
         {
-            if (!IsDirectionSet.Value)
-            {
-                randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-                randomZScale = Random.Range(0.5f, 3f); // Генерация случайного значения ZScale
-                IsDirectionSet.Value = true;
 
-                elapsedTime = 0f;
-                initialDirection = Direction.Value;
-                initialZScale = ZScale.Value;
-            }
-            else
-            {
-                if (elapsedTime < 1f)
-                {
-                    elapsedTime += Time.deltaTime * _changeSpeed;
-                    Direction.Value = Vector3.Lerp(initialDirection, randomDirection, elapsedTime); // Изменяем направление
-                    ZScale.Value = Mathf.Lerp(initialZScale, randomZScale, elapsedTime);
-                    IsDirectionSet.Value = false;
-                }
-            }
         }
 
         public void TryDisableIsDirectionSet()
         {
         }
 
-        public void EnableControllable()
+        private void UpdateDirection()
         {
+            float angleInRadians = (Angle.Value + 90) * Mathf.Deg2Rad;
+            float distance = ZScale.Value;
 
+            float x = distance * Mathf.Cos(angleInRadians) * -1;
+            float z = distance * Mathf.Sin(angleInRadians);
+
+            var direction = new Vector3(x, 0, z);
+            Direction.Value = direction.normalized;
         }
     }
 }

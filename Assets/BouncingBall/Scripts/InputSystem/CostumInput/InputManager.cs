@@ -15,7 +15,7 @@ namespace BouncingBall.InputSystem
         private Subject<Unit> _inputChange = new();
         private CompositeDisposable _disposable;
         private InputDevicePool _factory;
-        private IInputDevice _testInputDevice;
+        private IInputDevice _inputDevice;
         private InputDeviceTag _currentInputDeviceName;
 
         public ISubject<Unit> InputChange => _inputChange;
@@ -23,15 +23,17 @@ namespace BouncingBall.InputSystem
         public InputManager(InputDevicePool factory)
         {
             _factory = factory;
-            InitializeInputDevice(InputDeviceTag.Keyboard);
+            _currentInputDeviceName = InputDeviceTag.Keyboard;
+           // InitializeInputDevice(InputDeviceTag.Keyboard);
         }
 
         public void EnableInput()
         {
+            Debug.Log("Enable input");
             _disposable = new CompositeDisposable();
             Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
 
-            if (_testInputDevice == null)
+            if (_inputDevice == null)
             {
                 InitializeInputDevice(_currentInputDeviceName);
             }
@@ -39,19 +41,38 @@ namespace BouncingBall.InputSystem
 
         public void DisableInput()
         {
-            _disposable.Dispose();
-            RotationAmount.Dispose();
-            ZScale.Dispose();
-            IsDirectionSet.Dispose();
-            Angle.Dispose();
-            _testInputDevice = null;
+            Debug.Log("Disable input");
+            _disposable?.Dispose();
+            RotationAmount?.Dispose();
+            ZScale?.Dispose();
+            IsDirectionSet?.Dispose();
+            Angle?.Dispose();
+            _inputDevice = null;
         }
 
         public void EnableControllable()
         {
-            if (_testInputDevice is IControllable controllableDevice)
+            if (_inputDevice is IControllable controllableDevice)
             {
                 controllableDevice.EnableControllable();
+            }
+        }
+
+        public void EnableInputSimulator()
+        {
+            InitializeInputDevice(InputDeviceTag.Simulator);
+            if (_inputDevice is PlayerInputSimulator input)
+            {
+                input.Simulate();
+            }
+        }
+
+        public void DisableInputSimulator()
+        {
+            if(_inputDevice is PlayerInputSimulator input)
+            {
+                input.Disable();
+                DisableInput();
             }
         }
 
@@ -59,8 +80,8 @@ namespace BouncingBall.InputSystem
         {
             CheckInputDevice();
 
-            _testInputDevice?.SetRotationAndScale();
-            _testInputDevice?.TryDisableIsDirectionSet();
+            _inputDevice?.SetRotationAndScale();
+            _inputDevice?.TryDisableIsDirectionSet();
         }
 
         private void CheckInputDevice()
@@ -93,12 +114,12 @@ namespace BouncingBall.InputSystem
         private void InitializeInputDevice(InputDeviceTag deviceName)
         {
             _currentInputDeviceName = deviceName;
-            _testInputDevice = _factory.Create(deviceName);
+            _inputDevice = _factory.Create(deviceName);
 
-            RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_testInputDevice.Direction);
-            ZScale = new ReadOnlyReactiveProperty<float>(_testInputDevice.ZScale);
-            IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_testInputDevice.IsDirectionSet);
-            Angle = new ReadOnlyReactiveProperty<float>(_testInputDevice.Angle);
+            RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_inputDevice.Direction);
+            ZScale = new ReadOnlyReactiveProperty<float>(_inputDevice.ZScale);
+            IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_inputDevice.IsDirectionSet);
+            Angle = new ReadOnlyReactiveProperty<float>(_inputDevice.Angle);
 
             _inputChange.OnNext(Unit.Default);
         }

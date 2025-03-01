@@ -74,9 +74,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputDeviceDisposable?.Dispose();
             _inputDeviceDisposable = new();
 
-            _inputManager.ZScale.Subscribe(SetSpeed).AddTo(_inputDeviceDisposable);
-            _inputManager.RotationAmount.Subscribe(direction => _moveDirection = direction).AddTo(_inputDeviceDisposable);
-            _inputManager.IsDirectionSet.Skip(1).Subscribe(TryAddForce).AddTo(_inputDeviceDisposable);
+            _inputManager.ZScale?.Subscribe(SetSpeed).AddTo(_inputDeviceDisposable);
+            _inputManager.RotationAmount?.Subscribe(direction => _moveDirection = direction).AddTo(_inputDeviceDisposable);
+            _inputManager.IsDirectionSet?.Skip(1).Subscribe(TryAddForce).AddTo(_inputDeviceDisposable);
         }
 
         private void SetSpeed(float speed)

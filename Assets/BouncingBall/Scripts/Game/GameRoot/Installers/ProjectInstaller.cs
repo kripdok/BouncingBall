@@ -17,7 +17,6 @@ namespace BouncingBall.Game.GameRoot.Installers
         public override void InstallBindings()
         {
             BindLoadingWindow();
-            BindInputController();
             BindFactory();
             BindGameFSM();
             BindCamera();
@@ -28,6 +27,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             Container.Bind<GameBootstrap>().AsSingle().NonLazy();
             Container.Bind<GameDataManager>().AsSingle();
             Container.Bind<ResetManager>().AsSingle();
+            BindInputController();
         }
 
         private void BindLoadingWindow()

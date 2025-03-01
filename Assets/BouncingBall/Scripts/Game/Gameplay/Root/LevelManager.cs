@@ -23,7 +23,7 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private CoinsPool _coinsPool;
         [Inject] private Ball _ball;
         [Inject] private IAttachStateUI _attachStateUI;
-        [Inject] private readonly IInputInteractivityChanger _manageInputState;
+     
 
         private ReactiveCollection<Coin> _coinsCache = new();
         private CompositeDisposable _compositeDisposable;
@@ -68,8 +68,6 @@ namespace BouncingBall.Game.Gameplay.Root
 
             if (_levelData.LevelName != MainMenuLevelName)
             {
-                _manageInputState.EnableInput();
-
                 _coinsCache.ObserveAdd().Subscribe(levelViewModel =>
                 {
                     levelViewModel.Value.Reword.Subscribe(levelName => EnableLevelExit()).AddTo(_compositeDisposable);
@@ -110,13 +108,10 @@ namespace BouncingBall.Game.Gameplay.Root
             _coinsCache.Clear();
 
             CreateCoins(_levelData, _level.CoinsSpawnPoint);
-
-            _manageInputState.EnableInput();
         }
 
         private void EnableWinUI()
         {
-            _manageInputState.DisableInput();
             _gameUI.EnableWinPopup();
         }
 
@@ -124,7 +119,6 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             if (healthCount <= 0)
             {
-                _manageInputState.DisableInput();
                 _gameUI.EnableLossPopup();
             }
         }
