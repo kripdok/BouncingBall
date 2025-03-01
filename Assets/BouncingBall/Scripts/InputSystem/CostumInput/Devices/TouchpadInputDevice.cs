@@ -4,50 +4,93 @@ using UnityEngine;
 
 namespace BouncingBall.InputSystem.Device
 {
-    public class TouchpadInputDevice : IInputDevice
+    public class TouchpadInputDevice : IInputDevice, IControllable
     {
         public ReactiveProperty<bool> IsDirectionSet { get; private set; }
         public ReactiveProperty<Vector3> Direction { get; private set; }
         public ReactiveProperty<float> ZScale { get; private set; }
-
         public ReactiveProperty<float> Angle { get; private set; }
 
         private Plane _plane;
         private Vector3 _ballPosition;
         private GameDataManager _gameDataManager;
+        private Vector2 _touchStartPosition;
+
+        public bool IsControllable { get; private set; }
 
         public TouchpadInputDevice(GameDataManager gameDataManager)
         {
-            IsDirectionSet = new ReactiveProperty<bool>();
-            Direction = new ReactiveProperty<Vector3>();
-            ZScale = new ReactiveProperty<float>();
+            IsDirectionSet = new();
+            Direction = new();
+            ZScale = new();
             Angle = new();
 
-            _plane = new Plane(Vector3.up, new Vector3(0, 0.5f, 0));
+            _plane = new(Vector3.up, Vector3.zero);
             _gameDataManager = gameDataManager;
+            _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
+            IsControllable = false;
+        }
+
+        public void EnableControllable()
+        {
+            IsControllable = true;
         }
 
         public void SetRotationAndScale()
         {
-            IsDirectionSet.Value = Input.touchCount > 0;
+            if (IsControllable)
+            {
+                IsDirectionSet.Value = Input.touchCount > 0;
+                IsControllable = IsDirectionSet.Value;
+            }
         }
 
         public void TryDisableIsDirectionSet()
         {
-            if (Input.touchCount > 0)
+            if (IsControllable)
             {
-                Touch touch = Input.GetTouch(0);
-                _ballPosition = _gameDataManager.GameData.BallModel.ReadPosition.Value;
-
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-
-                if (_plane.Raycast(ray, out float distance))
+                if (Input.touchCount > 0)
                 {
-                    Vector3 position = ray.GetPoint(distance);
-                    CalculationScaleZ(position);
-                    CalculateDirection(position);
+                    Touch touch = Input.touches[0];
+                    if (touch.phase == TouchPhase.Moved)
+                    {
+                        Vector2 touchPosition = touch.position;
+                        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
+                        CalculationScaleZ(worldPosition);
+                        CalculateDirection(worldPosition);
+                    }
+                }
+                else
+                {
+                    Reset();
                 }
             }
+        }
+
+        private void CalculateDirection(Vector3 position)
+        {
+            Vector3 direction = position - _ballPosition;
+
+            if (direction != Vector3.zero)
+            {
+                Direction.Value = new Vector3(direction.x, 0, direction.z).normalized;
+                Angle.Value = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+                Debug.Log("Установленj направление" + Direction.Value);
+                Debug.Log("Установлен угол" + Angle.Value);
+            }
+        }
+
+        private void CalculationScaleZ(Vector3 position)
+        {
+            ZScale.Value = Vector3.Distance(_ballPosition, position);
+            Debug.Log("Установлен скейл" + ZScale.Value);
+        }
+
+        private void SetBallPositionAndPlanePoint(Vector3 position)
+        {
+            _ballPosition = position;
+            _plane.SetNormalAndPosition(Vector3.up, position);
         }
 
         public void Reset()
@@ -57,23 +100,5 @@ namespace BouncingBall.InputSystem.Device
             Direction.Value = Vector3.zero;
             IsDirectionSet.Value = false;
         }
-
-        private void CalculateDirection(Vector3 position)
-        {
-            Vector3 direction = position - _ballPosition;
-
-            if (direction != Vector3.zero)
-            {
-                float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                Direction.Value = new Vector3(0, angle, 0);
-            }
-        }
-
-        private void CalculationScaleZ(Vector3 position)
-        {
-            ZScale.Value = Vector3.Distance(_ballPosition, position);
-
-        }
-
     }
 }

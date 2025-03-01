@@ -102,10 +102,10 @@ namespace BouncingBall.InputSystem
             {
                 newInputDeviceName = InputDeviceTag.Keyboard;
             }
-            else if (Input.touchCount > 0)
-            {
-                newInputDeviceName = InputDeviceTag.Touchpad;
-            }
+            //else if (Input.touchCount > 0)
+            //{
+            //    newInputDeviceName = InputDeviceTag.Touchpad;
+            //}
             else
             {
                 return;
@@ -128,6 +128,7 @@ namespace BouncingBall.InputSystem
             Angle = new ReadOnlyReactiveProperty<float>(_inputDevice.Angle);
 
             _inputChange.OnNext(Unit.Default);
+            Debug.Log("Сейчас влючен дивайс"+_currentInputDeviceName);
         }
 
         public void Pause()
