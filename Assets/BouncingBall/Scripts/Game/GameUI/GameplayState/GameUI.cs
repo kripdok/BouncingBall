@@ -1,6 +1,7 @@
 using BouncingBall.Game.Data;
 using BouncingBall.Game.UI.GameplayState.MVVM;
 using BouncingBall.UI;
+using BouncingBall.Utilities;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace BouncingBall.Game.UI.GameplayState
         [SerializeField] private Transform _playerHeatlthContainer;
 
         [Inject] private GameDataManager _gameDataManager;
+        [Inject] private IPausable _pausable;
 
         private List<PlayerHealthCell> _playerHealthCells = new();
         private CoinCounterView _coinsCounterView;
@@ -36,16 +38,19 @@ namespace BouncingBall.Game.UI.GameplayState
 
         public void EnableWinPopup()
         {
+            _pausable.Pause();
             _winPopup.gameObject.SetActive(true);
         }
 
         public void EnableLossPopup()
         {
+            _pausable.Pause();
             _lossPopup.gameObject.SetActive(true);
         }
 
         public void DisablePopup()
         {
+            _pausable.Resume();
             _winPopup.gameObject.SetActive(false);
             _lossPopup.gameObject.SetActive(false);
         }

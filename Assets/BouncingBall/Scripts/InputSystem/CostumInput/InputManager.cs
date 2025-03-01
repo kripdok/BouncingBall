@@ -1,11 +1,12 @@
 using BouncingBall.InputSystem.Controller;
 using BouncingBall.InputSystem.Device;
+using BouncingBall.Utilities;
 using UniRx;
 using UnityEngine;
 
 namespace BouncingBall.InputSystem
 {
-    public class InputManager : IInputInteractivityChanger, IInputManager
+    public class InputManager : IInputInteractivityChanger, IInputManager, IPausable
     {
         public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
         public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
@@ -20,11 +21,12 @@ namespace BouncingBall.InputSystem
 
         public ISubject<Unit> InputChange => _inputChange;
 
+        private bool _isPouse;
+
         public InputManager(InputDevicePool factory)
         {
             _factory = factory;
             _currentInputDeviceName = InputDeviceTag.Keyboard;
-           // InitializeInputDevice(InputDeviceTag.Keyboard);
         }
 
         public void EnableInput()
@@ -32,6 +34,7 @@ namespace BouncingBall.InputSystem
             Debug.Log("Enable input");
             _disposable = new CompositeDisposable();
             Observable.EveryUpdate().Subscribe(_ => Update()).AddTo(_disposable);
+            Resume();
 
             if (_inputDevice == null)
             {
@@ -69,7 +72,7 @@ namespace BouncingBall.InputSystem
 
         public void DisableInputSimulator()
         {
-            if(_inputDevice is PlayerInputSimulator input)
+            if (_inputDevice is PlayerInputSimulator input)
             {
                 input.Disable();
                 DisableInput();
@@ -78,6 +81,9 @@ namespace BouncingBall.InputSystem
 
         private void Update()
         {
+            if (_isPouse)
+                return;
+
             CheckInputDevice();
 
             _inputDevice?.SetRotationAndScale();
@@ -122,6 +128,16 @@ namespace BouncingBall.InputSystem
             Angle = new ReadOnlyReactiveProperty<float>(_inputDevice.Angle);
 
             _inputChange.OnNext(Unit.Default);
+        }
+
+        public void Pause()
+        {
+            _isPouse = true;
+        }
+
+        public void Resume()
+        {
+            _isPouse = false;
         }
     }
 }
