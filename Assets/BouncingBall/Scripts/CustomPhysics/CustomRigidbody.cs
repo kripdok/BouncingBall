@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.CustomPhysics
@@ -12,8 +11,7 @@ namespace BouncingBall.CustomPhysics
         [SerializeField] private Transform _body;
         [SerializeField] private float _mass = 1f;
         [SerializeField, Range(0, 10)] private float _vilocityDamping;
-        [SerializeField, Range(0, 10)] private float _maximumCompression;
-        [SerializeField, Range(0, 1)] private float _compressionDuration;
+
 
         public Vector3 TestVelocity;
         public Vector3 _velocityForce;
@@ -21,11 +19,12 @@ namespace BouncingBall.CustomPhysics
         private Vector3 _rotationForce;
         private bool _isFall = true;
         private ContactPoint _lastContact;
-        private Vector3 _originalScale;
 
-        private void Awake()
+        public void Reset()
         {
-            _originalScale = transform.localScale;
+            _isFall = true;
+            _velocityForce = Vector3.zero;
+            _rotationForce = Vector3.zero;
         }
 
         private void FixedUpdate()
@@ -37,6 +36,7 @@ namespace BouncingBall.CustomPhysics
             ReduceSpeedOfRotation();
             TryFall();
         }
+
         private void OnCollisionEnter(Collision collision)
         {
             _lastContact = collision.GetContact(0);
@@ -47,13 +47,6 @@ namespace BouncingBall.CustomPhysics
         private void OnCollisionExit(Collision collision)
         {
             TryStartTheFall(collision);
-        }
-
-        public void Reset()
-        {
-            _isFall = true;
-            _velocityForce = Vector3.zero;
-            _rotationForce = Vector3.zero;
         }
 
         public void AddForce(Vector3 direction)
@@ -130,10 +123,7 @@ namespace BouncingBall.CustomPhysics
 
             var newVelocity = Vector3.Reflect(_velocityForce, normal);
             _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
-
-
-            await CompressScale(newVelocity);
-            await UnclenchScale();
+            _velocityForce = newVelocity;
 
             TestVelocity = _velocityForce;
         }
@@ -143,51 +133,6 @@ namespace BouncingBall.CustomPhysics
             var sumRotation = _body.rotation;
             transform.rotation = Quaternion.LookRotation(eulerAngle);
             _body.rotation = sumRotation;
-        }
-
-        private async UniTask CompressScale(Vector3 newVelocity)
-        {
-            var powerCompression = GetVelocityForcePowerCompression();
-            var compressionScale = GetCinoressScale(powerCompression);
-
-            float elapsedTime = 0f;
-
-            while (elapsedTime < _compressionDuration)
-            {
-                float lerpT = elapsedTime / _compressionDuration;
-                transform.localScale = Vector3.Lerp(transform.localScale, compressionScale, lerpT);
-                _velocityForce = Vector3.Lerp(_velocityForce, newVelocity, lerpT);
-                elapsedTime += Time.deltaTime;
-                await UniTask.Yield();
-            }
-        }
-
-        private async UniTask UnclenchScale()
-        {
-            float elapsedTime = 0f;
-
-            while (elapsedTime < _compressionDuration)
-            {
-                float lerpT = elapsedTime / _compressionDuration;
-                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, lerpT);
-                elapsedTime += Time.deltaTime;
-                await UniTask.Yield();
-            }
-
-            transform.localScale = Vector3.one;
-        }
-
-        private float GetVelocityForcePowerCompression()
-        {
-            var number = Vector3.Distance(Vector3.zero, _velocityForce);
-            return Mathf.Clamp(number, 0, _maximumCompression);
-        }
-
-        private Vector3 GetCinoressScale(float powerCompression)
-        {
-            var scale = transform.localScale;
-            scale.z = scale.z - (powerCompression / 10);
-            return scale;
         }
 
         private void TryStartTheFall(Collision collision)
