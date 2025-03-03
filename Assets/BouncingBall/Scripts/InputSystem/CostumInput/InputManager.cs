@@ -97,15 +97,14 @@ namespace BouncingBall.InputSystem
             if (Input.GetMouseButton(0))
             {
                 newInputDeviceName = InputDeviceTag.Mouse;
+#if UNITY_ANDROID
+                newInputDeviceName = InputDeviceTag.Touchpad;
+#endif
             }
             else if (Input.anyKey)
             {
                 newInputDeviceName = InputDeviceTag.Keyboard;
             }
-            //else if (Input.touchCount > 0)
-            //{
-            //    newInputDeviceName = InputDeviceTag.Touchpad;
-            //}
             else
             {
                 return;
