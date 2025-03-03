@@ -9,7 +9,26 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         {
             if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
             {
-                damageable.TakeDamage(1);
+                Vector3 enemyNormal = collision.contacts[0].normal;
+
+                Vector3 localNormal = transform.InverseTransformDirection(enemyNormal);
+
+                var angle = Mathf.Atan2(localNormal.x, localNormal.z) * Mathf.Rad2Deg;
+                angle = (angle + 360) % 360;
+
+                bool one = (angle >= 350 || angle <= 5);
+                bool two = (angle >= 170 && angle <= 190);
+
+                Debug.Log("Противник считает " + angle);
+
+                if (one || two)
+                {
+                   gameObject.SetActive(false);
+                }
+                else
+                {
+                    damageable.TakeDamage(1);
+                }
             }
         }
     }

@@ -64,6 +64,7 @@ namespace BouncingBall.InputSystem
         public void EnableInputSimulator()
         {
             InitializeInputDevice(InputDeviceTag.Simulator);
+
             if (_inputDevice is PlayerInputSimulator input)
             {
                 input.Simulate();
@@ -97,9 +98,6 @@ namespace BouncingBall.InputSystem
             if (Input.GetMouseButton(0))
             {
                 newInputDeviceName = InputDeviceTag.Mouse;
-#if UNITY_ANDROID
-                newInputDeviceName = InputDeviceTag.Touchpad;
-#endif
             }
             else if (Input.anyKey)
             {
