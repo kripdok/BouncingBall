@@ -5,7 +5,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
     public abstract class AbstractEnemy : MonoBehaviour
     {
-        [Inject] private EnemyPool _pool;
+        [Inject] protected EnemyPool Pool;
 
         protected Collider Collider;
 
@@ -20,11 +20,6 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         protected virtual void Awake()
         {
             Collider = GetComponent<Collider>();
-        }
-
-        private void OnDisable()
-        {
-            _pool.Despawn(this);
         }
 
         protected abstract bool IsCollisionPerpendicular(Collision collision);

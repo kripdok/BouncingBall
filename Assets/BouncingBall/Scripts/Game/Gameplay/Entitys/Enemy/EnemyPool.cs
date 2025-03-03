@@ -6,7 +6,7 @@ using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
-    public class EnemyPool : IFactory<EnemyType, AbstractEnemy>
+    public class EnemyPool : IFactory<Vector3, EnemyType, AbstractEnemy>
     {
         private const string SpikesPrefabPath = "Prefabs/Gameplay/Enemy";
 
@@ -22,28 +22,29 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             _parent = new GameObject("Enemies").transform;
         }
 
-        public AbstractEnemy Create(EnemyType param)
+        public AbstractEnemy Create(Vector3 param1, EnemyType param2)
         {
-            var obj = _activeEnemys.FirstOrDefault(enemy => param == enemy.Type && !enemy.gameObject.activeSelf);
+            var obj = _activeEnemys.FirstOrDefault(enemy => param2 == enemy.Type && !enemy.gameObject.activeSelf);
 
             if (obj == null)
             {
-                switch (param)
+                switch (param2)
                 {
                     case EnemyType.Cactus:
                         obj = CreateObject(SpikesPrefabPath);
                         break;
                     default:
-                        throw new ArgumentException($"Prefab of type {param} is not registered in pool");
+                        throw new ArgumentException($"Prefab of type {param2} is not registered in pool");
                 }
             }
 
+            obj.transform.position = param1;
             obj.Reset();
             return obj;
         }
 
 
-        public void Despawn(AbstractEnemy enemy)
+        public void Remove(AbstractEnemy enemy)
         {
             if (_activeEnemys.Contains(enemy))
             {

@@ -2,6 +2,7 @@
 using BouncingBall.Game.Data.ObjectData;
 using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.Entities.BallEntity;
+using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using BouncingBall.Game.UI.GameplayState;
 using BouncingBall.InputSystem.Controller;
@@ -23,8 +24,9 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private CoinsPool _coinsPool;
         [Inject] private Ball _ball;
         [Inject] private IAttachStateUI _attachStateUI;
-     
+        [Inject] private EnemyPool _enemyPool;
 
+        private List<AbstractEnemy> _enemies = new();
         private ReactiveCollection<Coin> _coinsCache = new();
         private CompositeDisposable _compositeDisposable;
         private LevelData _levelData;
@@ -44,6 +46,11 @@ namespace BouncingBall.Game.Gameplay.Root
             foreach (var coin in _coinsCache)
             {
                 coin.gameObject.SetActive(false);
+            }
+
+            foreach(var enemy in _enemies)
+            {
+                _enemyPool.Remove(enemy);
             }
 
             _coinsCache.Clear();
@@ -75,6 +82,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 }).AddTo(_compositeDisposable);
 
                 CreateCoins(_levelData, _level.CoinsSpawnPoint);
+                CreateEnemys(_levelData, _level.EnemySpawnPoint);
 
                 _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
                 _gameDataManager.GameData.BallModel.ReadConcreteHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
@@ -92,6 +100,21 @@ namespace BouncingBall.Game.Gameplay.Root
             }
         }
 
+        private void CreateEnemys(LevelData levelData, IReadOnlyList<Transform> spawns)
+        {
+            var spawnIndex =0;
+
+            foreach(var enemyType  in levelData.EnemiesCount.Keys)
+            {
+                for(int i = 0; i < levelData.EnemiesCount[enemyType]; i++)
+                {
+                    var enemy = _enemyPool.Create(spawns[spawnIndex].position, enemyType);
+                    _enemies.Add(enemy);
+                    spawnIndex++;
+                }
+            }
+        }
+
         private async void RestartLevel()
         {
             _ball.Reset();
@@ -106,7 +129,7 @@ namespace BouncingBall.Game.Gameplay.Root
             }
 
             _coinsCache.Clear();
-
+            //TODO - добавит перезагрузку противников
             CreateCoins(_levelData, _level.CoinsSpawnPoint);
         }
 

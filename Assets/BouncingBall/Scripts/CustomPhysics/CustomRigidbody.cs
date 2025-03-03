@@ -122,6 +122,7 @@ namespace BouncingBall.CustomPhysics
             ChangeRotate(normal);
 
             var newVelocity = Vector3.Reflect(_velocityForce, normal);
+            newVelocity.y = 0;
             _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
             _velocityForce = newVelocity;
 

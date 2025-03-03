@@ -1,5 +1,8 @@
 {
   "LevelName": "1",
   "CoinsCount": 2,
-  "CoinsForEnableExit": 1
+  "CoinsForEnableExit": 1,
+  "EnemiesCount": {
+    "Cactus": 1
+  }
 }

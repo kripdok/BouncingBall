@@ -33,7 +33,6 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         {
             base.Awake();
             _defoltScale = transform.localScale;
-            Reset();
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -85,7 +84,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 await Task.Yield();
             }
 
-            gameObject.SetActive(false);
+            Pool.Remove(this);
         }
 
         private Vector3 GetRaycastPoint(Vector3 direction)
