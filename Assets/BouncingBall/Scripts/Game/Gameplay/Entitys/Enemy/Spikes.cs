@@ -15,6 +15,10 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         private Vector3 _firstMovePoint;
         private Vector3 _secondMovePoint;
 
+        private EnemyPool _pool;
+
+        public override EnemyType Type => EnemyType.Cactus;
+
         public override void Reset()
         {
             base.Reset();

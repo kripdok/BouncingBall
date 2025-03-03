@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
+using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
     public abstract class AbstractEnemy : MonoBehaviour
     {
+        [Inject] private EnemyPool _pool;
+
         protected Collider Collider;
-        //TODO - добавить пулл объектов
+
+        public abstract EnemyType Type { get; }
 
         public virtual void Reset()
         {
@@ -20,7 +24,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 
         private void OnDisable()
         {
-            //_pool.Despawn(this);
+            _pool.Despawn(this);
         }
 
         protected abstract bool IsCollisionPerpendicular(Collision collision);

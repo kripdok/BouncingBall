@@ -1,7 +1,9 @@
 ﻿using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.Entities.BallEntity;
+using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using Zenject;
+using Zenject.SpaceFighter;
 
 namespace BouncingBall.Game.Gameplay.Root
 {
@@ -16,6 +18,7 @@ namespace BouncingBall.Game.Gameplay.Root
             Container.Bind<GameplayBootstrap>().AsCached().NonLazy();
             Container.BindMemoryPool<Coin, CoinsPool>().FromComponentInNewPrefabResource("Prefabs/Gameplay/Coins/Coin").UnderTransformGroup("Coins").AsCached();
             Container.Bind<LevelManager>().AsCached();
+            Container.Bind<EnemyPool>().AsCached();
         }
 
         private void BindFactory()
