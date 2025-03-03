@@ -52,22 +52,11 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private async void OnCollisionEnter(Collision collision)
         {
-            //var v1 = new Vector2(transform.position.x, transform.position.z).normalized;
-            var v1 = Vector2.zero;
-            //var v2 = new Vector2(_rigidbody._velocityForce.x, _rigidbody._velocityForce.z).normalized;
-            var v3 = Mathf.Atan2(_rigidbody._velocityForce.x, _rigidbody._velocityForce.z) * Mathf.Rad2Deg;
-            var angle = (v3 + 360) % 360;
-
-           // Debug.Log("Направление мяча "+ angle);
             Vector3 normal = collision.GetContact(0).normal;
             var newVelocity = Vector3.Reflect(_rigidbody._velocityForce, normal);
             await CompressScale(newVelocity);
             await UnclenchScale();
-
-
         }
-
-     
 
         public void OnPointerDown(PointerEventData eventData)
         {

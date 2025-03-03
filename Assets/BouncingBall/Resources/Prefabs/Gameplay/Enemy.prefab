@@ -291,6 +291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7295518f8d3313d4d9b59e42dececf72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 2
+  _deathAnimationDurationduration: 0.5
+  _rayLength: 5
 --- !u!136 &5270374840095831449
 CapsuleCollider:
   m_ObjectHideFlags: 0
