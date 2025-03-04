@@ -9,6 +9,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
     public class EnemyPool : IFactory<Vector3, EnemyType, AbstractEnemy>
     {
         private const string SpikesPrefabPath = "Prefabs/Gameplay/Enemy";
+        private const string MushroomPrefabPath = "Prefabs/Gameplay/Enemy_Mushroom";
 
         private DiContainer _container;
         private List<AbstractEnemy> _activeEnemys;
@@ -33,9 +34,14 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                     case EnemyType.Cactus:
                         obj = CreateObject(SpikesPrefabPath);
                         break;
+                    case EnemyType.Mushroom:
+                        obj = CreateObject(MushroomPrefabPath);
+                        break;
                     default:
                         throw new ArgumentException($"Prefab of type {param2} is not registered in pool");
                 }
+
+                _activeEnemys.Add(obj);
             }
 
             obj.transform.position = param1;
@@ -58,7 +64,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 
         private AbstractEnemy CreateObject(string path)
         {
-            var obj = _container.InstantiatePrefabResource(SpikesPrefabPath).GetComponent<AbstractEnemy>();
+            var obj = _container.InstantiatePrefabResource(path).GetComponent<AbstractEnemy>();
             obj.transform.parent = _parent;
             return obj;
         }

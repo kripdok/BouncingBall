@@ -35,22 +35,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             _defoltScale = transform.localScale;
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
-            {
-                if (IsCollisionPerpendicular(collision))
-                {
-                    PlayDisappearingAnimation();
-                }
-                else
-                {
-                    damageable.TakeDamage(1);
-                }
-            }
-        }
-
-        protected override bool IsCollisionPerpendicular(Collision collision)
+        protected override bool IsTakeDamage(Collision collision)
         {
             Vector3 enemyNormal = collision.contacts[0].normal;
 
@@ -63,6 +48,11 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             bool two = (angle >= 170 && angle <= 190);
 
             return one || two;
+        }
+
+        protected override void TakeDamage()
+        {
+            PlayDisappearingAnimation();
         }
 
         private async void PlayDisappearingAnimation()
@@ -119,14 +109,18 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 
                 while (Vector3.Distance(transform.position, targetPoint) > 1f)
                 {
+                    if (!gameObject.activeSelf)
+                        break;
+
                     float t = elapsedTime / journeyLength;
 
-                    // Обновляем позицию
                     transform.position = Vector3.Lerp(startPosition, targetPoint, t * _speed);
                     elapsedTime += Time.deltaTime;
                     await UniTask.Yield();
                 }
             }
         }
+
+
     }
 }

@@ -7,6 +7,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
     {
         [Inject] protected EnemyPool Pool;
 
+        private int _damage = 1;
         protected Collider Collider;
 
         public abstract EnemyType Type { get; }
@@ -22,6 +23,22 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             Collider = GetComponent<Collider>();
         }
 
-        protected abstract bool IsCollisionPerpendicular(Collision collision);
+        protected void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
+            {
+                if (IsTakeDamage(collision))
+                {
+                    TakeDamage();
+                }
+                else
+                {
+                    damageable.TakeDamage(_damage);
+                }
+            }
+        }
+
+        protected abstract bool IsTakeDamage(Collision collision);
+        protected abstract void TakeDamage();
     }
 }

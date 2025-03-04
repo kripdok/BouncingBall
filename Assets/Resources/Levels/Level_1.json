@@ -3,6 +3,7 @@
   "CoinsCount": 2,
   "CoinsForEnableExit": 1,
   "EnemiesCount": {
-    "Cactus": 1
+    "Cactus": 1,
+    "Mushroom": 1
   }
 }
