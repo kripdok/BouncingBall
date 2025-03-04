@@ -1,17 +1,18 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using BouncingBall.Game.Data;
+using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
-    public class Spikes : AbstractEnemy
+    public class Cactus : AbstractEnemy
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _deathAnimationDurationduration = 0.5f;
         [SerializeField] private float _rayLength = 10f;
 
         private Vector3 _defoltScale;
-
         private Vector3 _firstMovePoint;
         private Vector3 _secondMovePoint;
 
@@ -27,6 +28,13 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             _firstMovePoint = GetRaycastPoint(Vector3.left);
             _secondMovePoint = GetRaycastPoint(Vector3.right);
             Move();
+        }
+
+        [Inject]
+        public void InitData(GameDataManager gameDataManager)
+        {
+            HealthSystem = new(gameDataManager.GameData.CactusData.MaxHealthAmount);
+            _speed = gameDataManager.GameData.CactusData.MaxMoveSpeed;
         }
 
         protected override void Awake()
@@ -120,7 +128,6 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 }
             }
         }
-
 
     }
 }

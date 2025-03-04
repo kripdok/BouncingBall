@@ -14,7 +14,6 @@ namespace BouncingBall.InputSystem.Device
         private Plane _plane;
         private Vector3 _ballPosition;
         private GameDataManager _gameDataManager;
-        private Vector2 _touchStartPosition;
 
         public bool IsControllable { get; private set; }
 
@@ -27,7 +26,7 @@ namespace BouncingBall.InputSystem.Device
 
             _plane = new(Vector3.up, Vector3.zero);
             _gameDataManager = gameDataManager;
-            _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
+            _gameDataManager.GameData.BallData.Position.Subscribe(SetBallPositionAndPlanePoint);
             IsControllable = false;
         }
 

@@ -20,7 +20,7 @@ namespace BouncingBall.InputSystem.Device
 
         public KeyboardInputDevice(GameDataManager gameDataManager)
         {
-            _maxScale = gameDataManager.GameData.BallModel.MaxSpeed;
+            _maxScale = gameDataManager.GameData.BallData.MaxSpeed;
             _isCooldown = false;
             IsDirectionSet = new();
             Direction = new();

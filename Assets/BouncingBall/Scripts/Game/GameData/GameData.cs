@@ -7,8 +7,10 @@ namespace BouncingBall.Game.Data
 {
     public class GameData : IDownloadable
     {
-        [JsonProperty] public BallData BallModel { get; private set; }
-        [JsonProperty] public int NominalCoiny { get; private set; }
+        [JsonProperty] public BallData BallData { get; private set; }
+        [JsonProperty] public MushroomData MushroomData { get; private set; }
+        [JsonProperty] public CactusData CactusData { get; private set; }
+        [JsonProperty] public int NominalCoin { get; private set; }
 
         [JsonProperty] private List<string> _levelName;
 
@@ -19,8 +21,10 @@ namespace BouncingBall.Game.Data
             if (jsonData == string.Empty) return;
 
             var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
-            BallModel = loadedData.BallModel;
-            NominalCoiny = loadedData.NominalCoiny;
+            BallData = loadedData.BallData;
+            NominalCoin = loadedData.NominalCoin;
+            MushroomData = loadedData.MushroomData;
+            CactusData = loadedData.CactusData;
             _levelName = loadedData._levelName;
         }
     }

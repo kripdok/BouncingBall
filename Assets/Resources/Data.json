@@ -1,8 +1,21 @@
 {
-  "BallModel": {
-    "MaxHealth": 3
+  "BallData": {
+    "HealthSystem": {
+      "MaxAmount": 3
+    },
+    "MaxSpeed": 10
   },
-  "NominalCoiny":  10,
+
+  "MushroomData": {
+    "MaxHealthAmount": 1
+  },
+
+  "CactusData": {
+    "MaxHealthAmount": 1,
+    "MaxMoveSpeed": 2
+  },
+
+  "NominalCoiny": 10,
   "_levelName": [
     "1"
   ]

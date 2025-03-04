@@ -10,7 +10,7 @@ namespace BouncingBall.Game.Gameplay.Coins
         protected override void Reinitialize(Coin item)
         {
             base.Reinitialize(item);
-            item.SetData(new CoinData(_gameDataManager.GameData.NominalCoiny));
+            item.SetData(new CoinData(_gameDataManager.GameData.NominalCoin));
             item.Reset();
         }
     }

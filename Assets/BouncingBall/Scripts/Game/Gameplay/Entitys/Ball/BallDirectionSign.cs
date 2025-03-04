@@ -17,7 +17,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         [Inject]
         private void Constructor(GameDataManager gameDataManager)
         {
-            _ballData = gameDataManager.GameData.BallModel;
+            _ballData = gameDataManager.GameData.BallData;
         }
 
         private void Awake()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BouncingBall.Utilities.HealthSystems;
+using UnityEngine;
 using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
@@ -7,8 +8,10 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
     {
         [Inject] protected EnemyPool Pool;
 
-        private int _damage = 1;
+        protected HealthSystem HealthSystem;
         protected Collider Collider;
+
+        private int _damage = 1;
 
         public abstract EnemyType Type { get; }
 
@@ -16,6 +19,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         {
             gameObject.SetActive(true);
             transform.rotation = Quaternion.identity;
+            HealthSystem.ResetCorrectAmount();
         }
 
         protected virtual void Awake()

@@ -33,14 +33,14 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private void Constructor(GameDataManager GameDataManager, ResetManager resetManager)
         {
             resetManager.Add(this);
-            _model = GameDataManager.GameData.BallModel;
+            _model = GameDataManager.GameData.BallData;
         }
 
         public void Reset()
         {
             _rigidbody.Reset();
             _body.rotation = Quaternion.identity;
-            _model.ResetHealth();
+            _model.HealthSystem.ResetCorrectAmount();
         }
 
         private void Awake()
@@ -71,7 +71,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
                 return;
             }
 
-            _model.AddDamage(damage);
+            _model.HealthSystem.TakeDamage(damage);
         }
 
         private void Subscribe()

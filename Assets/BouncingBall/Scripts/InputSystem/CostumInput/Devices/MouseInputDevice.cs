@@ -25,7 +25,7 @@ namespace BouncingBall.InputSystem.Device
 
             _plane = new(Vector3.up, Vector3.zero);
             _gameDataManager = gameDataManager;
-            _gameDataManager.GameData.BallModel.ReadPosition.Subscribe(SetBallPositionAndPlanePoint);
+            _gameDataManager.GameData.BallData.Position.Subscribe(SetBallPositionAndPlanePoint);
             IsControllable = false;
         }
 

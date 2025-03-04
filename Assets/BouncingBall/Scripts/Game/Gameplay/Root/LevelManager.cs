@@ -5,7 +5,6 @@ using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using BouncingBall.Game.UI.GameplayState;
-using BouncingBall.InputSystem.Controller;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
@@ -48,7 +47,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 coin.gameObject.SetActive(false);
             }
 
-            foreach(var enemy in _enemies)
+            foreach (var enemy in _enemies)
             {
                 _enemyPool.Remove(enemy);
             }
@@ -65,7 +64,7 @@ namespace BouncingBall.Game.Gameplay.Root
             _level = level;
             _levelData = await _gameDataManager.LoadLevel(id);
             _ball.transform.position = level.BallSpawnPoint.position;
-            _ball.Reset();           
+            _ball.Reset();
 
             if (_attachStateUI.StateUI is GameUI gameUI)
             {
@@ -85,7 +84,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 CreateEnemys(_levelData, _level.EnemySpawnPoint);
 
                 _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
-                _gameDataManager.GameData.BallModel.ReadConcreteHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
+                _gameDataManager.GameData.BallData.HealthSystem.CorrectAmount.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
             }
         }
 
@@ -102,11 +101,11 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void CreateEnemys(LevelData levelData, IReadOnlyList<Transform> spawns)
         {
-            var spawnIndex =0;
+            var spawnIndex = 0;
 
-            foreach(var enemyType  in levelData.EnemiesCount.Keys)
+            foreach (var enemyType in levelData.EnemiesCount.Keys)
             {
-                for(int i = 0; i < levelData.EnemiesCount[enemyType]; i++)
+                for (int i = 0; i < levelData.EnemiesCount[enemyType]; i++)
                 {
                     var enemy = _enemyPool.Create(spawns[spawnIndex].position, enemyType);
                     _enemies.Add(enemy);

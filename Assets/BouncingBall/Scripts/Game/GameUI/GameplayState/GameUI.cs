@@ -63,7 +63,7 @@ namespace BouncingBall.Game.UI.GameplayState
         private void Subsctibe()
         {
             _backToMenuButton.onClick.AsObservable().Subscribe(_ => OnExit.OnNext("")).AddTo(this);
-            _gameDataManager.GameData.BallModel.ConcreteHealth.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
+            _gameDataManager.GameData.BallData.HealthSystem.CorrectAmount.Skip(1).Subscribe(UpdateHealthDisplays).AddTo(this);
         }
 
         private void InitCoinCounter()
@@ -84,7 +84,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
         private void CreatePlayerhealthCell()
         {
-            for (int i = 0; i < _gameDataManager.GameData.BallModel.MaxHealth; i++)
+            for (int i = 0; i < _gameDataManager.GameData.BallData.HealthSystem.MaxAmount; i++)
             {
                 _playerHealthCells.Add(Instantiate(_playerHealthCellPrefab, _playerHeatlthContainer));
             }
@@ -92,7 +92,7 @@ namespace BouncingBall.Game.UI.GameplayState
 
         private void UpdateHealthDisplays(int currentHealth)
         {
-            int maxHealth = _gameDataManager.GameData.BallModel.MaxHealth;
+            int maxHealth = _gameDataManager.GameData.BallData.HealthSystem.MaxAmount;
 
             for (int i = 0; i < maxHealth; i++)
             {

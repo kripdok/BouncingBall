@@ -22,14 +22,14 @@ public class CameraHolder : MonoBehaviour
     public void Init()
     {
         _yPosition = transform.position.y;
-        _ballData = _gameDataManager.GameData.BallModel;
+        _ballData = _gameDataManager.GameData.BallData;
         Subscribe();
     }
 
     private void Subscribe()
     {
-        _ballData.ReadPosition.Subscribe(SetPosition).AddTo(this);
-        _ballData.ReadDirection.Subscribe(UpdateCameraPosition).AddTo(this);
+        _ballData.Position.Subscribe(SetPosition).AddTo(this);
+        _ballData.Direction.Subscribe(UpdateCameraPosition).AddTo(this);
         _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
 
         SubscribeToInput();

@@ -20,7 +20,7 @@ namespace BouncingBall.InputSystem.Device
 
         public PlayerInputSimulator(GameDataManager gameDataManager)
         {
-            _maxScale = gameDataManager.GameData.BallModel.MaxSpeed;
+            _maxScale = gameDataManager.GameData.BallData.MaxSpeed;
             IsDirectionSet = new ReactiveProperty<bool>(false);
             Direction = new ReactiveProperty<Vector3>(Vector3.zero);
             ZScale = new ReactiveProperty<float>(0f);
