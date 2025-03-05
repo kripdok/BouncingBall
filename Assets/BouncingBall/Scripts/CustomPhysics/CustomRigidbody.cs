@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.CustomPhysics
@@ -20,6 +21,8 @@ namespace BouncingBall.CustomPhysics
         private bool _isFall = true;
         private ContactPoint _lastContact;
 
+        private bool _isTest = true;
+
         public void Reset()
         {
             _isFall = true;
@@ -41,7 +44,13 @@ namespace BouncingBall.CustomPhysics
         {
             _lastContact = collision.GetContact(0);
             TryStopTheFall(_lastContact);
-            ReactToCollision(collision);
+
+            if (_isTest)
+            {
+                ReactToCollision(collision);
+                Test();
+            }
+
         }
 
         private void OnCollisionExit(Collision collision)
@@ -122,6 +131,7 @@ namespace BouncingBall.CustomPhysics
             ChangeRotate(normal);
 
             var newVelocity = Vector3.Reflect(_velocityForce, normal);
+            Debug.Log(newVelocity);
             newVelocity.y = 0;
             _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
             _velocityForce = newVelocity;
@@ -145,6 +155,13 @@ namespace BouncingBall.CustomPhysics
             {
                 _isFall = true;
             }
+        }
+
+        private async void Test()
+        {
+            _isTest = false;
+            await UniTask.WaitForSeconds(0.1f);
+            _isTest = true;
         }
     }
 }
