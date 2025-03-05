@@ -15,8 +15,10 @@
     "MaxMoveSpeed": 2
   },
 
-  "NominalCoiny": 10,
+  "NominalCoin": 10,
   "_levelName": [
-    "1"
+    "1",
+    "2",
+    "3"
   ]
 }

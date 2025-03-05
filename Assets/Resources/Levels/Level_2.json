@@ -1,0 +1,9 @@
+{
+  "LevelName": "2",
+  "CoinsCount": 7,
+  "CoinsForEnableExit": 3,
+  "EnemiesCount": {
+    "Cactus": 2,
+    "Mushroom": 5
+  }
+}

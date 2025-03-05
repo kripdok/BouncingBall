@@ -8,7 +8,6 @@ using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.BallEntity
