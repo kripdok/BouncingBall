@@ -9,7 +9,11 @@ namespace BouncingBall.Game.Gameplay.Coins
     [RequireComponent(typeof(Rigidbody))]
     public class Coin : MonoBehaviour
     {
-        [SerializeField] private float _duration = 0.5f; 
+        [SerializeField] private float _duration = 0.5f;
+        [SerializeField] private Transform _body;
+        [Header("Effects")]
+        [SerializeField] private ParticleSystem _pulsationEffect;
+        [SerializeField] private ParticleSystem _explosionEffect;
 
         [Inject] private CoinsPool _pool;
 
@@ -17,6 +21,7 @@ namespace BouncingBall.Game.Gameplay.Coins
         private CoinData _data;
         private Vector3 _defoltScale;
         private bool _isColliderDetected;
+        private Vector3 _sumVector = new Vector3(0, 1, 0);
 
         public IObservable<int> Reword => _data.Reword;
 
@@ -24,9 +29,10 @@ namespace BouncingBall.Game.Gameplay.Coins
         public void Reset()
         {
             gameObject.SetActive(true);
-            transform.rotation = Quaternion.identity;
-            transform.localScale = _defoltScale;
+            _body.rotation = Quaternion.identity;
+            _body.localScale = _defoltScale;
             _isColliderDetected = true;
+            _pulsationEffect.Play();
         }
 
         private void Awake()
@@ -39,6 +45,11 @@ namespace BouncingBall.Game.Gameplay.Coins
 
             _defoltScale = transform.localScale;
             _isColliderDetected = true ;
+        }
+
+        private void Update()
+        {
+            transform.rotation = Quaternion.Euler(_sumVector) * Quaternion.Euler(_body.rotation.eulerAngles);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -63,6 +74,9 @@ namespace BouncingBall.Game.Gameplay.Coins
 
         private async void PlayDisappearingAnimation()
         {
+            _pulsationEffect.Stop();
+            _explosionEffect.Play();
+
             Vector3 initialPosition = transform.position;
             Vector3 initialScale = _defoltScale;
 
@@ -71,9 +85,9 @@ namespace BouncingBall.Game.Gameplay.Coins
             while (elapsedTime < _duration)
             {
                 float t = elapsedTime / _duration;
-                transform.position = initialPosition + new Vector3(0, t, 0);
-                transform.Rotate(Vector3.up, 360 * Time.deltaTime / _duration);
-                transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
+                _body.position = initialPosition + new Vector3(0, t, 0);
+                _body.Rotate(Vector3.up, 360 * Time.deltaTime / _duration);
+                _body.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
                 elapsedTime += Time.deltaTime;
                 await Task.Yield();
             }
