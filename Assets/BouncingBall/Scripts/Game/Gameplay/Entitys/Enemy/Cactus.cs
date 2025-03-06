@@ -11,12 +11,12 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         [SerializeField] private float _speed;
         [SerializeField] private float _deathAnimationDurationduration = 0.5f;
         [SerializeField] private float _rayLength = 10f;
+        [SerializeField] private ParticleSystem _deathEffect;
 
         private Vector3 _defoltScale;
         private Vector3 _firstMovePoint;
         private Vector3 _secondMovePoint;
 
-        private EnemyPool _pool;
 
         public override EnemyType Type => EnemyType.Cactus;
 
@@ -71,14 +71,19 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             Vector3 initialScale = _defoltScale;
 
             float elapsedTime = 0f;
+            _deathEffect.Play();
 
             while (elapsedTime < _deathAnimationDurationduration)
             {
                 float t = elapsedTime / _deathAnimationDurationduration;
-                transform.position = initialPosition + new Vector3(0, t, 0);
                 transform.Rotate(Vector3.up, 360 * Time.deltaTime / _deathAnimationDurationduration);
                 transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
                 elapsedTime += Time.deltaTime;
+                await Task.Yield();
+            }
+
+            while (_deathEffect.isPlaying)
+            {
                 await Task.Yield();
             }
 
