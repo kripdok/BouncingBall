@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8306955759566311610}
   - component: {fileID: 5232040400878107010}
   - component: {fileID: 1931035869758564615}
+  - component: {fileID: 3236952590920837894}
   m_Layer: 0
   m_Name: BallSmokeEffect
   m_TagString: Untagged
@@ -26,14 +27,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2563898272676509225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.714783, y: 8.841941, z: -0.5432601}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1769569237660721375}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &5232040400878107010
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4834,6 +4835,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3236952590920837894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2563898272676509225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d07f3a17a1538a849b1a679cbfed68df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effect: {fileID: 5232040400878107010}
 --- !u!1 &7961226077432186955
 GameObject:
   m_ObjectHideFlags: 0

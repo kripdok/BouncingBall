@@ -160,7 +160,7 @@ namespace BouncingBall.CustomPhysics
         private async void Test()
         {
             _isTest = false;
-            await UniTask.WaitForSeconds(0.1f);
+            await UniTask.Yield();
             _isTest = true;
         }
     }

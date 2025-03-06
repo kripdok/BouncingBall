@@ -99,6 +99,8 @@ MonoBehaviour:
   _body: {fileID: 1586001351574961064}
   _compressionDuration: 0.15
   _maximumCompression: 5
+  _material: {fileID: 2100000, guid: a199b9287cdcbe84a8bf232b991d6a8d, type: 2}
+  _compressionColor: {r: 1, g: 0.5235849, b: 0.5235849, a: 1}
 --- !u!114 &5766222152222108221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,8 +116,6 @@ MonoBehaviour:
   _body: {fileID: 1586001351574961064}
   _mass: 1
   _vilocityDamping: 0.5
-  _maximumCompression: 5
-  _compressionDuration: 0.15
   TestVelocity: {x: 0, y: 0, z: 0}
   _velocityForce: {x: 0, y: 0, z: 0}
 --- !u!1 &4920233407371449476
