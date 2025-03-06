@@ -49,7 +49,7 @@ namespace BouncingBall.Game.Gameplay.Coins
 
         private void Update()
         {
-            transform.rotation = Quaternion.Euler(_sumVector) * Quaternion.Euler(transform.rotation.eulerAngles);
+            _body.transform.localRotation = Quaternion.Euler(_sumVector) * Quaternion.Euler(_body.transform.localRotation.eulerAngles);
         }
 
         private void OnTriggerEnter(Collider other)
