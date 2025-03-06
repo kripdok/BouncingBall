@@ -43,7 +43,7 @@ namespace BouncingBall.Game.Gameplay.Coins
             var collider = GetComponent<Collider>();
             collider.isTrigger = true;
 
-            _defoltScale = transform.localScale;
+            _defoltScale = _body.localScale;
             _isColliderDetected = true ;
         }
 
@@ -85,7 +85,7 @@ namespace BouncingBall.Game.Gameplay.Coins
             while (elapsedTime < _duration)
             {
                 float t = elapsedTime / _duration;
-                _body.position = initialPosition + new Vector3(0, t, 0);
+
                 _body.Rotate(Vector3.up, 360 * Time.deltaTime / _duration);
                 _body.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
                 elapsedTime += Time.deltaTime;
