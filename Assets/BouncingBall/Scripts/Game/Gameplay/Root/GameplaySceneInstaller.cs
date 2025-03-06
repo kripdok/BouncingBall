@@ -2,6 +2,8 @@
 using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
+using BouncingBall.Game.UI.GameplayState;
+using UnityEngine;
 using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Root
@@ -24,6 +26,7 @@ namespace BouncingBall.Game.Gameplay.Root
         private void BindFactory()
         {
             Container.BindFactory<UnityEngine.Object, Level, LevelFactory>().FromFactory<PrefabFactory<Level>>();
+            
         }
     }
 }

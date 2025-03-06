@@ -200,6 +200,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1626620788528383168}
   - component: {fileID: 2723084883420973211}
+  - component: {fileID: 6650269427937490783}
+  - component: {fileID: 4497415085270055290}
   m_Layer: 0
   m_Name: GameUI
   m_TagString: Untagged
@@ -242,10 +244,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _backToMenuButton: {fileID: 7989048709305150795}
   _coinsCount: {fileID: 5078740186192092019}
+  _playerHealthView: {fileID: 133827733063125531}
   _winPopup: {fileID: 7472773249364338127}
   _lossPopup: {fileID: 6048775922583227738}
   _playerHealthCellPrefab: {fileID: 4382111101686057056, guid: 524ca7ac63753284e8dda4e1ccddad40, type: 3}
   _playerHeatlthContainer: {fileID: 2471788424946146140}
+--- !u!114 &6650269427937490783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6410408977007223390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 4497415085270055290}
+  _installerPrefabs: []
+  _autoRun: 1
+  _kernel: {fileID: 0}
+--- !u!114 &4497415085270055290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6410408977007223390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9dfe8744d3fee46b3c44af8f6fe428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6667990197214992373
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4214812577049279499}
   - component: {fileID: 2769327346487672139}
+  - component: {fileID: 133827733063125531}
   m_Layer: 0
   m_Name: PlayerHealth
   m_TagString: Untagged
@@ -291,6 +325,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6667990197214992373}
   m_CullTransparentMesh: 1
+--- !u!114 &133827733063125531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6667990197214992373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f5d8074fbebb1047b14a5f06b3462a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _container: {fileID: 2471788424946146140}
 --- !u!1001 &1036823814491990694
 PrefabInstance:
   m_ObjectHideFlags: 0

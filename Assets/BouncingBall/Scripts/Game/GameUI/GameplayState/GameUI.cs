@@ -1,3 +1,4 @@
+using Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealth;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.UI.GameplayState.MVVM;
 using BouncingBall.UI;
@@ -14,6 +15,7 @@ namespace BouncingBall.Game.UI.GameplayState
     {
         [SerializeField] private Button _backToMenuButton;
         [SerializeField] private CoinCounterViewModel _coinsCount;
+        [SerializeField] private PlayerHealthView _playerHealthView;
         [SerializeField] private WinPopup _winPopup;
         [SerializeField] private LossPopup _lossPopup;
         [Header("Player health")]
@@ -33,6 +35,7 @@ namespace BouncingBall.Game.UI.GameplayState
             InitPopup();
             Subsctibe();
             InitCoinCounter();
+            InitPlayerHealth();
             CreatePlayerhealthCell();
         }
 
@@ -71,6 +74,13 @@ namespace BouncingBall.Game.UI.GameplayState
             var CoinCounterModel = new CoinCounterModel(_gameDataManager.PlayerData);
             _coinsCounterView = new CoinCounterView(CoinCounterModel);
             _coinsCount.Init(_coinsCounterView);
+        }
+
+        private void InitPlayerHealth()
+        {
+            var playerHealthModel = new PlayerHealthModel(_gameDataManager);
+            var playerHealthViewModel = new PlayerHealthViewModel(playerHealthModel);
+            _playerHealthView.Init(playerHealthViewModel);
         }
 
         private void InitPopup()
