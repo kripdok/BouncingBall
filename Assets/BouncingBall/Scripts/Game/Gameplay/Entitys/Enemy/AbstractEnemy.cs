@@ -19,7 +19,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         {
             gameObject.SetActive(true);
             transform.rotation = Quaternion.identity;
-            HealthSystem.ResetCorrectAmount();
+            HealthSystem.Reset();
         }
 
         protected virtual void Awake()

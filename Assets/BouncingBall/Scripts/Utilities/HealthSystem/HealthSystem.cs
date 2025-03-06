@@ -10,17 +10,11 @@ namespace BouncingBall.Utilities.HealthSystems
 
         public ReactiveProperty<int> CorrectAmount { get; private set; }
 
-        //public HealthSystem()
-        //{
-        //    CorrectAmount = new();
-        //    ResetCorrectAmount();
-        //}
-
         public HealthSystem(int maxAmount)
         {
             MaxAmount = maxAmount;
             CorrectAmount = new();
-            ResetCorrectAmount();
+            Reset();
         }
 
         public void TakeDamage(int amount)
@@ -33,7 +27,7 @@ namespace BouncingBall.Utilities.HealthSystems
             CorrectAmount.Value -= amount;
         }
 
-        public void ResetCorrectAmount()
+        public void Reset()
         {
             CorrectAmount.Value = MaxAmount;
         }

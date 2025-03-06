@@ -16,51 +16,51 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
     public class Ball : MonoBehaviour, IPointerDownHandler, IResettable, IDamageable
     {
         [SerializeField] private Transform _body;
-        [SerializeField, Range(0, 1)] private float _compressionDuration;
-        [SerializeField, Range(0, 10)] private float _maximumCompression;
+        [SerializeField, Range(0, 1)] private float _compressionDuration = 0.2f;
+        [SerializeField, Range(0, 10)] private float _maximumCompression = 5f;
         [SerializeField] private Material _material;
-        [SerializeField] private Color _compressionColor;
+        [SerializeField] private Color _compressionColor = Color.red;
 
         [Inject] private IInputManager _inputManager;
         [Inject] private BallCollisionEffectPool _collisionEffectPool;
 
-        private CompositeDisposable _inputDeviceDisposable;
+        private CompositeDisposable _inputDisposables;
         private CustomRigidbody _rigidbody;
-        private BallData _model;
+        private BallData _ballData;
         private Vector3 _moveDirection;
         private Vector3 _originalScale;
-        private float _speed;
-        private Color _defoltColor = Color.white;
+        private float _currentSpeed;
+        private readonly Color _defaultColor = Color.white;
 
         [Inject]
-        private void Constructor(GameDataManager GameDataManager, ResetManager resetManager)
+        private void Construct(GameDataManager gameDataManager, ResetManager resetManager)
         {
             resetManager.Add(this);
-            _model = GameDataManager.GameData.BallData;
+            _ballData = gameDataManager.GameData.BallData;
         }
 
         public void Reset()
         {
             _rigidbody.Reset();
             _body.rotation = Quaternion.identity;
-            _model.HealthSystem.ResetCorrectAmount();
+            _ballData.HealthSystem.Reset();
         }
 
         private void Awake()
         {
             _originalScale = transform.localScale;
             _rigidbody = GetComponent<CustomRigidbody>();
-            Subscribe();
+            SubscribeToInputEvents();
         }
 
         private async void OnCollisionEnter(Collision collision)
         {
-            Vector3 normal = collision.GetContact(0).normal;
-            var newVelocity = Vector3.Reflect(_rigidbody._velocityForce, normal);
+            Vector3 collisionNormal = collision.GetContact(0).normal;
+            Vector3 reflectedVelocity = Vector3.Reflect(_rigidbody._velocityForce, collisionNormal);
 
-            _collisionEffectPool.Spawn(collision.GetContact(0).point, Quaternion.LookRotation(normal));
-            await CompressScale(newVelocity);
-            await UnclenchScale();
+            _collisionEffectPool.Spawn(collision.GetContact(0).point, Quaternion.LookRotation(collisionNormal));
+            await CompressBall(reflectedVelocity);
+            await RestoreBallScale();
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -72,100 +72,117 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             if (damage <= 0)
             {
-                Debug.LogError($"Object can't take negative damage! Damage: {damage}");
+                Debug.LogError($"Damage must be positive! Received: {damage}");
                 return;
             }
 
-            _model.HealthSystem.TakeDamage(damage);
+            _ballData.HealthSystem.TakeDamage(damage);
         }
 
-        private void Subscribe()
+        private void SubscribeToInputEvents()
         {
-            _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
-            Observable.EveryUpdate().Subscribe(_ => _model.Position.Value = transform.position).AddTo(this);
-            Observable.EveryUpdate().Subscribe(_ => _model.Direction.Value = _rigidbody.TestVelocity).AddTo(this);
+            _inputManager.InputChange
+                .Subscribe(_ => SubscribeToInputDevice())
+                .AddTo(this);
 
-            SubscribeToInput();
+            Observable.EveryUpdate()
+                .Subscribe(_ => UpdateBallData())
+                .AddTo(this);
+
+            SubscribeToInputDevice();
         }
 
-        private void SubscribeToInput()
+        private void SubscribeToInputDevice()
         {
-            _inputDeviceDisposable?.Dispose();
-            _inputDeviceDisposable = new();
+            _inputDisposables?.Dispose();
+            _inputDisposables = new CompositeDisposable();
 
-            _inputManager.ZScale?.Subscribe(SetSpeed).AddTo(_inputDeviceDisposable);
-            _inputManager.RotationAmount?.Subscribe(direction => _moveDirection = direction).AddTo(_inputDeviceDisposable);
-            _inputManager.IsDirectionSet?.Skip(1).Subscribe(TryAddForce).AddTo(_inputDeviceDisposable);
+            _inputManager.ZScale?
+                .Subscribe(SetCurrentSpeed)
+                .AddTo(_inputDisposables);
+
+            _inputManager.RotationAmount?
+                .Subscribe(direction => _moveDirection = direction)
+                .AddTo(_inputDisposables);
+
+            _inputManager.IsDirectionSet?
+                .Skip(1)
+                .Subscribe(ApplyForceIfDirectionSet)
+                .AddTo(_inputDisposables);
         }
 
-        private void SetSpeed(float speed)
+        private void SetCurrentSpeed(float speed)
         {
-            _speed = Math.Clamp(speed, 0, _model.MaxSpeed);
+            _currentSpeed = Math.Clamp(speed, 0, _ballData.MaxSpeed);
         }
 
-        private void TryAddForce(bool flag)
+        private void ApplyForceIfDirectionSet(bool isDirectionSet)
         {
-            if (flag == false)
+            if (!isDirectionSet)
             {
-                _rigidbody.AddForce(_moveDirection * _speed);
+                _rigidbody.AddForce(_moveDirection * _currentSpeed);
             }
         }
 
-        private async UniTask CompressScale(Vector3 newVelocity)
+        private void UpdateBallData()
         {
-            var powerCompression = GetVelocityForcePowerCompression();
-            var compressionScale = GetCinoressScale(powerCompression);
+            _ballData.Position.Value = transform.position;
+            _ballData.Direction.Value = _rigidbody.TestVelocity;
+        }
+
+        private async UniTask CompressBall(Vector3 newVelocity)
+        {
+            float compressionPower = CalculateCompressionPower();
+            Vector3 targetScale = CalculateCompressionScale(compressionPower);
+            Color targetColor = CalculateCompressionColor(compressionPower);
 
             float elapsedTime = 0f;
-            Color newColor = GetCompressionColor(powerCompression);
 
             while (elapsedTime < _compressionDuration)
             {
-                float lerpT = elapsedTime / _compressionDuration;
-                transform.localScale = Vector3.Lerp(transform.localScale, compressionScale, lerpT);
-                _material.color = Color.Lerp(_defoltColor, newColor, lerpT);
+                float lerpValue = elapsedTime / _compressionDuration;
+                transform.localScale = Vector3.Lerp(transform.localScale, targetScale, lerpValue);
+                _material.color = Color.Lerp(_defaultColor, targetColor, lerpValue);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield();
             }
         }
 
-        private async UniTask UnclenchScale()
+        private async UniTask RestoreBallScale()
         {
             float elapsedTime = 0f;
-
-            Color ballColor = _material.color;
+            Color initialColor = _material.color;
 
             while (elapsedTime < _compressionDuration)
             {
-                float lerpT = elapsedTime / _compressionDuration;
-                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, lerpT);
+                float lerpValue = elapsedTime / _compressionDuration;
+                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, lerpValue);
+                _material.color = Color.Lerp(initialColor, _defaultColor, lerpValue);
                 elapsedTime += Time.deltaTime;
-                _material.color = Color.Lerp(ballColor, _defoltColor, lerpT);
                 await UniTask.Yield();
             }
 
-            _material.color = _defoltColor;
-            transform.localScale = Vector3.one;
+            _material.color = _defaultColor;
+            transform.localScale = _originalScale;
         }
 
-        private float GetVelocityForcePowerCompression()
+        private float CalculateCompressionPower()
         {
-            var number = Vector3.Distance(Vector3.zero, _rigidbody._velocityForce);
-            return Mathf.Clamp(number, 0, _maximumCompression);
+            float velocityMagnitude = Vector3.Distance(Vector3.zero, _rigidbody._velocityForce);
+            return Mathf.Clamp(velocityMagnitude, 0, _maximumCompression);
         }
 
-        private Vector3 GetCinoressScale(float powerCompression)
+        private Vector3 CalculateCompressionScale(float compressionPower)
         {
-            var scale = transform.localScale;
-            scale.z = scale.z - (powerCompression / 10);
+            Vector3 scale = transform.localScale;
+            scale.z -= compressionPower / 10f;
             return scale;
         }
 
-        private Color GetCompressionColor(float powerCompression)
+        private Color CalculateCompressionColor(float compressionPower)
         {
-            float t = Mathf.Clamp01(powerCompression / _maximumCompression);
-
-            return Color.Lerp(_defoltColor, _compressionColor, t);
+            float t = Mathf.Clamp01(compressionPower / _maximumCompression);
+            return Color.Lerp(_defaultColor, _compressionColor, t);
         }
     }
 }
