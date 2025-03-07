@@ -27,11 +27,11 @@ namespace BouncingBall.Game.FinalStateMachine
 
             foreach (var state in _states.Values)
             {
-                state.OnExitObservable.Subscribe(ChangeStateAsync);
+                state.OnExitObservable.Subscribe(ChangeState);
             }
         }
 
-        public async void ChangeStateAsync(string stateId)
+        public async void ChangeState(string stateId)
         {
             if (_states.TryGetValue(stateId, out var newState))
             {
