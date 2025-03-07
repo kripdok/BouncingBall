@@ -50,7 +50,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void CreateMainMenuUI()
         {
-            var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefab<MainMenuUI>(UIPrefabPathc);
+            var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefabSync<MainMenuUI>(UIPrefabPathc);
             var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
             mainMenuUI.OnExit.Subscribe(SetGameplayState).AddTo(_disposables);
             _attachStateUI.AttachStateUI(mainMenuUI);

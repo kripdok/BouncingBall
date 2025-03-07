@@ -47,7 +47,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
             try
             {
-                return await _prefabLoadStrategy.AsyncLoadPrefab<Level>(patch);
+                return await _prefabLoadStrategy.LoadPrefabAsync<Level>(patch);
             }
             catch
             {

@@ -5,16 +5,15 @@ namespace BouncingBall.PrefabLoader
 {
     public class ResourcesPrefabLoadStrategy : IPrefabLoadStrategy
     {
-        public async UniTask<T> AsyncLoadPrefab<T>(string patch) where T : Object
+        public async UniTask<T> LoadPrefabAsync<T>(string path) where T : Object
         {
-            var prefab = await Resources.LoadAsync<T>(patch);
-
-            return (prefab as T);
+            var prefab = await Resources.LoadAsync<T>(path);
+            return prefab as T;
         }
 
-        public T LoadPrefab<T>(string patch) where T : Object
+        public T LoadPrefabSync<T>(string path) where T : Object
         {
-            return Resources.Load<T>(patch);
+            return Resources.Load<T>(path);
         }
     }
 }

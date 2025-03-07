@@ -5,8 +5,8 @@ namespace BouncingBall.PrefabLoader
 {
     public interface IPrefabLoadStrategy
     {
-        public T LoadPrefab<T>(string patch) where T : Object;
+        public T LoadPrefabSync<T>(string path) where T : Object;
 
-        public UniTask<T> AsyncLoadPrefab<T>(string patch) where T : Object;
+        public UniTask<T> LoadPrefabAsync<T>(string path) where T : Object;
     }
 }
