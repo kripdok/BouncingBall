@@ -37,7 +37,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 }
                 else
                 {
-                    damageable.TakeDamage(_damage);
+                    damageable.ApplyDamage(_damage);
                 }
             }
         }

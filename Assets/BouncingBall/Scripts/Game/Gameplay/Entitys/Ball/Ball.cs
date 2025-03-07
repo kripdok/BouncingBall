@@ -69,7 +69,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputManager.EnableControllable();
         }
 
-        public void TakeDamage(int damage)
+        public void ApplyDamage(int damage)
         {
             if (damage <= 0)
             {
