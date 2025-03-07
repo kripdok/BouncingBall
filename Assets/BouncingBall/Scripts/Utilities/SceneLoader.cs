@@ -7,21 +7,22 @@ namespace BouncingBall.Utilities
 {
     public class SceneLoader
     {
-        public async UniTask LoadScene(string sceneName, Action onLoader = null)
+        public async UniTask LoadSceneAsync(string sceneName, Action onSceneLoadedCallback = null)
         {
             if (SceneManager.GetActiveScene().name == sceneName)
             {
-                onLoader?.Invoke();
+                onSceneLoadedCallback?.Invoke();
                 return;
             }
 
             var operation = SceneManager.LoadSceneAsync(sceneName);
 
             while (!operation.isDone)
+            {
                 await Task.Yield();
+            }
 
-            onLoader?.Invoke();
+            onSceneLoadedCallback?.Invoke();
         }
-
     }
 }

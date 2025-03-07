@@ -10,8 +10,8 @@ namespace Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealt
 
         public PlayerHealthModel(GameDataManager gameDataManager)
         {
-            MaxHealth = gameDataManager.GameData.BallData.HealthSystem.MaxAmount;
-            CurrentHealth = gameDataManager.GameData.BallData.HealthSystem.CorrectAmount;
+            MaxHealth = gameDataManager.GameData.BallData.HealthSystem.MaxHealth;
+            CurrentHealth = gameDataManager.GameData.BallData.HealthSystem.CurrentHealth;
         }
     }
 }

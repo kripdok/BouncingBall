@@ -24,7 +24,7 @@ namespace BouncingBall.Game.Gameplay.Root
         public LevelLoader(LevelLoaderMediator levelLoaderMediator)
         {
             _levelLoaderMediator = levelLoaderMediator;
-            _levelLoaderMediator.LevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
+            _levelLoaderMediator.CurrentLevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
         }
 
         public async UniTask LoadLevel(string id)

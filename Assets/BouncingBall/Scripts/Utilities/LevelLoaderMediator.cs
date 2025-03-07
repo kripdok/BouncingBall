@@ -5,26 +5,26 @@ namespace BouncingBall.Utilities
 {
     public class LevelLoaderMediator
     {
-        public readonly ReadOnlyReactiveProperty<string> LevelName;
-        private readonly ReactiveProperty<string> _levelName = new();
-        private readonly ReactiveProperty<bool> _onLevelLoaded = new();
+        public readonly ReadOnlyReactiveProperty<string> CurrentLevelName;
+        private readonly ReactiveProperty<string> _currentLevelName = new();
+        private readonly ReactiveProperty<bool> _isLevelLoaded = new();
 
-        public IObservable<bool> OnLevelLoaded => _onLevelLoaded;
+        public IObservable<bool> IsLevelLoaded => _isLevelLoaded;
 
         public LevelLoaderMediator()
         {
-            LevelName = new(_levelName);
+            CurrentLevelName = new(_currentLevelName);
         }
 
         public void SetLevelName(string levelName)
         {
-            _onLevelLoaded.Value = false;
-            _levelName.Value = levelName;
+            _isLevelLoaded.Value = false;
+            _currentLevelName.Value = levelName;
         }
 
         public void NotifyLevelIsLoaded()
         {
-            _onLevelLoaded.Value = true;
+            _isLevelLoaded.Value = true;
         }
     }
 }

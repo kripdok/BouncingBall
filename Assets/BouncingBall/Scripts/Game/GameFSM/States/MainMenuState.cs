@@ -34,7 +34,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
         {
             _disposables = new();
             CreateMainMenuUI();
-            _levelLoaderMediator.OnLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
+            _levelLoaderMediator.IsLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _levelLoaderMediator.SetLevelName(LevelId);
             _resetManager.Reset();
             _inputInteractivityChanger.EnableInputSimulator();

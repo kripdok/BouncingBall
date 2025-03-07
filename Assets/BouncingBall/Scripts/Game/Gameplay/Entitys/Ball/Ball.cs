@@ -35,7 +35,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         [Inject]
         private void Construct(GameDataManager gameDataManager, ResetManager resetManager)
         {
-            resetManager.Add(this);
+            resetManager.RegisterResettable(this);
             _ballData = gameDataManager.GameData.BallData;
         }
 
@@ -77,7 +77,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
                 return;
             }
 
-            _ballData.HealthSystem.TakeDamage(damage);
+            _ballData.HealthSystem.ApplyDamage(damage);
         }
 
         private void Subscribe()

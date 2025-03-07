@@ -5,26 +5,26 @@ namespace BouncingBall.Utilities.Reset
 {
     public class ResetManager : IResettable
     {
-        private List<IResettable> _resettables = new();
+        private List<IResettable> _resettableObjects = new();
 
-        public void Add(IResettable resettable)
+        public void RegisterResettable(IResettable resettable)
         {
-            _resettables.Add(resettable);
+            _resettableObjects.Add(resettable);
         }
 
-        public void Remove(IResettable resettable)
+        public void UnregisterResettable(IResettable resettable)
         {
-            if (!_resettables.Contains(resettable))
+            if (!_resettableObjects.Contains(resettable))
             {
-                throw new ArgumentException($"The object {resettable} was not added to the reset list.");
+                throw new ArgumentException($"The object {resettable} was not registered for reset.");
             }
 
-            _resettables.Remove(resettable);
+            _resettableObjects.Remove(resettable);
         }
 
         public void Reset()
         {
-            foreach (IResettable resettable in _resettables)
+            foreach (IResettable resettable in _resettableObjects)
             {
                 resettable.Reset();
             }

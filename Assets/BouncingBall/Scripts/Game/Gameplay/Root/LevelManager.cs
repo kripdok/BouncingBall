@@ -35,7 +35,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         public LevelManager(ResetManager resetManager)
         {
-            resetManager.Add(this);
+            resetManager.RegisterResettable(this);
         }
 
         public void Reset()
@@ -84,7 +84,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 CreateEnemys(_levelData, _level.EnemySpawnPoint);
 
                 _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
-                _gameDataManager.GameData.BallData.HealthSystem.CorrectAmount.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
+                _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
             }
         }
 

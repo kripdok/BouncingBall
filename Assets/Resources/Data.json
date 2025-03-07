@@ -1,7 +1,7 @@
 {
   "BallData": {
     "HealthSystem": {
-      "MaxAmount": 3
+      "MaxHealth": 3
     },
     "MaxSpeed": 10
   },
