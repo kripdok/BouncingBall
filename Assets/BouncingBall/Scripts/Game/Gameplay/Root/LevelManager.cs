@@ -26,12 +26,12 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private EnemyPool _enemyPool;
 
         private List<AbstractEnemy> _enemies = new();
-        private ReactiveCollection<Coin> _coinsCache = new();
-        private CompositeDisposable _compositeDisposable;
+        private ReactiveCollection<Coin> _activeCoins = new();
+        private CompositeDisposable _subscriptions;
         private LevelData _levelData;
         private GameUI _gameUI;
         private Level _level;
-        private int _coinsCount;
+        private int _coinsCollected;
 
         public LevelManager(ResetManager resetManager)
         {
@@ -40,9 +40,9 @@ namespace BouncingBall.Game.Gameplay.Root
 
         public void Reset()
         {
-            _compositeDisposable?.Dispose();
+            _subscriptions?.Dispose();
 
-            foreach (var coin in _coinsCache)
+            foreach (var coin in _activeCoins)
             {
                 coin.gameObject.SetActive(false);
             }
@@ -52,54 +52,53 @@ namespace BouncingBall.Game.Gameplay.Root
                 _enemyPool.Remove(enemy);
             }
 
-            _coinsCache.Clear();
-            _coinsCount = 0;
-            _compositeDisposable = new();
+            _activeCoins.Clear();
+            _coinsCollected = 0;
+            _subscriptions = new CompositeDisposable();
             _levelData = null;
             _level = null;
         }
 
-        public async UniTask InitLevel(Level level, string id)
+        public async UniTask InitLevelAsync(Level level, string levelId)
         {
             _level = level;
-            _levelData = await _gameDataManager.LoadLevelDataAsync(id);
+            _levelData = await _gameDataManager.LoadLevelDataAsync(levelId);
             _ball.transform.position = level.BallSpawnPoint.position;
             _ball.Reset();
 
             if (_attachStateUI.StateUI is GameUI gameUI)
             {
                 _gameUI = gameUI;
-                _gameUI.OnRestart.Subscribe(_ => RestartLevel());
+                _gameUI.OnRestart.Subscribe(_ => RestartLevel()).AddTo(_subscriptions);
             }
 
             if (_levelData.LevelName != MainMenuLevelName)
             {
-                _coinsCache.ObserveAdd().Subscribe(levelViewModel =>
+                _activeCoins.ObserveAdd().Subscribe(coinEvent =>
                 {
-                    levelViewModel.Value.Reword.Subscribe(levelName => EnableLevelExit()).AddTo(_compositeDisposable);
-                    levelViewModel.Value.Reword.Subscribe(count => _gameUI.AddCoin(count)).AddTo(_compositeDisposable);
-                }).AddTo(_compositeDisposable);
+                    coinEvent.Value.Reword.Subscribe(_ => CheckAndEnableLevelExit()).AddTo(_subscriptions);
+                    coinEvent.Value.Reword.Subscribe(count => _gameUI.AddCoin(count)).AddTo(_subscriptions);
+                }).AddTo(_subscriptions);
 
-                CreateCoins(_levelData, _level.CoinsSpawnPoint);
-                CreateEnemys(_levelData, _level.EnemySpawnPoint);
+                SpawnCoins(_levelData, _level.CoinsSpawnPoint);
+                SpawnEnemies(_levelData, _level.EnemySpawnPoint);
 
-                _level.ExitTriggerHit.Subscribe(_ => EnableWinUI()).AddTo(_compositeDisposable);
-                _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(TryEnableLoseUI).AddTo(_compositeDisposable);
+                _level.ExitTriggerHit.Subscribe(_ => ShowWinPopup()).AddTo(_subscriptions);
+                _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(CheckAndShowLosePopup).AddTo(_subscriptions);
             }
         }
 
-        private void CreateCoins(LevelData levelData, IReadOnlyList<Transform> spawns)
+        private void SpawnCoins(LevelData levelData, IReadOnlyList<Transform> spawnPoints)
         {
-
             for (var i = 0; i < levelData.CoinsCount; i++)
             {
-                var coins = _coinsPool.Spawn();
-                coins.transform.position = spawns[i].position;
-                _coinsCache.Add(coins);
+                var coin = _coinsPool.Spawn();
+                coin.transform.position = spawnPoints[i].position;
+                _activeCoins.Add(coin);
             }
         }
 
-        private void CreateEnemys(LevelData levelData, IReadOnlyList<Transform> spawns)
+        private void SpawnEnemies(LevelData levelData, IReadOnlyList<Transform> spawnPoints)
         {
             var spawnIndex = 0;
 
@@ -107,7 +106,7 @@ namespace BouncingBall.Game.Gameplay.Root
             {
                 for (int i = 0; i < levelData.EnemiesCount[enemyType]; i++)
                 {
-                    var enemy = _enemyPool.Create(spawns[spawnIndex].position, enemyType);
+                    var enemy = _enemyPool.Create(spawnPoints[spawnIndex].position, enemyType);
                     _enemies.Add(enemy);
                     spawnIndex++;
                 }
@@ -120,24 +119,32 @@ namespace BouncingBall.Game.Gameplay.Root
             _ball.transform.position = _level.BallSpawnPoint.position;
             _gameUI.DisablePopup();
             _level.Reset();
-            _coinsCount = 0;
+            _coinsCollected = 0;
 
-            foreach (var coin in _coinsCache)
+            foreach (var coin in _activeCoins)
             {
                 coin.gameObject.SetActive(false);
             }
 
-            _coinsCache.Clear();
-            //TODO - добавит перезагрузку противников
-            CreateCoins(_levelData, _level.CoinsSpawnPoint);
+            _activeCoins.Clear();
+
+            foreach (var enemy in _enemies)
+            {
+                enemy.gameObject.SetActive(false);
+            }
+
+            _enemies.Clear();
+
+            SpawnCoins(_levelData, _level.CoinsSpawnPoint);
+            SpawnEnemies(_levelData, _level.EnemySpawnPoint);
         }
 
-        private void EnableWinUI()
+        private void ShowWinPopup()
         {
             _gameUI.EnableWinPopup();
         }
 
-        private void TryEnableLoseUI(int healthCount)
+        private void CheckAndShowLosePopup(int healthCount)
         {
             if (healthCount <= 0)
             {
@@ -145,11 +152,11 @@ namespace BouncingBall.Game.Gameplay.Root
             }
         }
 
-        private void EnableLevelExit()
+        private void CheckAndEnableLevelExit()
         {
-            _coinsCount++;
+            _coinsCollected++;
 
-            if (_coinsCount >= _levelData.CoinsCount)
+            if (_coinsCollected >= _levelData.CoinsCount)
             {
                 _level.EnableExit();
             }

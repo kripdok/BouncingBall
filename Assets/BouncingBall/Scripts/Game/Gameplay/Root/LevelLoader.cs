@@ -11,47 +11,46 @@ namespace BouncingBall.Game.Gameplay.Root
 {
     public class LevelLoader
     {
-        private const string LevelsPathc = "Prefabs/Gameplay/Levels/Level_";
+        private const string LevelsPath = "Prefabs/Gameplay/Levels/Level_";
 
         [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         [Inject] private readonly LevelFactory _levelFactory;
-        [Inject] private readonly LevelManager _manager;
+        [Inject] private readonly LevelManager _levelManager;
 
         private readonly LevelLoaderMediator _levelLoaderMediator;
-
-        private Level _concreteLevel;
+        private Level _currentLevel;
 
         public LevelLoader(LevelLoaderMediator levelLoaderMediator)
         {
             _levelLoaderMediator = levelLoaderMediator;
-            _levelLoaderMediator.CurrentLevelName.Skip(1).Subscribe(async levelName => await LoadLevel(levelName));
+            _levelLoaderMediator.CurrentLevelName.Skip(1).Subscribe(async levelName => await LoadLevelAsync(levelName));
         }
 
-        public async UniTask LoadLevel(string id)
+        public async UniTask LoadLevelAsync(string levelId)
         {
-            if (_concreteLevel != null)
+            if (_currentLevel != null)
             {
-                GameObject.Destroy(_concreteLevel.gameObject);
+                GameObject.Destroy(_currentLevel.gameObject);
             }
 
-            var prefab = await LoadPrefab(id);
+            var levelPrefab = await LoadPrefabAsync(levelId);
 
-            _concreteLevel = _levelFactory.Create(prefab);
-            await _manager.InitLevel(_concreteLevel, id);
+            _currentLevel = _levelFactory.Create(levelPrefab);
+            await _levelManager.InitLevelAsync(_currentLevel, levelId);
             _levelLoaderMediator.NotifyLevelIsLoaded();
         }
 
-        private async UniTask<Level> LoadPrefab(string id)
+        private async UniTask<Level> LoadPrefabAsync(string levelId)
         {
-            var patch = LevelsPathc + id;
+            var prefabPath = LevelsPath + levelId;
 
             try
             {
-                return await _prefabLoadStrategy.LoadPrefabAsync<Level>(patch);
+                return await _prefabLoadStrategy.LoadPrefabAsync<Level>(prefabPath);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new ArgumentNullException($"Level with ID {id} ​​does not exist or path to file is incorrectly specified:\n{LevelsPathc}");
+                throw new ArgumentException($"Level with ID '{levelId}' does not exist or path to file is incorrectly specified:\n{LevelsPath}", ex);
             }
         }
     }
