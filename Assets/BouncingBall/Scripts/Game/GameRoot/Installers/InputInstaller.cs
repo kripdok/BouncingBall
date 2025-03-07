@@ -2,7 +2,7 @@
 using BouncingBall.InputSystem.Device;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameRoot.Installers
+namespace BouncingBall.Game.GameRoot.Installers
 {
     public class InputInstaller : MonoInstaller
     {

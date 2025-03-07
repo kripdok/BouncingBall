@@ -1,7 +1,7 @@
-﻿using BouncingBall.Game.GameRoot;
-using Zenject;
+﻿using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameRoot.Installers
+
+namespace BouncingBall.Game.GameRoot.Installers
 {
     public class CameraInstaller : MonoInstaller
     {

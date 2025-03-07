@@ -1,12 +1,11 @@
 ﻿using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
-using BouncingBall.Game.GameRoot;
 using BouncingBall.PrefabLoader;
-using BouncingBall.Utilities.Reset;
 using BouncingBall.Utilities;
+using BouncingBall.Utilities.Reset;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameRoot.Installers
+namespace BouncingBall.Game.GameRoot.Installers
 {
     public class CoreSystemsInstaller : MonoInstaller
     {

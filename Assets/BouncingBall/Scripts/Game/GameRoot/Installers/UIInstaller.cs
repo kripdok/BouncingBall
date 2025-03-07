@@ -2,7 +2,7 @@
 using BouncingBall.UI.Root;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameRoot.Installers
+namespace BouncingBall.Game.GameRoot.Installers
 {
     public class UIInstaller : MonoInstaller
     {
