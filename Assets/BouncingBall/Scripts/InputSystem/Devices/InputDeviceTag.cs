@@ -1,4 +1,4 @@
-﻿namespace BouncingBall.InputSystem
+﻿namespace BouncingBall.InputSystem.Device
 {
     public enum InputDeviceTag
     {

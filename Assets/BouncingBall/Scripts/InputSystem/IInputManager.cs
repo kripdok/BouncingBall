@@ -5,9 +5,9 @@ namespace BouncingBall.InputSystem
 {
     public interface IInputManager
     {
-        public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; }
-        public ReadOnlyReactiveProperty<float> ZScale { get; }
-        public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; }
+        public ReadOnlyReactiveProperty<Vector3> Direction { get; }
+        public ReadOnlyReactiveProperty<float> DistanceScale { get; }
+        public ReadOnlyReactiveProperty<bool> IsDirectionActive { get; }
         public ReadOnlyReactiveProperty<float> Angle { get; }
         public ISubject<Unit> InputChange { get; }
 

@@ -1,13 +1,14 @@
 ﻿using BouncingBall.Game.Data;
 using UniRx;
 using UnityEngine;
-namespace BouncingBall.InputSystem.Device
+
+namespace BouncingBall.InputSystem.Device.Concrete
 {
     public class MouseInputDevice : IInputDevice, IControllable
     {
-        public ReactiveProperty<bool> IsDirectionSet { get; private set; }
+        public ReactiveProperty<bool> IsDirectionActive { get; private set; }
         public ReactiveProperty<Vector3> Direction { get; private set; }
-        public ReactiveProperty<float> ZScale { get; private set; }
+        public ReactiveProperty<float> DistanceScale { get; private set; }
         public ReactiveProperty<float> Angle { get; private set; }
 
         private Plane _plane;
@@ -18,15 +19,23 @@ namespace BouncingBall.InputSystem.Device
 
         public MouseInputDevice(GameDataManager gameDataManager)
         {
-            IsDirectionSet = new();
-            Direction = new();
-            ZScale = new();
-            Angle = new();
+            IsDirectionActive = new ReactiveProperty<bool>();
+            Direction = new ReactiveProperty<Vector3>();
+            DistanceScale = new ReactiveProperty<float>();
+            Angle = new ReactiveProperty<float>();
 
-            _plane = new(Vector3.up, Vector3.zero);
+            _plane = new Plane(Vector3.up, Vector3.zero);
             _gameDataManager = gameDataManager;
             _gameDataManager.GameData.BallData.Position.Subscribe(SetBallPositionAndPlanePoint);
             IsControllable = false;
+        }
+
+        public void Reset()
+        {
+            DistanceScale.Value = 0;
+            Angle.Value = 0;
+            Direction.Value = Vector3.zero;
+            IsDirectionActive.Value = false;
         }
 
         public void EnableControllable()
@@ -34,16 +43,16 @@ namespace BouncingBall.InputSystem.Device
             IsControllable = true;
         }
 
-        public void SetRotationAndScale()
+        public void UpdateRotationAndScale()
         {
             if (IsControllable)
             {
-                IsDirectionSet.Value = Input.GetMouseButton(0);
-                IsControllable = IsDirectionSet.Value;
+                IsDirectionActive.Value = Input.GetMouseButton(0);
+                IsControllable = IsDirectionActive.Value;
             }
         }
 
-        public void TryDisableIsDirectionSet()
+        public void UpdateDirectionAndScale()
         {
             if (IsControllable)
             {
@@ -52,7 +61,7 @@ namespace BouncingBall.InputSystem.Device
                 if (_plane.Raycast(ray, out float distance))
                 {
                     var position = ray.GetPoint(distance);
-                    CalculationScaleZ(position);
+                    CalculateDistanceScale(position);
                     CalculateDirection(position);
                 }
             }
@@ -69,9 +78,9 @@ namespace BouncingBall.InputSystem.Device
             }
         }
 
-        private void CalculationScaleZ(Vector3 position)
+        private void CalculateDistanceScale(Vector3 position)
         {
-            ZScale.Value = Vector3.Distance(_ballPosition, position);
+            DistanceScale.Value = Vector3.Distance(_ballPosition, position);
         }
 
         private void SetBallPositionAndPlanePoint(Vector3 position)
@@ -79,14 +88,5 @@ namespace BouncingBall.InputSystem.Device
             _ballPosition = position;
             _plane.SetNormalAndPosition(Vector3.up, position);
         }
-
-        public void Reset()
-        {
-            ZScale.Value = 0;
-            Angle.Value = 0;
-            Direction.Value = Vector3.zero;
-            IsDirectionSet.Value = false;
-        }
     }
 }
-

@@ -1,5 +1,5 @@
-using BouncingBall.InputSystem.Controller;
 using BouncingBall.InputSystem.Device;
+using BouncingBall.InputSystem.Device.Concrete;
 using BouncingBall.Utilities;
 using UniRx;
 using UnityEngine;
@@ -8,12 +8,12 @@ namespace BouncingBall.InputSystem
 {
     public class InputManager : IInputInteractivityChanger, IInputManager, IPausable
     {
-        public ReadOnlyReactiveProperty<Vector3> RotationAmount { get; private set; }
-        public ReadOnlyReactiveProperty<float> ZScale { get; private set; }
-        public ReadOnlyReactiveProperty<bool> IsDirectionSet { get; private set; }
+        public ReadOnlyReactiveProperty<Vector3> Direction { get; private set; }
+        public ReadOnlyReactiveProperty<float> DistanceScale { get; private set; }
+        public ReadOnlyReactiveProperty<bool> IsDirectionActive { get; private set; }
         public ReadOnlyReactiveProperty<float> Angle { get; private set; }
 
-        private Subject<Unit> _inputChange = new();
+        private Subject<Unit> _inputChange = new Subject<Unit>();
         private CompositeDisposable _disposable;
         private InputDevicePool _factory;
         private IInputDevice _inputDevice;
@@ -21,7 +21,7 @@ namespace BouncingBall.InputSystem
 
         public ISubject<Unit> InputChange => _inputChange;
 
-        private bool _isPouse;
+        private bool _isPaused;
 
         public InputManager(InputDevicePool factory)
         {
@@ -46,9 +46,9 @@ namespace BouncingBall.InputSystem
         {
             Debug.Log("Disable input");
             _disposable?.Dispose();
-            RotationAmount?.Dispose();
-            ZScale?.Dispose();
-            IsDirectionSet?.Dispose();
+            Direction?.Dispose();
+            DistanceScale?.Dispose();
+            IsDirectionActive?.Dispose();
             Angle?.Dispose();
             _inputDevice = null;
         }
@@ -61,37 +61,47 @@ namespace BouncingBall.InputSystem
             }
         }
 
-        public void EnableInputSimulator()
+        public void EnableSimulatedInput()
         {
             InitializeInputDevice(InputDeviceTag.Simulator);
 
             if (_inputDevice is PlayerInputSimulator input)
             {
-                input.Simulate();
+                input.StartSimulation();
             }
         }
 
-        public void DisableInputSimulator()
+        public void DisableSimulatedInput()
         {
             if (_inputDevice is PlayerInputSimulator input)
             {
-                input.Disable();
+                input.StopSimulation();
                 DisableInput();
             }
         }
 
-        private void Update()
+        public void Pause()
         {
-            if (_isPouse)
-                return;
-
-            CheckInputDevice();
-
-            _inputDevice?.SetRotationAndScale();
-            _inputDevice?.TryDisableIsDirectionSet();
+            _isPaused = true;
         }
 
-        private void CheckInputDevice()
+        public void Resume()
+        {
+            _isPaused = false;
+        }
+
+        private void Update()
+        {
+            if (_isPaused)
+                return;
+
+            UpdateInputDeviceBasedOnInput();
+
+            _inputDevice?.UpdateRotationAndScale();
+            _inputDevice?.UpdateDirectionAndScale();
+        }
+
+        private void UpdateInputDeviceBasedOnInput()
         {
             InputDeviceTag newInputDeviceName;
 
@@ -119,23 +129,13 @@ namespace BouncingBall.InputSystem
             _currentInputDeviceName = deviceName;
             _inputDevice = _factory.Create(deviceName);
 
-            RotationAmount = new ReadOnlyReactiveProperty<Vector3>(_inputDevice.Direction);
-            ZScale = new ReadOnlyReactiveProperty<float>(_inputDevice.ZScale);
-            IsDirectionSet = new ReadOnlyReactiveProperty<bool>(_inputDevice.IsDirectionSet);
+            Direction = new ReadOnlyReactiveProperty<Vector3>(_inputDevice.Direction);
+            DistanceScale = new ReadOnlyReactiveProperty<float>(_inputDevice.DistanceScale);
+            IsDirectionActive = new ReadOnlyReactiveProperty<bool>(_inputDevice.IsDirectionActive);
             Angle = new ReadOnlyReactiveProperty<float>(_inputDevice.Angle);
 
             _inputChange.OnNext(Unit.Default);
             Debug.Log($"The {_currentInputDeviceName} device is now on");
-        }
-
-        public void Pause()
-        {
-            _isPouse = true;
-        }
-
-        public void Resume()
-        {
-            _isPouse = false;
         }
     }
 }

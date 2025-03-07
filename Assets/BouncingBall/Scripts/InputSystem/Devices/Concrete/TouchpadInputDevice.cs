@@ -2,13 +2,13 @@
 using UniRx;
 using UnityEngine;
 
-namespace BouncingBall.InputSystem.Device
+namespace BouncingBall.InputSystem.Device.Concrete
 {
     public class TouchpadInputDevice : IInputDevice, IControllable
     {
-        public ReactiveProperty<bool> IsDirectionSet { get; private set; }
+        public ReactiveProperty<bool> IsDirectionActive { get; private set; }
         public ReactiveProperty<Vector3> Direction { get; private set; }
-        public ReactiveProperty<float> ZScale { get; private set; }
+        public ReactiveProperty<float> DistanceScale { get; private set; }
         public ReactiveProperty<float> Angle { get; private set; }
 
         private Plane _plane;
@@ -19,14 +19,14 @@ namespace BouncingBall.InputSystem.Device
 
         public TouchpadInputDevice(GameDataManager gameDataManager)
         {
-            IsDirectionSet = new();
+            IsDirectionActive = new();
             Direction = new();
-            ZScale = new();
+            DistanceScale = new();
             Angle = new();
 
             _plane = new(Vector3.up, Vector3.zero);
             _gameDataManager = gameDataManager;
-            _gameDataManager.GameData.BallData.Position.Subscribe(SetBallPositionAndPlanePoint);
+            _gameDataManager.GameData.BallData.Position.Subscribe(UpdateBallPositionAndPlane);
             IsControllable = false;
         }
 
@@ -35,16 +35,16 @@ namespace BouncingBall.InputSystem.Device
             IsControllable = true;
         }
 
-        public void SetRotationAndScale()
+        public void UpdateRotationAndScale()
         {
             if (IsControllable)
             {
-                IsDirectionSet.Value = Input.touchCount > 0;
-                IsControllable = IsDirectionSet.Value;
+                IsDirectionActive.Value = Input.touchCount > 0;
+                IsControllable = IsDirectionActive.Value;
             }
         }
 
-        public void TryDisableIsDirectionSet()
+        public void UpdateDirectionAndScale()
         {
             if (IsControllable)
             {
@@ -55,7 +55,7 @@ namespace BouncingBall.InputSystem.Device
                     {
                         Vector2 touchPosition = touch.position;
                         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane));
-                        CalculationScaleZ(worldPosition);
+                        CalculateDistanceScale(worldPosition);
                         CalculateDirection(worldPosition);
                     }
                 }
@@ -74,19 +74,15 @@ namespace BouncingBall.InputSystem.Device
             {
                 Direction.Value = new Vector3(direction.x, 0, direction.z).normalized;
                 Angle.Value = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-
-                Debug.Log("Установленj направление" + Direction.Value);
-                Debug.Log("Установлен угол" + Angle.Value);
             }
         }
 
-        private void CalculationScaleZ(Vector3 position)
+        private void CalculateDistanceScale(Vector3 position)
         {
-            ZScale.Value = Vector3.Distance(_ballPosition, position);
-            Debug.Log("Установлен скейл" + ZScale.Value);
+            DistanceScale.Value = Vector3.Distance(_ballPosition, position);
         }
 
-        private void SetBallPositionAndPlanePoint(Vector3 position)
+        private void UpdateBallPositionAndPlane(Vector3 position)
         {
             _ballPosition = position;
             _plane.SetNormalAndPosition(Vector3.up, position);
@@ -94,10 +90,10 @@ namespace BouncingBall.InputSystem.Device
 
         public void Reset()
         {
-            ZScale.Value = 0;
+            DistanceScale.Value = 0;
             Angle.Value = 0;
             Direction.Value = Vector3.zero;
-            IsDirectionSet.Value = false;
+            IsDirectionActive.Value = false;
         }
     }
 }

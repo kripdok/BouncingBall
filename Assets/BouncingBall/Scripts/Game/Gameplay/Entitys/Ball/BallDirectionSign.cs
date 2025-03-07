@@ -46,9 +46,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputDeviceDisposable?.Dispose();
             _inputDeviceDisposable = new();
 
-            _inputController.ZScale?.Subscribe(UpdateScale).AddTo(_inputDeviceDisposable);
+            _inputController.DistanceScale?.Subscribe(UpdateScale).AddTo(_inputDeviceDisposable);
             _inputController.Angle?.Subscribe(UpdateRotation).AddTo(_inputDeviceDisposable);
-            _inputController.IsDirectionSet?.Skip(1).Subscribe(flag => gameObject.SetActive(flag)).AddTo(_inputDeviceDisposable);
+            _inputController.IsDirectionActive?.Skip(1).Subscribe(flag => gameObject.SetActive(flag)).AddTo(_inputDeviceDisposable);
         }
 
         private void UpdateRotation(float angle)

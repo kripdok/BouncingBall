@@ -1,5 +1,5 @@
 ﻿using BouncingBall.Game.UI.GameplayState;
-using BouncingBall.InputSystem.Controller;
+using BouncingBall.InputSystem;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
@@ -46,7 +46,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 
         private void CreateGameUI()
         {
-            
+
             var prefabGameUI = _prefabLoadStrategy.LoadPrefabSync<GameUI>(UIPatch);
             var gameUI = _stateUIFactory.Create(prefabGameUI);
             gameUI.OnExit.Subscribe(_ => SetMainMenuState()).AddTo(_disposables);

@@ -98,9 +98,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputDisposables?.Dispose();
             _inputDisposables = new CompositeDisposable();
 
-            _inputManager.ZScale?.Subscribe(SetCurrentSpeed).AddTo(_inputDisposables);
-            _inputManager.RotationAmount?.Subscribe(direction => _moveDirection = direction).AddTo(_inputDisposables);
-            _inputManager.IsDirectionSet?.Skip(1).Subscribe(ApplyForceIfDirectionSet).AddTo(_inputDisposables);
+            _inputManager.DistanceScale?.Subscribe(SetCurrentSpeed).AddTo(_inputDisposables);
+            _inputManager.Direction?.Subscribe(direction => _moveDirection = direction).AddTo(_inputDisposables);
+            _inputManager.IsDirectionActive?.Skip(1).Subscribe(ApplyForceIfDirectionSet).AddTo(_inputDisposables);
         }
 
         private void SetCurrentSpeed(float speed)

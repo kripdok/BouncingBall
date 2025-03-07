@@ -66,7 +66,7 @@ namespace BouncingBall.Game.GameRoot
             _inputDeviceDisposable?.Dispose();
             _inputDeviceDisposable = new CompositeDisposable();
 
-            _inputManager.ZScale?.Subscribe(UpdateCameraSpeed).AddTo(_inputDeviceDisposable);
+            _inputManager.DistanceScale?.Subscribe(UpdateCameraSpeed).AddTo(_inputDeviceDisposable);
         }
 
         private Vector3 CalculateTargetCameraPosition(Vector3 targetPosition)

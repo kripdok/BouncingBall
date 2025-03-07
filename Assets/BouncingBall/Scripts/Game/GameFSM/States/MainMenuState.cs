@@ -1,5 +1,5 @@
 ﻿using BouncingBall.Game.UI.MainMenuState;
-using BouncingBall.InputSystem.Controller;
+using BouncingBall.InputSystem;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
 using BouncingBall.UI.Root;
@@ -37,12 +37,12 @@ namespace BouncingBall.Game.FinalStateMachine.States
             _levelLoaderMediator.IsLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
             _levelLoaderMediator.SetLevelName(LevelId);
             _resetManager.Reset();
-            _inputInteractivityChanger.EnableInputSimulator();
+            _inputInteractivityChanger.EnableSimulatedInput();
         }
 
         public override async UniTask Exit()
         {
-            _inputInteractivityChanger.DisableInputSimulator();
+            _inputInteractivityChanger.DisableSimulatedInput();
             _disposables.Dispose();
             await _loadingWindowController.ShowLoadingWindow();
             _levelLoaderMediator.SetLevelName(_levelName);

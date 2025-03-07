@@ -5,14 +5,14 @@ namespace BouncingBall.InputSystem.Device
 {
     public interface IInputDevice
     {
-        public ReactiveProperty<bool> IsDirectionSet { get; }
+        public ReactiveProperty<bool> IsDirectionActive { get; }
         public ReactiveProperty<Vector3> Direction { get; }
-        public ReactiveProperty<float> ZScale { get; }
+        public ReactiveProperty<float> DistanceScale { get; }
         public ReactiveProperty<float> Angle { get; }
 
-        public void SetRotationAndScale();
+        public void UpdateRotationAndScale();
 
-        public void TryDisableIsDirectionSet();
+        public void UpdateDirectionAndScale();
 
         public void Reset();
     }
