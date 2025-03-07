@@ -21,8 +21,8 @@ namespace BouncingBall.Game.Data
 
         public async UniTask LoadGameData()
         {
-            GameData = await _dataLoader.LoadDataAsync<GameData>(GameDataPath);
-            PlayerData = await _dataLoader.LoadDataAsync<PlayerData>(PlayerDataPath);
+            GameData = await _dataLoader.LoadDataFromPathAsync<GameData>(GameDataPath);
+            PlayerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataPath);
         }
 
         public async UniTask<LevelData> LoadLevel(string name)
@@ -30,14 +30,14 @@ namespace BouncingBall.Game.Data
             if (_levelData.TryGetValue(name, out var level))
                 return level;
 
-            level = await _dataLoader.LoadDataAsync<LevelData>(LevelDataPath.Replace("NAME", name));
+            level = await _dataLoader.LoadDataFromPathAsync<LevelData>(LevelDataPath.Replace("NAME", name));
             _levelData[name] = level;
             return level;
         }
 
         public async UniTask ResetPlayerData()
         {
-            var playerData = await _dataLoader.LoadDataAsync<PlayerData>(PlayerDataPath);
+            var playerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataPath);
             PlayerData.CoinsCount.Value = playerData.CoinsCount.Value;
         }
     }

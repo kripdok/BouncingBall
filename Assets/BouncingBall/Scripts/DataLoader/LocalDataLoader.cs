@@ -1,35 +1,31 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BouncingBall.DataLoader
 {
     public class LocalDataLoader : IDataLoader
     {
-        public async UniTask<T> LoadDataAsync<T>(string path) where T : IDownloadable, new()
+        public async UniTask<T> LoadDataFromPathAsync<T>(string path) where T : IDownloadable, new()
         {
-            TaskCompletionSource<T> task = new TaskCompletionSource<T>();
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"File not found at path: {path}");
+            }
 
             T data = new T();
 
-            if (File.Exists(path) == false)
-            {
-                throw new FileNotFoundException($"{path} does not exist!");
-            }
-
             try
             {
-                string jsonData = await File.ReadAllTextAsync(path);
-                data.Load(jsonData);
-                task.SetResult(data);
-                return task.Task.Result;
+                string jsonContent = await File.ReadAllTextAsync(path);
+                data.Load(jsonContent);
+                return data;
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Failed to load data due to: {ex.Message} {ex.StackTrace}");
-                throw ex;
+                throw;
             }
         }
     }

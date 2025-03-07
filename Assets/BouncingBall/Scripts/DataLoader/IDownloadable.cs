@@ -2,6 +2,6 @@
 {
     public interface IDownloadable
     {
-        public void Load(string jsonData);
+        public void Load(string jsonContent);
     }
 }
