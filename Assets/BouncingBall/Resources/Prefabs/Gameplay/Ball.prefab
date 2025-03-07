@@ -115,9 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _body: {fileID: 1586001351574961064}
   _mass: 1
-  _vilocityDamping: 0.5
-  TestVelocity: {x: 0, y: 0, z: 0}
-  _velocityForce: {x: 0, y: 0, z: 0}
+  _velocityDamping: 0.5
 --- !u!1 &4920233407371449476
 GameObject:
   m_ObjectHideFlags: 0

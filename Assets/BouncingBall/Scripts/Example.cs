@@ -24,7 +24,7 @@ public class Example : MonoBehaviour
 
     private async void OnCollisionEnter(Collision collision)
     {
-        var velocity = _rigidbody.TestVelocity;
+      //  var velocity = _rigidbody.TestVelocity;
         var directionOfCompression = Vector3.one;
 
         Vector3 normal = collision.GetContact(0).normal;

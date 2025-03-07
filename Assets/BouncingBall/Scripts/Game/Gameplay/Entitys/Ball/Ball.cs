@@ -50,15 +50,16 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             _originalScale = transform.localScale;
             _rigidbody = GetComponent<CustomRigidbody>();
-            SubscribeToInputEvents();
+            Subscribe();
         }
 
         private async void OnCollisionEnter(Collision collision)
         {
             Vector3 collisionNormal = collision.GetContact(0).normal;
-            Vector3 reflectedVelocity = Vector3.Reflect(_rigidbody._velocityForce, collisionNormal);
-
+            Vector3 reflectedVelocity = Vector3.Reflect(_rigidbody.VelocityForce, collisionNormal);
+            _ballData.Direction.Value = reflectedVelocity;
             _collisionEffectPool.Spawn(collision.GetContact(0).point, Quaternion.LookRotation(collisionNormal));
+
             await CompressBall(reflectedVelocity);
             await RestoreBallScale();
         }
@@ -79,17 +80,17 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _ballData.HealthSystem.TakeDamage(damage);
         }
 
+        private void Subscribe()
+        {
+            SubscribeToInputEvents();
+            SubscribeToInputDevice();
+        }
+
         private void SubscribeToInputEvents()
         {
-            _inputManager.InputChange
-                .Subscribe(_ => SubscribeToInputDevice())
-                .AddTo(this);
+            _inputManager.InputChange.Subscribe(_ => SubscribeToInputDevice()).AddTo(this);
+            Observable.EveryUpdate().Subscribe(_ => UpdateBallData()).AddTo(this);
 
-            Observable.EveryUpdate()
-                .Subscribe(_ => UpdateBallData())
-                .AddTo(this);
-
-            SubscribeToInputDevice();
         }
 
         private void SubscribeToInputDevice()
@@ -97,18 +98,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputDisposables?.Dispose();
             _inputDisposables = new CompositeDisposable();
 
-            _inputManager.ZScale?
-                .Subscribe(SetCurrentSpeed)
-                .AddTo(_inputDisposables);
-
-            _inputManager.RotationAmount?
-                .Subscribe(direction => _moveDirection = direction)
-                .AddTo(_inputDisposables);
-
-            _inputManager.IsDirectionSet?
-                .Skip(1)
-                .Subscribe(ApplyForceIfDirectionSet)
-                .AddTo(_inputDisposables);
+            _inputManager.ZScale?.Subscribe(SetCurrentSpeed).AddTo(_inputDisposables);
+            _inputManager.RotationAmount?.Subscribe(direction => _moveDirection = direction).AddTo(_inputDisposables);
+            _inputManager.IsDirectionSet?.Skip(1).Subscribe(ApplyForceIfDirectionSet).AddTo(_inputDisposables);
         }
 
         private void SetCurrentSpeed(float speed)
@@ -121,13 +113,13 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             if (!isDirectionSet)
             {
                 _rigidbody.AddForce(_moveDirection * _currentSpeed);
+                _ballData.Direction.Value = _moveDirection;
             }
         }
 
         private void UpdateBallData()
         {
             _ballData.Position.Value = transform.position;
-            _ballData.Direction.Value = _rigidbody.TestVelocity;
         }
 
         private async UniTask CompressBall(Vector3 newVelocity)
@@ -168,7 +160,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private float CalculateCompressionPower()
         {
-            float velocityMagnitude = Vector3.Distance(Vector3.zero, _rigidbody._velocityForce);
+            float velocityMagnitude = Vector3.Distance(Vector3.zero, _rigidbody.VelocityForce);
             return Mathf.Clamp(velocityMagnitude, 0, _maximumCompression);
         }
 

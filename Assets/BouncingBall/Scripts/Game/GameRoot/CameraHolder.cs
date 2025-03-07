@@ -6,85 +6,94 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-public class CameraHolder : MonoBehaviour
+namespace BouncingBall.Game.GameRoot
 {
-    [SerializeField] private Transform _holder;
-    [SerializeField] private float _moveDuration = 0.5f;
-
-    [Inject] private GameDataManager _gameDataManager;
-    [Inject] private IInputManager _inputManager;
-
-    private CompositeDisposable _inputDeviceDisposable;
-    private BallData _ballData;
-    private float _yPosition;
-    private float _speed;
-
-    public void Init()
+    public class CameraHolder : MonoBehaviour
     {
-        _yPosition = transform.position.y;
-        _ballData = _gameDataManager.GameData.BallData;
-        Subscribe();
-    }
+        private const float MinSpeed = 0f;
 
-    private void Subscribe()
-    {
-        _ballData.Position.Subscribe(SetPosition).AddTo(this);
-        _ballData.Direction.Subscribe(UpdateCameraPosition).AddTo(this);
-        _inputManager.InputChange.Subscribe(_ => SubscribeToInput()).AddTo(this);
+        [SerializeField] private Transform _holder;
+        [SerializeField] private float _moveDuration = 0.5f;
 
-        SubscribeToInput();
-    }
+        [Inject] private GameDataManager _gameDataManager;
+        [Inject] private IInputManager _inputManager;
 
-    private void SetPosition(Vector3 position)
-    {
-        var newPosition = position;
-        newPosition.y += _yPosition;
-        transform.position = newPosition;
-    }
+        private CompositeDisposable _inputDeviceDisposable;
+        private BallData _ballData;
+        private float _initialYPosition;
+        private float _speed;
 
-    private void UpdateSpeed(float speed)
-    {
-        _speed = Mathf.Clamp(speed, 0, _ballData.MaxSpeed);
-    }
-
-    private async void UpdateCameraPosition(Vector3 targetPosition)
-    {
-        Vector3 newCameraPosition = CalculateNewCameraPosition(targetPosition);
-        await SmoothMoveCamera(newCameraPosition);
-    }
-
-    private void SubscribeToInput()
-    {
-        _inputDeviceDisposable?.Dispose();
-        _inputDeviceDisposable = new();
-
-        _inputManager.ZScale?.Subscribe(UpdateSpeed).AddTo(_inputDeviceDisposable);
-    }
-
-    private Vector3 CalculateNewCameraPosition(Vector3 targetPosition)
-    {
-        var targetDirection = targetPosition.normalized;
-
-        float speedFactor = _speed / _ballData.MaxSpeed;
-        Vector3 newPosition = targetDirection * speedFactor;
-        newPosition.y = _holder.localPosition.y;
-
-        return newPosition;
-    }
-
-    private async UniTask SmoothMoveCamera(Vector3 targetPosition)
-    {
-        Vector3 startPosition = _holder.localPosition;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < _moveDuration)
+        public void Init()
         {
-            var t = elapsedTime / _moveDuration;
-            _holder.localPosition = Vector3.Lerp(startPosition, targetPosition, t);
-            elapsedTime += Time.deltaTime;
-            await UniTask.Yield();
+            _initialYPosition = transform.position.y;
+            _ballData = _gameDataManager.GameData.BallData;
+
+            Subscribe();
         }
 
-        _holder.localPosition = targetPosition;
+        private void Subscribe()
+        {
+            SubscribeToInputEventsAndBallData();
+            SubscribeToInputDevice();
+        }
+
+        private void SubscribeToInputEventsAndBallData()
+        {
+            _ballData.Position.Subscribe(SetPosition).AddTo(this);
+            _ballData.Direction.Subscribe(MoveCameraToTargetPosition).AddTo(this);
+            _inputManager.InputChange.Subscribe(_ => SubscribeToInputDevice()).AddTo(this);
+        }
+        private void SetPosition(Vector3 position)
+        {
+            var newPosition = position;
+            newPosition.y += _initialYPosition;
+            transform.position = newPosition;
+        }
+
+        private void UpdateCameraSpeed(float speed)
+        {
+            _speed = Mathf.Clamp(speed, MinSpeed, _ballData.MaxSpeed);
+        }
+
+        private async void MoveCameraToTargetPosition(Vector3 targetPosition)
+        {
+            Vector3 newCameraPosition = CalculateTargetCameraPosition(targetPosition);
+            await SmoothlyMoveCamera(newCameraPosition);
+        }
+
+        private void SubscribeToInputDevice()
+        {
+            _inputDeviceDisposable?.Dispose();
+            _inputDeviceDisposable = new CompositeDisposable();
+
+            _inputManager.ZScale?.Subscribe(UpdateCameraSpeed).AddTo(_inputDeviceDisposable);
+        }
+
+        private Vector3 CalculateTargetCameraPosition(Vector3 targetPosition)
+        {
+            var targetDirection = targetPosition.normalized;
+
+            float speedFactor = _speed / _ballData.MaxSpeed;
+            Vector3 newPosition = targetDirection * speedFactor;
+            newPosition.y = _holder.localPosition.y;
+
+            return newPosition;
+        }
+
+        private async UniTask SmoothlyMoveCamera(Vector3 targetPosition)
+        {
+            Vector3 startPosition = _holder.localPosition;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _moveDuration)
+            {
+                float lerpValue = elapsedTime / _moveDuration;
+                _holder.localPosition = Vector3.Lerp(startPosition, targetPosition, lerpValue);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield();
+            }
+
+            _holder.localPosition = targetPosition;
+        }
     }
 }
