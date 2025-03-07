@@ -130,7 +130,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
             foreach (var enemy in _enemies)
             {
-                enemy.gameObject.SetActive(false);
+                _enemyPool.Remove(enemy);
             }
 
             _enemies.Clear();

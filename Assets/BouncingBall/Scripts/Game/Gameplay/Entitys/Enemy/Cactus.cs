@@ -16,7 +16,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         private Vector3 _defoltScale;
         private Vector3 _firstMovePoint;
         private Vector3 _secondMovePoint;
-
+        private bool _isWoork;
 
         public override string Type => EnemyType.Cactus;
 
@@ -27,6 +27,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             Collider.enabled = true;
             _firstMovePoint = GetRaycastPoint(Vector3.left);
             _secondMovePoint = GetRaycastPoint(Vector3.right);
+
             Move();
         }
 
@@ -41,6 +42,11 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         {
             base.Awake();
             _defoltScale = transform.localScale;
+        }
+
+        private void OnDisable()
+        {
+            _isWoork = false;
         }
 
         protected override bool IsTakeDamage(Collision collision)
@@ -107,8 +113,10 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         private async void Move()
         {
             Vector3 targetPoint = Vector3.zero;
+            await UniTask.Yield();
+            _isWoork = true;
 
-            while (gameObject.activeSelf)
+            while (_isWoork)
             {
                 targetPoint = targetPoint == _firstMovePoint ? _secondMovePoint : _firstMovePoint;
                 var startPosition = transform.position;
@@ -120,11 +128,8 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = targetRotation;
 
-                while (Vector3.Distance(transform.position, targetPoint) > 1f)
+                while (Vector3.Distance(transform.position, targetPoint) > 1f && _isWoork)
                 {
-                    if (!gameObject.activeSelf)
-                        break;
-
                     float t = elapsedTime / journeyLength;
 
                     transform.position = Vector3.Lerp(startPosition, targetPoint, t * _speed);
@@ -133,6 +138,5 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 }
             }
         }
-
     }
 }
