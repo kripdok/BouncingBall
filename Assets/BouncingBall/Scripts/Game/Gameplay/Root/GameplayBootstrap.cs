@@ -7,7 +7,7 @@ namespace BouncingBall.Game.Gameplay.Root
     {
         public GameplayBootstrap(IStateMachine gameStateMachine)
         {
-            gameStateMachine.SetState(GameStateTag.MainMenu);
+            gameStateMachine.ChangeStateAsync(GameStateTag.MainMenu);
         }
     }
 }

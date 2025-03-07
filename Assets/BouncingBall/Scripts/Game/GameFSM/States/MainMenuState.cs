@@ -14,8 +14,8 @@ namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class MainMenuState : AbstractGameState
     {
-        private const string LevelId = "0";
-        private const string UIPrefabPathc = "Prefabs/UI/Containers/MainMenuUI";
+        private const string InitialLevelId = "0";
+        private const string MainMenuUIPrefabPath = "Prefabs/UI/Containers/MainMenuUI";
 
         [Inject] private readonly ILoadingWindowController _loadingWindowController;
         [Inject] private readonly IAttachStateUI _attachStateUI;
@@ -25,17 +25,23 @@ namespace BouncingBall.Game.FinalStateMachine.States
         [Inject] private readonly ResetManager _resetManager;
         [Inject] private readonly IInputInteractivityChanger _inputInteractivityChanger;
 
-        private CompositeDisposable _disposables;
-        private string _levelName;
+        private CompositeDisposable _subscriptions;
+        private string _selectedLevelName;
 
         public MainMenuState() : base(GameStateTag.MainMenu) { }
 
         public override async void Enter()
         {
-            _disposables = new();
-            CreateMainMenuUI();
-            _levelLoaderMediator.IsLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
-            _levelLoaderMediator.SetLevelName(LevelId);
+            _subscriptions = new CompositeDisposable();
+
+            InitializeMainMenuUI();
+
+            _levelLoaderMediator.IsLevelLoaded
+                .Where(isLoaded => isLoaded)
+                .Subscribe(_ => HideLoadingWindow())
+                .AddTo(_subscriptions);
+
+            _levelLoaderMediator.SetLevelName(InitialLevelId);
             _resetManager.Reset();
             _inputInteractivityChanger.EnableSimulatedInput();
         }
@@ -43,28 +49,32 @@ namespace BouncingBall.Game.FinalStateMachine.States
         public override async UniTask Exit()
         {
             _inputInteractivityChanger.DisableSimulatedInput();
-            _disposables.Dispose();
-            await _loadingWindowController.ShowLoadingWindow();
-            _levelLoaderMediator.SetLevelName(_levelName);
+            _subscriptions.Dispose();
+            await _loadingWindowController.ShowLoadingScreen();
+            _levelLoaderMediator.SetLevelName(_selectedLevelName);
         }
 
-        private void CreateMainMenuUI()
+        private void InitializeMainMenuUI()
         {
-            var prefabMainMenuUI = _prefabLoadStrategy.LoadPrefabSync<MainMenuUI>(UIPrefabPathc);
-            var mainMenuUI = _stateUIFactory.Create(prefabMainMenuUI);
-            mainMenuUI.OnExit.Subscribe(SetGameplayState).AddTo(_disposables);
+            var mainMenuUIPrefab = _prefabLoadStrategy.LoadPrefabSync<MainMenuUI>(MainMenuUIPrefabPath);
+            var mainMenuUI = _stateUIFactory.Create(mainMenuUIPrefab);
+
+            mainMenuUI.OnExit
+                .Subscribe(HandleTransitionToGameplayState)
+                .AddTo(_subscriptions);
+
             _attachStateUI.AttachStateUI(mainMenuUI);
         }
 
-        private void SetGameplayState(string levelName)
+        private void HandleTransitionToGameplayState(string levelName)
         {
-            _levelName = levelName;
+            _selectedLevelName = levelName;
             OnExit.OnNext(GameStateTag.Gameplay);
         }
 
         private void HideLoadingWindow()
         {
-            _loadingWindowController.HideLoadingWindow();
+            _loadingWindowController.HideLoadingScreen();
         }
     }
 }

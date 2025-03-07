@@ -15,13 +15,13 @@ namespace BouncingBall.UI.Root
             _loadingWindow.Initialize();
         }
 
-        public async UniTask HideLoadingWindow()
+        public async UniTask HideLoadingScreen()
         {
             await _loadingWindow.Hide();
             _loadingWindow.gameObject.SetActive(false);
         }
 
-        public async UniTask ShowLoadingWindow()
+        public async UniTask ShowLoadingScreen()
         {
             _loadingWindow.gameObject.SetActive(true);
             await _loadingWindow.Show();

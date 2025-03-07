@@ -14,7 +14,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class GameplayState : AbstractGameState
     {
-        private const string UIPatch = "Prefabs/UI/Containers/GameUI";
+        private const string GameUIPrefabPath = "Prefabs/UI/Containers/GameUI";
 
         [Inject] private readonly ILoadingWindowController _loadingWindowController;
         [Inject] private readonly IAttachStateUI _attachStateUI;
@@ -22,45 +22,54 @@ namespace BouncingBall.Game.FinalStateMachine.States
         [Inject] private readonly StateUIFactory _stateUIFactory;
         [Inject] private readonly LevelLoaderMediator _levelLoaderMediator;
         [Inject] private readonly ResetManager _resetManager;
-        [Inject] private readonly IInputInteractivityChanger _manageInputState;
+        [Inject] private readonly IInputInteractivityChanger _inputInteractivityChanger;
 
-        private CompositeDisposable _disposables;
+        private CompositeDisposable _subscriptions;
 
         public GameplayState() : base(GameStateTag.Gameplay) { }
 
         public override async void Enter()
         {
-            _manageInputState.EnableInput();
-            _disposables = new();
-            CreateGameUI();
-            _levelLoaderMediator.IsLevelLoaded.Where(flag => flag == true).Subscribe(_ => HideLoadingWindow()).AddTo(_disposables);
+            _inputInteractivityChanger.EnableInput();
+            _subscriptions = new CompositeDisposable();
+
+            InitializeGameUI();
+
+            _levelLoaderMediator.IsLevelLoaded
+                .Where(isLoaded => isLoaded)
+                .Subscribe(_ => HideLoadingScreen())
+                .AddTo(_subscriptions);
+
             _resetManager.Reset();
         }
 
         public override async UniTask Exit()
         {
-            _disposables.Dispose();
-            _manageInputState.DisableInput();
-            await _loadingWindowController.ShowLoadingWindow();
+            _subscriptions.Dispose();
+            _inputInteractivityChanger.DisableInput();
+            await _loadingWindowController.ShowLoadingScreen();
         }
 
-        private void CreateGameUI()
+        private void InitializeGameUI()
         {
+            var gameUIPrefab = _prefabLoadStrategy.LoadPrefabSync<GameUI>(GameUIPrefabPath);
+            var gameUI = _stateUIFactory.Create(gameUIPrefab);
 
-            var prefabGameUI = _prefabLoadStrategy.LoadPrefabSync<GameUI>(UIPatch);
-            var gameUI = _stateUIFactory.Create(prefabGameUI);
-            gameUI.OnExit.Subscribe(_ => SetMainMenuState()).AddTo(_disposables);
+            gameUI.OnExit
+                .Subscribe(_ => TransitionToMainMenuState())
+                .AddTo(_subscriptions);
+
             _attachStateUI.AttachStateUI(gameUI);
         }
 
-        private void SetMainMenuState()
+        private void TransitionToMainMenuState()
         {
             OnExit.OnNext(GameStateTag.MainMenu);
         }
 
-        private void HideLoadingWindow()
+        private void HideLoadingScreen()
         {
-            _loadingWindowController.HideLoadingWindow();
+            _loadingWindowController.HideLoadingScreen();
         }
     }
 }

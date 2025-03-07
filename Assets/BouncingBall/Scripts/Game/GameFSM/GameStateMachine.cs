@@ -10,7 +10,7 @@ namespace BouncingBall.Game.FinalStateMachine
 {
     public class GameStateMachine : IStateMachine
     {
-        private IState _concreteState;
+        private IState _currentState;
         private readonly Dictionary<string, AbstractGameState> _states;
         private readonly GameStateFactory _stateFactory;
 
@@ -27,26 +27,26 @@ namespace BouncingBall.Game.FinalStateMachine
 
             foreach (var state in _states.Values)
             {
-                state.IOnExit.Subscribe(SetState);
+                state.OnExitObservable.Subscribe(ChangeStateAsync);
             }
         }
 
-        public async void SetState(string id)
+        public async void ChangeStateAsync(string stateId)
         {
-            if (_states.TryGetValue(id, out var newState))
+            if (_states.TryGetValue(stateId, out var newState))
             {
-                if (_concreteState != null)
+                if (_currentState != null)
                 {
-                    await _concreteState.Exit();
+                    await _currentState.Exit();
                 }
 
-                _concreteState = newState;
-                _concreteState.Enter();
-                Debug.Log($"State {id} entered");
+                _currentState = newState;
+                _currentState.Enter();
+                Debug.Log($"State {stateId} entered");
             }
             else
             {
-                throw new NullReferenceException($"There is no game state with id {id}!");
+                throw new NullReferenceException($"There is no game state with id {stateId}!");
             }
         }
     }

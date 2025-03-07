@@ -7,14 +7,14 @@ namespace BouncingBall.Game.FinalStateMachine.States
 {
     public abstract class AbstractGameState : IState
     {
-        public IObservable<string> IOnExit => OnExit;
+        public IObservable<string> OnExitObservable => OnExit;
 
-        public readonly string Id;
+        public readonly string StateId;
         protected readonly Subject<string> OnExit;
 
-        public AbstractGameState(string id)
+        public AbstractGameState(string stateId)
         {
-            Id = id;
+            StateId = stateId;
             OnExit = new Subject<string>();
         }
 

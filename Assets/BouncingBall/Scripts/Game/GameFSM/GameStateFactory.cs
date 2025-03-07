@@ -12,20 +12,15 @@ namespace BouncingBall.Game.FinalStateMachine
             _container = container;
         }
 
-        public AbstractGameState Create(string param)
+        public AbstractGameState Create(string stateTag)
         {
-            switch (param)
+            return stateTag switch
             {
-                case GameStateTag.Bootstrap:
-                    return _container.Instantiate<BootstrapState>();
-                case GameStateTag.MainMenu:
-                    return _container.Instantiate<MainMenuState>();
-                case GameStateTag.Gameplay:
-                    return _container.Instantiate<GameplayState>();
-                default:
-                    return null;
-
-            }
+                GameStateTag.Bootstrap => _container.Instantiate<BootstrapState>(),
+                GameStateTag.MainMenu => _container.Instantiate<MainMenuState>(),
+                GameStateTag.Gameplay => _container.Instantiate<GameplayState>(),
+                _ => null
+            };
         }
     }
 }

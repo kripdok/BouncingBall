@@ -2,7 +2,7 @@ namespace BouncingBall.FinalStateMachine
 {
     public interface IStateMachine
     {
-        public void SetState(string id);
+        public void ChangeStateAsync(string id);
     }
 }
 

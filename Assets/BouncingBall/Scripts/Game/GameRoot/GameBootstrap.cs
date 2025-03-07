@@ -20,7 +20,7 @@ namespace BouncingBall.Game.GameRoot
 
             await gameDataManager.LoadGameDataAsync();
             cameraHolder.Init();
-            gameStateMachine.SetState(GameStateTag.Bootstrap);
+            gameStateMachine.ChangeStateAsync(GameStateTag.Bootstrap);
         }
     }
 }
