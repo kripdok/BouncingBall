@@ -62,7 +62,7 @@ namespace BouncingBall.Game.Gameplay.Root
         public async UniTask InitLevel(Level level, string id)
         {
             _level = level;
-            _levelData = await _gameDataManager.LoadLevel(id);
+            _levelData = await _gameDataManager.LoadLevelDataAsync(id);
             _ball.transform.position = level.BallSpawnPoint.position;
             _ball.Reset();
 

@@ -18,7 +18,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         private Vector3 _secondMovePoint;
 
 
-        public override EnemyType Type => EnemyType.Cactus;
+        public override string Type => EnemyType.Cactus;
 
         public override void Reset()
         {

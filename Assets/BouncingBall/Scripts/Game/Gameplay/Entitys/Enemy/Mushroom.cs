@@ -6,7 +6,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
     public class Mushroom : AbstractEnemy
     {
-        public override EnemyType Type => EnemyType.Mushroom;
+        public override string Type => EnemyType.Mushroom;
 
 
         [Inject]

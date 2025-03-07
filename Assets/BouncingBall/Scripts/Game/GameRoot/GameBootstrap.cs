@@ -18,7 +18,7 @@ namespace BouncingBall.Game.GameRoot
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.multiTouchEnabled = false;
 
-            await gameDataManager.LoadGameData();
+            await gameDataManager.LoadGameDataAsync();
             cameraHolder.Init();
             gameStateMachine.SetState(GameStateTag.Bootstrap);
         }

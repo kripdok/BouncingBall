@@ -16,11 +16,11 @@ namespace BouncingBall.Game.Data
 
         public IReadOnlyList<string> LevelName => _levelName;
 
-        public void Load(string jsonData)
+        public void Load(string jsonContent)
         {
-            if (jsonData == string.Empty) return;
+            if (jsonContent == string.Empty) return;
 
-            var loadedData = JsonConvert.DeserializeObject<GameData>(jsonData);
+            var loadedData = JsonConvert.DeserializeObject<GameData>(jsonContent);
             BallData = loadedData.BallData;
             NominalCoin = loadedData.NominalCoin;
             MushroomData = loadedData.MushroomData;

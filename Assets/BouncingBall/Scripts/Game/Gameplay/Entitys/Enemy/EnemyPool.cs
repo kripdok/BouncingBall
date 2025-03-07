@@ -6,7 +6,7 @@ using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
-    public class EnemyPool : IFactory<Vector3, EnemyType, AbstractEnemy>
+    public class EnemyPool : IFactory<Vector3, string, AbstractEnemy>
     {
         private const string SpikesPrefabPath = "Prefabs/Gameplay/Enemy";
         private const string MushroomPrefabPath = "Prefabs/Gameplay/Enemy_Mushroom";
@@ -23,7 +23,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
             _parent = new GameObject("Enemies").transform;
         }
 
-        public AbstractEnemy Create(Vector3 param1, EnemyType param2)
+        public AbstractEnemy Create(Vector3 param1, string param2)
         {
             var obj = _activeEnemys.FirstOrDefault(enemy => param2 == enemy.Type && !enemy.gameObject.activeSelf);
 

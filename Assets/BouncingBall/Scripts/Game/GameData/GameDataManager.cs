@@ -8,36 +8,40 @@ namespace BouncingBall.Game.Data
 {
     public class GameDataManager
     {
-        private const string GameDataPath = "Assets/Resources/Data.json";
-        private const string PlayerDataPath = "Assets/Resources/PlayerData.json";
-        private const string LevelDataPath = "Assets/Resources/Levels/Level_NAME.json";
+        private const string GameDataFilePath = "Assets/Resources/Data.json";
+        private const string PlayerDataFilePath = "Assets/Resources/PlayerData.json";
+        private const string LevelDataFilePathTemplate = "Assets/Resources/Levels/Level_NAME.json";
 
         public GameData GameData { get; private set; }
         public PlayerData PlayerData { get; private set; }
 
         [Inject] private IDataLoader _dataLoader;
 
-        private Dictionary<string, LevelData> _levelData = new();
+        private readonly Dictionary<string, LevelData> _cachedLevelData = new();
 
-        public async UniTask LoadGameData()
+        public async UniTask LoadGameDataAsync()
         {
-            GameData = await _dataLoader.LoadDataFromPathAsync<GameData>(GameDataPath);
-            PlayerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataPath);
+            GameData = await _dataLoader.LoadDataFromPathAsync<GameData>(GameDataFilePath);
+            PlayerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataFilePath);
         }
 
-        public async UniTask<LevelData> LoadLevel(string name)
+        public async UniTask<LevelData> LoadLevelDataAsync(string levelName)
         {
-            if (_levelData.TryGetValue(name, out var level))
-                return level;
+            if (_cachedLevelData.TryGetValue(levelName, out var levelData))
+            {
+                return levelData;
+            }
 
-            level = await _dataLoader.LoadDataFromPathAsync<LevelData>(LevelDataPath.Replace("NAME", name));
-            _levelData[name] = level;
-            return level;
+            string levelDataFilePath = LevelDataFilePathTemplate.Replace("NAME", levelName);
+            levelData = await _dataLoader.LoadDataFromPathAsync<LevelData>(levelDataFilePath);
+            _cachedLevelData[levelName] = levelData;
+
+            return levelData;
         }
 
-        public async UniTask ResetPlayerData()
+        public async UniTask ResetPlayerDataAsync()
         {
-            var playerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataPath);
+            var playerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataFilePath);
             PlayerData.CoinsCount.Value = playerData.CoinsCount.Value;
         }
     }

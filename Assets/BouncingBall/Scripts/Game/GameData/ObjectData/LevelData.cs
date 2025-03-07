@@ -1,23 +1,22 @@
 ﻿using BouncingBall.DataLoader;
-using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BouncingBall.Game.Data.ObjectData
 {
-    public class LevelData: IDownloadable
+    public class LevelData : IDownloadable
     {
         [JsonProperty] public string LevelName { get; private set; }
         [JsonProperty] public int CoinsCount { get; private set; }
         [JsonProperty] public int CoinsForEnableExit { get; private set; }
 
-        [JsonProperty] public Dictionary<EnemyType, int> EnemiesCount { get; private set; }
+        [JsonProperty] public Dictionary<string, int> EnemiesCount { get; private set; }
 
-        public void Load(string jsonData)
+        public void Load(string jsonContent)
         {
-            if (jsonData == string.Empty) return;
+            if (jsonContent == string.Empty) return;
 
-            var loadedData = JsonConvert.DeserializeObject<LevelData>(jsonData);
+            var loadedData = JsonConvert.DeserializeObject<LevelData>(jsonContent);
             LevelName = loadedData.LevelName;
             CoinsCount = loadedData.CoinsCount;
             CoinsForEnableExit = loadedData.CoinsForEnableExit;

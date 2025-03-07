@@ -13,7 +13,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 
         private int _damage = 1;
 
-        public abstract EnemyType Type { get; }
+        public abstract string Type { get; }
 
         public virtual void Reset()
         {

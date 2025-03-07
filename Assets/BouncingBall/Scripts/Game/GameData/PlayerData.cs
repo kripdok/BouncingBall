@@ -10,11 +10,11 @@ namespace BouncingBall.Game.Data
 
         [JsonIgnore] public ReactiveProperty<int> CoinsCount = new();
 
-        public void Load(string jsonData)
+        public void Load(string jsonContent)
         {
-            if (jsonData == string.Empty) return;
+            if (jsonContent == string.Empty) return;
 
-            var data = JsonConvert.DeserializeObject<PlayerData>(jsonData);
+            var data = JsonConvert.DeserializeObject<PlayerData>(jsonContent);
             CoinsCount.Value = data._coinsCount;
         }
     }
