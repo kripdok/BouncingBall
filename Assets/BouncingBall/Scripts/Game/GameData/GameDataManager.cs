@@ -8,9 +8,9 @@ namespace BouncingBall.Game.Data
 {
     public class GameDataManager
     {
-        private const string GameDataFilePath = "Assets/Resources/Data.json";
-        private const string PlayerDataFilePath = "Assets/Resources/PlayerData.json";
-        private const string LevelDataFilePathTemplate = "Assets/Resources/Levels/Level_NAME.json";
+        private const string GameDataFilePath = "Assets/BouncingBall/Resources/Data/Data.json";
+        private const string PlayerDataFilePath = "Assets/BouncingBall/Resources/Data/PlayerData.json";
+        private const string LevelDataFilePathTemplate = "Assets/BouncingBall/Resources/Data/Levels/Level_NAME.json";
 
         public GameData GameData { get; private set; }
         public PlayerData PlayerData { get; private set; }
