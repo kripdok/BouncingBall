@@ -1,10 +1,12 @@
 ﻿using BouncingBall.CustomPhysics;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
+using BouncingBall.Game.Gameplay.LevelObject;
 using BouncingBall.InputSystem;
 using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +22,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         [SerializeField, Range(0, 10)] private float _maximumCompression = 5f;
         [SerializeField] private Material _material;
         [SerializeField] private Color _compressionColor = Color.red;
+        [Header("Death animation")]
+        [SerializeField] private ParticleSystem _deathEffect;
+        [SerializeField] private float _deathAnimationDurationduration = 0.5f;
 
         [Inject] private IInputManager _inputManager;
         [Inject] private BallCollisionEffectPool _collisionEffectPool;
@@ -28,9 +33,11 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private CustomRigidbody _rigidbody;
         private BallData _ballData;
         private Vector3 _moveDirection;
-        private Vector3 _originalScale;
+        private Vector3 _defoltScale;
         private float _currentSpeed;
-        private readonly Color _defaultColor = Color.white;
+        private Collider _collider;
+
+        private Color _defaultColor => Color.white;
 
         [Inject]
         private void Construct(GameDataManager gameDataManager, ResetManager resetManager)
@@ -41,6 +48,10 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         public void Reset()
         {
+            gameObject.SetActive(true);
+            transform.localScale = _defoltScale;
+            _collider.enabled = true;
+            _rigidbody.enabled = true;
             _rigidbody.Reset();
             _body.rotation = Quaternion.identity;
             _ballData.HealthSystem.Reset();
@@ -48,20 +59,21 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private void Awake()
         {
-            _originalScale = transform.localScale;
+            _defoltScale = transform.localScale;
+            _collider = GetComponent<Collider>();
             _rigidbody = GetComponent<CustomRigidbody>();
             Subscribe();
         }
 
         private async void OnCollisionEnter(Collision collision)
         {
-            Vector3 collisionNormal = collision.GetContact(0).normal;
-            Vector3 reflectedVelocity = Vector3.Reflect(_rigidbody.VelocityForce, collisionNormal);
-            _ballData.Direction.Value = reflectedVelocity;
-            _collisionEffectPool.Spawn(collision.GetContact(0).point, Quaternion.LookRotation(collisionNormal));
+            ReactToCollisionWithObstacle(collision);
+          
+        }
 
-            await CompressBall(reflectedVelocity);
-            await RestoreBallScale();
+        private void OnTriggerEnter(Collider other)
+        {
+            ReactToExitCollision(other);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -84,6 +96,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             SubscribeToInputEvents();
             SubscribeToInputDevice();
+            SubscribeToHealthSystem();
         }
 
         private void SubscribeToInputEvents()
@@ -103,6 +116,11 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _inputManager.IsDirectionActive?.Skip(1).Subscribe(ApplyForceIfDirectionSet).AddTo(_inputDisposables);
         }
 
+        private void SubscribeToHealthSystem()
+        {
+            _ballData.HealthSystem.CurrentHealth.Skip(1).Subscribe(amount => PlayDisappearingAnimation()).AddTo(this);
+        }
+
         private void SetCurrentSpeed(float speed)
         {
             _currentSpeed = Math.Clamp(speed, 0, _ballData.MaxSpeed);
@@ -120,6 +138,17 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private void UpdateBallData()
         {
             _ballData.Position.Value = transform.position;
+        }
+
+        private async void ReactToCollisionWithObstacle(Collision collision)
+        {
+            Vector3 collisionNormal = collision.GetContact(0).normal;
+            Vector3 reflectedVelocity = Vector3.Reflect(_rigidbody.VelocityForce, collisionNormal);
+            _ballData.Direction.Value = reflectedVelocity;
+            _collisionEffectPool.Spawn(collision.GetContact(0).point, Quaternion.LookRotation(collisionNormal));
+
+            await CompressBall(reflectedVelocity);
+            await RestoreBallScale();
         }
 
         private async UniTask CompressBall(Vector3 newVelocity)
@@ -148,14 +177,23 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             while (elapsedTime < _compressionDuration)
             {
                 float lerpValue = elapsedTime / _compressionDuration;
-                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, lerpValue);
+                transform.localScale = Vector3.Lerp(transform.localScale, _defoltScale, lerpValue);
                 _material.color = Color.Lerp(initialColor, _defaultColor, lerpValue);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield();
             }
 
             _material.color = _defaultColor;
-            transform.localScale = _originalScale;
+            transform.localScale = _defoltScale;
+        }
+
+        private void ReactToExitCollision(Collider collider)
+        {
+            if(collider.gameObject.TryGetComponent<LevelExit>(out var exit))
+            {
+                _rigidbody.VelocityForce = Vector3.zero;
+                _rigidbody.RotationForce = Vector3.zero;
+            }
         }
 
         private float CalculateCompressionPower()
@@ -175,6 +213,36 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             float t = Mathf.Clamp01(compressionPower / _maximumCompression);
             return Color.Lerp(_defaultColor, _compressionColor, t);
+        }
+
+        private async void PlayDisappearingAnimation()
+        {
+            if (_ballData.HealthSystem.CurrentHealth.Value > 0)
+                return;
+
+            _rigidbody.Reset();
+            _rigidbody.enabled = false; 
+            _collider.enabled = false;
+
+            Vector3 initialPosition = transform.position;
+            Vector3 initialScale = _defoltScale;
+
+            float elapsedTime = 0f;
+            _deathEffect.Play();
+
+            while (elapsedTime < _deathAnimationDurationduration)
+            {
+                float t = elapsedTime / _deathAnimationDurationduration;
+                transform.Rotate(Vector3.up, 360 * Time.deltaTime / _deathAnimationDurationduration);
+                transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
+                elapsedTime += Time.deltaTime;
+                await Task.Yield();
+            }
+
+            while (_deathEffect.isPlaying)
+            {
+                await Task.Yield();
+            }
         }
     }
 }

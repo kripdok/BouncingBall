@@ -14,11 +14,8 @@ namespace BouncingBall.CustomPhysics
         [SerializeField] private float _mass = 1f;
         [SerializeField, Range(0, 10)] private float _velocityDamping;
 
-        public Vector3 VelocityForce => _velocityForce;
-        public Vector3 RotationForce => _rotationForce;
-
-        private Vector3 _velocityForce;
-        private Vector3 _rotationForce;
+        public Vector3 VelocityForce;
+        public Vector3 RotationForce;
         private ContactPoint _lastCollisionContact;
         private bool _isFalling = true;
         private bool _isCollisionResponseAvailable = true;
@@ -26,16 +23,16 @@ namespace BouncingBall.CustomPhysics
         public void Reset()
         {
             _isFalling = true;
-            _velocityForce = Vector3.zero;
-            _rotationForce = Vector3.zero;
+            VelocityForce = Vector3.zero;
+            RotationForce = Vector3.zero;
         }
 
         private void FixedUpdate()
         {
             ChangeRotateAndPosition();
 
-            _velocityForce = ReduceSpeed(_velocityForce);
-            _rotationForce = ReduceSpeed(_rotationForce);
+            VelocityForce = ReduceSpeed(VelocityForce);
+            RotationForce = ReduceSpeed(RotationForce);
 
             TryFall();
         }
@@ -65,18 +62,18 @@ namespace BouncingBall.CustomPhysics
 
         public void Move(Vector3 direction)
         {
-            _velocityForce += direction / _mass;
+            VelocityForce += direction / _mass;
         }
 
         public void Rotate(Vector3 direction)
         {
-            _rotationForce += direction / _mass;
+            RotationForce += direction / _mass;
         }
 
         private void ChangeRotateAndPosition()
         {
-            transform.position += _velocityForce * Time.fixedDeltaTime;
-            _body.rotation = Quaternion.Euler(_rotationForce) * Quaternion.Euler(_body.rotation.eulerAngles);
+            transform.position += VelocityForce * Time.fixedDeltaTime;
+            _body.rotation = Quaternion.Euler(RotationForce) * Quaternion.Euler(_body.rotation.eulerAngles);
         }
 
         private Vector3 ReduceSpeed(Vector3 force)
@@ -93,7 +90,7 @@ namespace BouncingBall.CustomPhysics
         {
             if (_isFalling)
             {
-                _velocityForce.y -= FallAcceleration * _mass * Time.fixedDeltaTime;
+                VelocityForce.y -= FallAcceleration * _mass * Time.fixedDeltaTime;
             }
         }
 
@@ -105,9 +102,9 @@ namespace BouncingBall.CustomPhysics
             {
                 _isFalling = false;
 
-                if (_velocityForce.y < MinYVelocity)
+                if (VelocityForce.y < MinYVelocity)
                 {
-                    _velocityForce.y = 0;
+                    VelocityForce.y = 0;
                     var newPosition = transform.position;
                     newPosition.y = contact.point.y + transform.localScale.y / 2;
                     transform.position = newPosition;
@@ -120,10 +117,10 @@ namespace BouncingBall.CustomPhysics
             Vector3 normal = _lastCollisionContact.normal;
             UpdateRotation(normal);
 
-            var newVelocity = Vector3.Reflect(_velocityForce, normal);
+            var newVelocity = Vector3.Reflect(VelocityForce, normal);
             newVelocity.y = 0;
-            _rotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
-            _velocityForce = newVelocity;
+            RotationForce = new Vector3(newVelocity.z, 0, newVelocity.x * -1);
+            VelocityForce = newVelocity;
         }
 
         private void UpdateRotation(Vector3 eulerAngle)
