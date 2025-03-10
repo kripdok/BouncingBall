@@ -135,7 +135,6 @@ namespace BouncingBall.InputSystem
             Angle = new ReadOnlyReactiveProperty<float>(_inputDevice.Angle);
 
             _inputChange.OnNext(Unit.Default);
-            Debug.Log($"The {_currentInputDeviceName} device is now on");
         }
     }
 }

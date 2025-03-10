@@ -23,7 +23,7 @@ namespace BouncingBall.Game.Gameplay.Coins
         private bool _isColliderDetected;
         private Vector3 _sumVector = new Vector3(0, 1, 0);
 
-        public IObservable<int> Reword => _data.Reword;
+        public IObservable<int> OnRewardCollected => _data.Reword;
 
 
         public void Reset()

@@ -15,7 +15,7 @@ namespace BouncingBall.Game.Gameplay.LevelObject
 
         public IReadOnlyList<Transform> CoinsSpawnPoint => _coinsSpawnPoint;
         public IReadOnlyList<Transform> EnemySpawnPoint => _enemySpawnPoint;
-        public IObservable<Unit> ExitTriggerHit => _levelExit.OnExit;
+        public IObservable<Unit> OnExitTriggerHit => _levelExit.OnExit;
 
 
         public void Reset()
