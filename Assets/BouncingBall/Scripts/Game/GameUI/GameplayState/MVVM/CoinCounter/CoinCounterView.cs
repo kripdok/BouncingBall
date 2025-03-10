@@ -7,71 +7,73 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
 {
     public class CoinCounterView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _count;
+        [SerializeField] private TMP_Text _coinCountText;
         [Header("Animation")]
         [SerializeField] private float _scaleMultiplier;
         [SerializeField, Range(0, 0.5f)] private float _animationPlayerTime;
 
-        private CoinCounterViewModel _view;
-        private Vector3 _animationScale;
-        private Vector3 _defoltScale;
-        private bool _isEnable;
+        private CoinCounterViewModel _viewModel;
+        private Vector3 _targetScale;
+        private Vector3 _defaultScale;
+        private bool _isEnabled;
 
-        public void Init(CoinCounterViewModel view)
+        public void Init(CoinCounterViewModel viewModel)
         {
-            _view = view;
-            _count.text = _view.CoinCount.Value.ToString();
-            _view.CoinCount.Skip(1).Subscribe(PlayReplenishmentAnimation).AddTo(this);
-            _animationScale = _count.transform.localScale * _scaleMultiplier;
-            _defoltScale = _count.transform.localScale;
-            _isEnable = true;
+            _viewModel = viewModel;
+            _coinCountText.text = _viewModel.CoinCount.Value.ToString();
+            _viewModel.CoinCount.Skip(1).Subscribe(UpdateCoinCountWithAnimation).AddTo(this);
+
+            _targetScale = _coinCountText.transform.localScale * _scaleMultiplier;
+            _defaultScale = _coinCountText.transform.localScale;
+            _isEnabled = true;
         }
 
         private void OnDestroy()
         {
-            _isEnable = false;
+            _isEnabled = false;
         }
 
-        private async void PlayReplenishmentAnimation(int amount)
+        private async void UpdateCoinCountWithAnimation(int amount)
         {
-            if (!_isEnable)
+            if (!_isEnabled)
                 return;
 
-            var exitTime = 0f;
-            _count.text = amount.ToString();
+            _coinCountText.text = amount.ToString();
 
-            while (exitTime < _animationPlayerTime)
+            await AnimateScaleUp();
+            await AnimateScaleDown();
+        }
+
+        private async UniTask AnimateScaleUp()
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _animationPlayerTime && _isEnabled)
             {
-                if (!_isEnable)
-                    break;
+                float lerpT = elapsedTime / _animationPlayerTime;
+                _coinCountText.transform.localScale = Vector3.Lerp(_defaultScale, _targetScale, lerpT);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield();
+            }
+        }
 
-                float lerpT = exitTime / _animationPlayerTime;
-                _count.transform.localScale = Vector3.Lerp(_defoltScale, _animationScale, lerpT);
-                exitTime += Time.deltaTime;
+        private async UniTask AnimateScaleDown()
+        {
+            Vector3 currentScale = _coinCountText.transform.localScale;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < _animationPlayerTime && _isEnabled)
+            {
+                float lerpT = elapsedTime / _animationPlayerTime;
+                _coinCountText.transform.localScale = Vector3.Lerp(currentScale, _defaultScale, lerpT);
+                elapsedTime += Time.deltaTime;
                 await UniTask.Yield();
             }
 
-            if (!_isEnable)
-                return;
-
-            var scale = _count.transform.localScale;
-            exitTime = 0;
-
-            while (exitTime < _animationPlayerTime)
+            if (_isEnabled)
             {
-                if (!_isEnable)
-                    break;
-
-                float lerpT = exitTime / _animationPlayerTime;
-                _count.transform.localScale = Vector3.Lerp(scale, _defoltScale, lerpT);
-                exitTime += Time.deltaTime;
-                await UniTask.Yield();
+                _coinCountText.transform.localScale = _defaultScale;
             }
-
-            if (!_isEnable)
-                return;
-
-            _count.transform.localScale = _defoltScale;
         }
     }
 }

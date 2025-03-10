@@ -69,7 +69,7 @@ namespace BouncingBall.Game.Gameplay.Root
             if (_attachStateUI.StateUI is GameUI gameUI)
             {
                 _gameUI = gameUI;
-                _gameUI.OnRestart.Subscribe(_ => RestartLevel()).AddTo(_subscriptions);
+                _gameUI.RestartRequested.Subscribe(_ => RestartLevel()).AddTo(_subscriptions);
             }
 
             if (_levelData.LevelName != MainMenuLevelName)
@@ -112,12 +112,12 @@ namespace BouncingBall.Game.Gameplay.Root
                 }
             }
         }
-
+   
         private async void RestartLevel()
         {
             _ball.Reset();
             _ball.transform.position = _level.BallSpawnPoint.position;
-            _gameUI.DisablePopup();
+            _gameUI.HidePopups();
             _level.Reset();
             _coinsCollected = 0;
 
@@ -141,14 +141,14 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void ShowWinPopup()
         {
-            _gameUI.EnableWinPopup();
+            _gameUI.ShowWinPopup();
         }
 
         private void CheckAndShowLosePopup(int healthCount)
         {
             if (healthCount <= 0)
             {
-                _gameUI.EnableLossPopup();
+                _gameUI.ShowLossPopup();
             }
         }
 

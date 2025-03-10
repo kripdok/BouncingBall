@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using Zenject;
 
-namespace BouncingBall.Game.UI.GameplayState
+namespace BouncingBall.Game.UI.GameplayState.HUD
 {
     public class PlayerHealthCell : MonoBehaviour
     {

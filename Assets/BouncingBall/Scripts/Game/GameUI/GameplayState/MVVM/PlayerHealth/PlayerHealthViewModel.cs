@@ -1,9 +1,7 @@
 ﻿using UniRx;
 
-namespace Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealth
+namespace BouncingBall.Game.UI.GameplayState.MVVM
 {
-
-
     public class PlayerHealthViewModel
     {
 

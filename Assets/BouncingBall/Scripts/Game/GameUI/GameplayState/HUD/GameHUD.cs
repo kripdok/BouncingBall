@@ -1,12 +1,12 @@
-﻿using Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealth;
-using BouncingBall.Game.Data;
+﻿using BouncingBall.Game.Data;
 using BouncingBall.Game.UI.GameplayState.MVVM;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameUI.AA
+namespace BouncingBall.Game.UI.GameplayState.HUD
+
 {
     public class GameHUD : MonoBehaviour
     {

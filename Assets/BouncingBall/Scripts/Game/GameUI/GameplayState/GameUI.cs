@@ -1,5 +1,4 @@
-using Assets.BouncingBall.Scripts.Game.GameUI;
-using Assets.BouncingBall.Scripts.Game.GameUI.AA;
+using BouncingBall.Game.UI.GameplayState.HUD;
 using BouncingBall.UI;
 using BouncingBall.Utilities;
 using UniRx;
@@ -16,27 +15,27 @@ namespace BouncingBall.Game.UI.GameplayState
 
         [Inject] private IPausable _pausable;
 
-        public Subject<Unit> OnRestart = new();
+        public Subject<Unit> RestartRequested = new();
 
         public void Awake()
         {
-            InitPopup();
-            InitHUD();
+            InitializePopups();
+            InitializeHUD();
         }
 
-        public void EnableWinPopup()
+        public void ShowWinPopup()
         {
             _pausable.Pause();
             _winPopup.gameObject.SetActive(true);
         }
 
-        public void EnableLossPopup()
+        public void ShowLossPopup()
         {
             _pausable.Pause();
             _lossPopup.gameObject.SetActive(true);
         }
 
-        public void DisablePopup()
+        public void HidePopups()
         {
             _pausable.Resume();
             _winPopup.gameObject.SetActive(false);
@@ -48,16 +47,16 @@ namespace BouncingBall.Game.UI.GameplayState
             _hud.AddCoin(coin);
         }
 
-        private void InitPopup()
+        private void InitializePopups()
         {
-            DisablePopup();
+            HidePopups();
 
             _winPopup.SetExitButton(OnExit);
             _lossPopup.SetExitButton(OnExit);
-            _lossPopup.SetRestartButton(OnRestart);
+            _lossPopup.SetRestartButton(RestartRequested);
         }
 
-        private void InitHUD()
+        private void InitializeHUD()
         {
             _hud.Init(OnExit);
         }

@@ -1,11 +1,11 @@
-﻿using BouncingBall.Game.UI.GameplayState;
+﻿using BouncingBall.Game.UI.GameplayState.HUD;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealth
+namespace BouncingBall.Game.UI.GameplayState.MVVM
 {
     public class PlayerHealthView : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace Assets.BouncingBall.Scripts.Game.GameUI.GameplayState.MVVM.PlayerHealt
         private PlayerHealthViewModel _view;
 
 
-        public void Init( PlayerHealthViewModel view)
+        public void Init(PlayerHealthViewModel view)
         {
             _view = view;
 
