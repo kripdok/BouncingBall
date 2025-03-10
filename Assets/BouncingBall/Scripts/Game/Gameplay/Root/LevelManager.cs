@@ -156,7 +156,7 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             _coinsCollected++;
 
-            if (_coinsCollected >= _levelData.CoinsCount)
+            if (_coinsCollected >= _levelData.CoinsForEnableExit)
             {
                 _level.EnableExit();
             }

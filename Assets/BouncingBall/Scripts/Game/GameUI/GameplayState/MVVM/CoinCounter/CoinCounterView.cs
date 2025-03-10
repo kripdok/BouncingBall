@@ -5,19 +5,19 @@ using UnityEngine;
 
 namespace BouncingBall.Game.UI.GameplayState.MVVM
 {
-    public class CoinCounterViewModel : MonoBehaviour
+    public class CoinCounterView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _count;
         [Header("Animation")]
         [SerializeField] private float _scaleMultiplier;
         [SerializeField, Range(0, 0.5f)] private float _animationPlayerTime;
 
-        private CoinCounterView _view;
+        private CoinCounterViewModel _view;
         private Vector3 _animationScale;
         private Vector3 _defoltScale;
         private bool _isEnable;
 
-        public void Init(CoinCounterView view)
+        public void Init(CoinCounterViewModel view)
         {
             _view = view;
             _count.text = _view.CoinCount.Value.ToString();

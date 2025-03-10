@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 255855413955648828}
   - component: {fileID: 4109009982141015253}
   - component: {fileID: 6928641525135609426}
-  - component: {fileID: 4382111101686057056}
+  - component: {fileID: 7879048212606674121}
   m_Layer: 0
   m_Name: HealthCell
   m_TagString: Untagged
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4382111101686057056
+--- !u!114 &7879048212606674121
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5410397919120213818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6436868eea147a6478a0fb3dffd84e06, type: 3}
+  m_Script: {fileID: 11500000, guid: 26ce5d053e933b144b21ab71e0479ca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _cell: {fileID: 3292421524432523279}

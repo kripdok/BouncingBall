@@ -3,13 +3,13 @@ using UniRx;
 
 namespace BouncingBall.Game.UI.GameplayState.MVVM
 {
-    public class CoinCounterView
+    public class CoinCounterViewModel
     {
         private CoinCounterModel _model;
 
         public ReactiveProperty<int> CoinCount;
 
-        public CoinCounterView(CoinCounterModel model)
+        public CoinCounterViewModel(CoinCounterModel model)
         {
             _model = model;
             CoinCount = new(_model.CoinCount.Value);
