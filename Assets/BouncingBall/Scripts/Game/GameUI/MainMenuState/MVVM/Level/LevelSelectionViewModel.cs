@@ -1,16 +1,16 @@
 ﻿using UniRx;
 
-namespace BouncingBall.Game.UI.MVVM.Level
+namespace BouncingBall.Game.UI.MainMenuState.MVVM
 {
-    public class LevelViewModel
+    public class LevelSelectionViewModel
     {
         public readonly string LevelName;
         public readonly ReactiveCommand<string> StartLevelCommand;
         public readonly ReactiveCommand Clicked;
 
-        private readonly LevelModel _levelModel;
+        private readonly LevelSelectionModel _levelModel;
 
-        public LevelViewModel(LevelModel levelModel)
+        public LevelSelectionViewModel(LevelSelectionModel levelModel)
         {
             _levelModel = levelModel;
             LevelName = _levelModel.LevelName;

@@ -51,14 +51,14 @@ namespace BouncingBall.Game.UI.GameplayState
         {
             HidePopups();
 
-            _winPopup.SetExitButton(OnExit);
-            _lossPopup.SetExitButton(OnExit);
+            _winPopup.SetExitButton(ExitRequested);
+            _lossPopup.SetExitButton(ExitRequested);
             _lossPopup.SetRestartButton(RestartRequested);
         }
 
         private void InitializeHUD()
         {
-            _hud.Init(OnExit);
+            _hud.Init(ExitRequested);
         }
     }
 }

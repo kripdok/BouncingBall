@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace BouncingBall.Game.UI.MVVM.Level
+namespace BouncingBall.Game.UI.MainMenuState.MVVM
 {
-    public class LevelView : MonoBehaviour
+    public class LevelSelectionView : MonoBehaviour
     {
         [SerializeField] private Button _button;
         [SerializeField] private TMP_Text _text;
 
         [Inject]
-        private void Init(LevelViewModel viewModel, Transform transform)
+        private void Constructor(LevelSelectionViewModel viewModel, Transform transform)
         {
             gameObject.transform.SetParent(transform);
             _text.text = viewModel.LevelName;
