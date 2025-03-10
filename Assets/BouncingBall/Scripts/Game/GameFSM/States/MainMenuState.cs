@@ -1,4 +1,5 @@
-﻿using BouncingBall.Game.UI.MainMenuState;
+﻿using BouncingBall.Game.GameRoot.Constants;
+using BouncingBall.Game.UI.MainMenuState;
 using BouncingBall.InputSystem;
 using BouncingBall.PrefabLoader;
 using BouncingBall.UI;
@@ -14,7 +15,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class MainMenuState : AbstractGameState
     {
-        private const string InitialLevelId = "0";
         private const string MainMenuUIPrefabPath = "Prefabs/UI/Containers/MainMenuUI";
 
         [Inject] private readonly ILoadingWindowController _loadingWindowController;
@@ -41,7 +41,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
                 .Subscribe(_ => HideLoadingWindow())
                 .AddTo(_subscriptions);
 
-            _levelLoaderMediator.SetLevelName(InitialLevelId);
+            _levelLoaderMediator.SetLevelName(MainMenuTag.Name);
             _resetManager.Reset();
             _inputInteractivityChanger.EnableSimulatedInput();
         }

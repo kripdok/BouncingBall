@@ -4,6 +4,7 @@ using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.Entities.BallEntity;
 using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
+using BouncingBall.Game.GameRoot.Constants;
 using BouncingBall.Game.UI.GameplayState;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities.Reset;
@@ -17,8 +18,6 @@ namespace BouncingBall.Game.Gameplay.Root
 {
     public class LevelManager : IResettable
     {
-        private const string MainMenuLevelName = "0";
-
         [Inject] private GameDataManager _gameDataManager;
         [Inject] private CoinsPool _coinsPool;
         [Inject] private Ball _ball;
@@ -72,7 +71,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 _gameUI.RestartRequested.Subscribe(_ => RestartLevel()).AddTo(_subscriptions);
             }
 
-            if (_levelData.LevelName != MainMenuLevelName)
+            if (_levelData.LevelName != MainMenuTag.Name)
             {
                 _activeCoins.ObserveAdd().Subscribe(coinEvent =>
                 {
@@ -112,7 +111,7 @@ namespace BouncingBall.Game.Gameplay.Root
                 }
             }
         }
-   
+
         private async void RestartLevel()
         {
             _ball.Reset();
