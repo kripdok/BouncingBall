@@ -14,14 +14,14 @@ namespace BouncingBall.Game.Gameplay.Root.Installers
         private void BindBall()
         {
             Container.Bind<Ball>()
-                .FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball")
+                .FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball/Ball")
                 .AsCached();
         }
 
         private void BindBallDirectionSign()
         {
             Container.Bind<BallDirectionSign>()
-                .FromComponentInNewPrefabResource("Prefabs/Gameplay/PointHolder")
+                .FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball/BallDirectionSign")
                 .AsCached()
                 .NonLazy();
         }

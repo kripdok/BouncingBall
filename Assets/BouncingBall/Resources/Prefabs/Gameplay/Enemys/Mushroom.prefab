@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 4464507348747641578}
   - component: {fileID: 6544676862201372957}
   m_Layer: 0
-  m_Name: Enemy_Mushroom
+  m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

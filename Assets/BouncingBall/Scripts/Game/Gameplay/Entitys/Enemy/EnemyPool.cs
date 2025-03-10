@@ -8,8 +8,8 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
 {
     public class EnemyPool : IFactory<Vector3, string, AbstractEnemy>
     {
-        private const string SpikesPrefabPath = "Prefabs/Gameplay/Enemy_Cactus";
-        private const string MushroomPrefabPath = "Prefabs/Gameplay/Enemy_Mushroom";
+        private const string SpikesPrefabPath = "Prefabs/Gameplay/Enemys/Cactus";
+        private const string MushroomPrefabPath = "Prefabs/Gameplay/Enemys/Mushroom";
 
         private DiContainer _container;
         private List<AbstractEnemy> _activeEnemys;

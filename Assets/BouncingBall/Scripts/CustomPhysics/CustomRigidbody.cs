@@ -112,7 +112,7 @@ namespace BouncingBall.CustomPhysics
             }
         }
 
-        private async void HandleCollisionResponse(Collision collision)
+        private void HandleCollisionResponse(Collision collision)
         {
             Vector3 normal = _lastCollisionContact.normal;
             UpdateRotation(normal);

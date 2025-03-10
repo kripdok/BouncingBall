@@ -15,19 +15,19 @@ namespace BouncingBall.Game.UI.GameplayState
 
         private void BindScreens()
         {
-            Container.Bind<GameHUD>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/GameHUD").AsCached();
+            Container.Bind<GameHUD>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/HUD/GameHUD").AsCached();
 
         }
 
         private void BindPopup()
         {
-            Container.Bind<WinPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/WinPopup").AsCached();
-            Container.Bind<LossPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/LossPopup").AsCached();
+            Container.Bind<WinPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/WinPopup").AsCached();
+            Container.Bind<LossPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/LossPopup").AsCached();
         }
 
         private void BindFactorys()
         {
-            Container.BindFactory<Transform, PlayerHealthCell, PlayerHealthCellFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/HealthCell").AsCached();
+            Container.BindFactory<Transform, PlayerHealthCell, PlayerHealthCellFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/HUD/HealthCell").AsCached();
         }
     }
 }

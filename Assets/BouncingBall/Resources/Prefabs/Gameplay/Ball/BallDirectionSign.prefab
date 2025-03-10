@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 1713024700003819859}
   - component: {fileID: 1976454359835718435}
   m_Layer: 0
-  m_Name: PointHolder
+  m_Name: BallDirectionSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

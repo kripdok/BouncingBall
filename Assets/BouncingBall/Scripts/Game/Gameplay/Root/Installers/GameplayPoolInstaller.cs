@@ -30,7 +30,7 @@ namespace BouncingBall.Game.Gameplay.Root.Installers
         private void BindBallCollisionEffectPool()
         {
             Container.BindMemoryPool<BallCollisionEffect, BallCollisionEffectPool>()
-                .FromComponentInNewPrefabResource("Prefabs/Gameplay/BallSmokeEffect")
+                .FromComponentInNewPrefabResource("Prefabs/Gameplay/Ball/BallSmokeEffect")
                 .UnderTransformGroup("BallCollisionEffect")
                 .AsCached();
         }

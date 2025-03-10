@@ -15,7 +15,7 @@ namespace BouncingBall.Game.FinalStateMachine.States
 {
     public class MainMenuState : AbstractGameState
     {
-        private const string MainMenuUIPrefabPath = "Prefabs/UI/Containers/MainMenuUI";
+        private const string MainMenuUIPrefabPath = "Prefabs/UI/MainMenu/MainMenuUI";
 
         [Inject] private readonly ILoadingWindowController _loadingWindowController;
         [Inject] private readonly IAttachStateUI _attachStateUI;

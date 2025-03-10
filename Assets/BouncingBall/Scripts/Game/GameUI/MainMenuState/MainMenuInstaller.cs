@@ -15,12 +15,13 @@ namespace BouncingBall.Game.UI.MainMenuState
 
         private void BindScreens()
         {
-            Container.Bind<LevelSelectionScreen>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/LevelSelectionScreen").AsCached();
+            Container.Bind<LevelSelectionScreen>().FromComponentInNewPrefabResource("Prefabs/UI/MainMenu/Screens/LevelSelection/LevelSelectionScreen").AsCached();
         }
 
         private void BindFactorys()
         {
-            Container.BindFactory<Transform, LevelSelectionViewModel, LevelSelectionView, LevelSelectionViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached();
+            Container.BindFactory<Transform, LevelSelectionViewModel, LevelSelectionView, LevelSelectionViewFactory>()
+                .FromComponentInNewPrefabResource("Prefabs/UI/MainMenu/Screens/LevelSelection/LevelSelectionView").AsCached();
         }
     }
 }
