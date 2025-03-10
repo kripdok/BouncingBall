@@ -9,10 +9,9 @@ namespace BouncingBall.Game.UI.GameplayState
 {
     public class GameUI : StateUI
     {
-        [SerializeField] private WinPopup _winPopup;
-        [SerializeField] private LossPopup _lossPopup;
-        [SerializeField] private GameHUD _hud;
-
+        [Inject] private WinPopup _winPopup;
+        [Inject] private LossPopup _lossPopup;
+        [Inject] private GameHUD _hud;
         [Inject] private IPausable _pausable;
 
         public Subject<Unit> RestartRequested = new();

@@ -145,7 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4220643611741482898}
-  - component: {fileID: 552173897519281674}
+  - component: {fileID: 2214228801236642275}
   m_Layer: 0
   m_Name: WinPopup
   m_TagString: Untagged
@@ -175,7 +175,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &552173897519281674
+--- !u!114 &2214228801236642275
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5770317048061861332}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f215500a21ac1b4bb73121eb790c837, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b49857d1f1b164478d39ac43b896332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _backToMenuButton: {fileID: 2636426384023083304}

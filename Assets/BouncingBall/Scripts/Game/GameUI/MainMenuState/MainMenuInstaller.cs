@@ -9,16 +9,16 @@ namespace BouncingBall.Game.UI.MainMenuState
     {
         public override void InstallBindings()
         {
-            InitScreen();
-            InitFactorys();
+            BindScreens();
+            BindFactorys();
         }
 
-        private void InitScreen()
+        private void BindScreens()
         {
             Container.Bind<LevelSelectionScreen>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/LevelSelectionScreen").AsCached();
         }
 
-        private void InitFactorys()
+        private void BindFactorys()
         {
             Container.BindFactory<Transform, LevelSelectionViewModel, LevelSelectionView, LevelSelectionViewFactory>().FromComponentInNewPrefabResource("Prefabs/UI/Containers/MenuButton").AsCached();
         }
