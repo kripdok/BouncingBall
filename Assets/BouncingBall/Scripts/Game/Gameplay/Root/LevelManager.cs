@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Ads;
+using BouncingBall.Analytic;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
 using BouncingBall.Game.Gameplay.Coins;
@@ -26,6 +27,7 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private IAttachStateUI _attachStateUI;
         [Inject] private EnemyPool _enemyPool;
         [Inject] private AdsMediator _adsMediator;
+        [Inject] private AnalyticsReporter _analitycsReporter;
 
         private List<AbstractEnemy> _enemies = new();
         private ReactiveCollection<Coin> _activeCoins = new();
@@ -197,6 +199,7 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             _adsMediator.ShowInterstitialBanner();
             _gameUI.ShowWinPopup();
+            _analitycsReporter.ReportLeveCompletion(_levelData.LevelName);
         }
 
         private void ShowLossPopup(int healthCount)

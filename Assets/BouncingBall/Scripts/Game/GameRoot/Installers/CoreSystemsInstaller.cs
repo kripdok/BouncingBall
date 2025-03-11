@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Ads;
+using BouncingBall.Analytic;
 using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
 using BouncingBall.PrefabLoader;
@@ -20,6 +21,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             BindGameDataManager();
             BindResetManager();
             BindAdsMediator();
+            BindAnalytic();
         }
 
         private void BindSceneLoader()
@@ -60,6 +62,12 @@ namespace BouncingBall.Game.GameRoot.Installers
         private void BindAdsMediator()
         {
             Container.Bind<AdsMediator>().AsSingle();
+        }
+
+        private void BindAnalytic()
+        {
+            Container.Bind<AnalyticsReporter>().AsSingle();
+            Container.Bind<FirebaseInitializer>().AsSingle();
         }
     }
 }
