@@ -1,4 +1,5 @@
-﻿using BouncingBall.DataLoader;
+﻿using BouncingBall.Ads;
+using BouncingBall.DataLoader;
 using BouncingBall.Game.Data;
 using BouncingBall.PrefabLoader;
 using BouncingBall.Utilities;
@@ -18,6 +19,7 @@ namespace BouncingBall.Game.GameRoot.Installers
             BindGameBootstrap();
             BindGameDataManager();
             BindResetManager();
+            BindAdsMediator();
         }
 
         private void BindSceneLoader()
@@ -53,6 +55,11 @@ namespace BouncingBall.Game.GameRoot.Installers
         private void BindResetManager()
         {
             Container.Bind<ResetManager>().AsSingle();
+        }
+
+        private void BindAdsMediator()
+        {
+            Container.Bind<AdsMediator>().AsSingle();
         }
     }
 }

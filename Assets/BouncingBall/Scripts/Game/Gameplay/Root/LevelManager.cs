@@ -1,4 +1,5 @@
-﻿using BouncingBall.Game.Data;
+﻿using BouncingBall.Ads;
+using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
 using BouncingBall.Game.Gameplay.Coins;
 using BouncingBall.Game.Gameplay.Entities.BallEntity;
@@ -24,6 +25,7 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private Ball _ball;
         [Inject] private IAttachStateUI _attachStateUI;
         [Inject] private EnemyPool _enemyPool;
+        [Inject] private AdsMediator _adsMediator;
 
         private List<AbstractEnemy> _enemies = new();
         private ReactiveCollection<Coin> _activeCoins = new();
@@ -115,8 +117,8 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void SubscribeToLevelEvents()
         {
-            _level.OnExitTriggerHit.Subscribe(_ => HandleWinCondition()).AddTo(_subscriptions);
-            _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(HandleHealthChange).AddTo(_subscriptions);
+            _level.OnExitTriggerHit.Subscribe(_ => ShowWinPopup()).AddTo(_subscriptions);
+            _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(ShowLossPopup).AddTo(_subscriptions);
         }
 
         private void SpawnCoins(LevelData levelData, IReadOnlyList<Transform> spawnPoints)
@@ -191,15 +193,17 @@ namespace BouncingBall.Game.Gameplay.Root
             SpawnEnemies(_levelData, _level.EnemySpawnPoint);
         }
 
-        private void HandleWinCondition()
+        private void ShowWinPopup()
         {
+            _adsMediator.ShowInterstitialBanner();
             _gameUI.ShowWinPopup();
         }
 
-        private void HandleHealthChange(int healthCount)
+        private void ShowLossPopup(int healthCount)
         {
             if (healthCount <= 0)
             {
+                _adsMediator.ShowInterstitialBanner();
                 _gameUI.ShowLossPopup();
             }
         }

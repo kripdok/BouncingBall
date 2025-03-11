@@ -1,4 +1,5 @@
-﻿using BouncingBall.FinalStateMachine;
+﻿using BouncingBall.Ads;
+using BouncingBall.FinalStateMachine;
 using BouncingBall.Game.Data;
 using BouncingBall.Game.FinalStateMachine;
 using Cysharp.Threading.Tasks;
@@ -10,12 +11,12 @@ namespace BouncingBall.Game.GameRoot
     {
         private const int TargetFrameRate = 60;
 
-        public GameBootstrap(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder)
+        public GameBootstrap(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder, AdsMediator adsMediator)
         {
-            InitializeGameSettings(gameDataManager, gameStateMachine, cameraHolder).Forget();
+            InitializeGameSettings(gameDataManager, gameStateMachine, cameraHolder, adsMediator).Forget();
         }
 
-        private async UniTaskVoid InitializeGameSettings(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder)
+        private async UniTaskVoid InitializeGameSettings(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder, AdsMediator adsMediator)
         {
             Application.targetFrameRate = TargetFrameRate;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -23,6 +24,7 @@ namespace BouncingBall.Game.GameRoot
 
             await gameDataManager.LoadGameDataAsync();
             cameraHolder.Init();
+            adsMediator.Init();
             gameStateMachine.ChangeState(GameStateTag.Bootstrap);
         }
     }

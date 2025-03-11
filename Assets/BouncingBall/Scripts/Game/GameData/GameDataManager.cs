@@ -11,9 +11,11 @@ namespace BouncingBall.Game.Data
         private const string GameDataFilePath = "Assets/BouncingBall/Resources/Data/Data.json";
         private const string PlayerDataFilePath = "Assets/BouncingBall/Resources/Data/PlayerData.json";
         private const string LevelDataFilePathTemplate = "Assets/BouncingBall/Resources/Data/Levels/Level_NAME.json";
+        private const string ADSDataFilePath = "Assets/BouncingBall/Resources/Data/AdsData.json";
 
         public GameData GameData { get; private set; }
         public PlayerData PlayerData { get; private set; }
+        public AdsData AdsData { get; private set; }
 
         [Inject] private IDataLoader _dataLoader;
 
@@ -23,6 +25,7 @@ namespace BouncingBall.Game.Data
         {
             GameData = await _dataLoader.LoadDataFromPathAsync<GameData>(GameDataFilePath);
             PlayerData = await _dataLoader.LoadDataFromPathAsync<PlayerData>(PlayerDataFilePath);
+            AdsData = await _dataLoader.LoadDataFromPathAsync<AdsData>(ADSDataFilePath);
         }
 
         public async UniTask<LevelData> LoadLevelDataAsync(string levelName)
