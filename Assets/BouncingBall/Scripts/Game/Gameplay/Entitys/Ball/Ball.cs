@@ -36,6 +36,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private Vector3 _defoltScale;
         private float _currentSpeed;
         private Collider _collider;
+        private bool _isWork;
 
         private Color _defaultColor => Color.white;
 
@@ -59,6 +60,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private void Awake()
         {
+            _isWork =true;
             _defoltScale = transform.localScale;
             _collider = GetComponent<Collider>();
             _rigidbody = GetComponent<CustomRigidbody>();
@@ -74,6 +76,11 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private void OnTriggerEnter(Collider other)
         {
             ReactToExitCollision(other);
+        }
+
+        private void OnDestroy()
+        {
+            _isWork = false;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -153,13 +160,14 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private async UniTask CompressBall(Vector3 newVelocity)
         {
+            transform.localScale = _defoltScale;
             float compressionPower = CalculateCompressionPower();
             Vector3 targetScale = CalculateCompressionScale(compressionPower);
             Color targetColor = CalculateCompressionColor(compressionPower);
 
             float elapsedTime = 0f;
 
-            while (elapsedTime < _compressionDuration)
+            while (elapsedTime < _compressionDuration && _isWork)
             {
                 float lerpValue = elapsedTime / _compressionDuration;
                 transform.localScale = Vector3.Lerp(transform.localScale, targetScale, lerpValue);
@@ -174,7 +182,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             float elapsedTime = 0f;
             Color initialColor = _material.color;
 
-            while (elapsedTime < _compressionDuration && gameObject != null)
+            while (elapsedTime < _compressionDuration && _isWork)
             {
                 float lerpValue = elapsedTime / _compressionDuration;
                 transform.localScale = Vector3.Lerp(transform.localScale, _defoltScale, lerpValue);
@@ -182,6 +190,9 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield();
             }
+
+            if (!_isWork)
+                return;
 
             _material.color = _defaultColor;
             transform.localScale = _defoltScale;

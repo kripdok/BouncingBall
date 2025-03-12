@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2996507162209172861}
-  - component: {fileID: 8543835006073400220}
+  - component: {fileID: 4324393962502887672}
   m_Layer: 0
   m_Name: CoinCounter
   m_TagString: Untagged
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchoredPosition: {x: 1.2803955, y: -1.5}
   m_SizeDelta: {x: -1.1192627, y: -1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8543835006073400220
+--- !u!114 &4324393962502887672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,12 +47,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1669037736682644085}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23ad1ac15522dba45bc54c5cbd4131c4, type: 3}
+  m_Script: {fileID: 11500000, guid: c517e5319b7f87d498bc1e1fde91110b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _count: {fileID: 56088491781712162}
+  _coinCountText: {fileID: 56088491781712162}
   _scaleMultiplier: 1.2
-  _animationPlayerTime: 0.25
+  _animationPlayerTime: 0.357
 --- !u!1 &3980611621658913012
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,8 +120,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 94446fd3b8e87f441aaea049ef958b21, type: 2}
+  m_sharedMaterial: {fileID: 4935537893250409264, guid: 94446fd3b8e87f441aaea049ef958b21, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

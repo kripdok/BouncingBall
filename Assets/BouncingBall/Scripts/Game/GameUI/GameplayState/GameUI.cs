@@ -1,16 +1,16 @@
 using BouncingBall.Game.UI.GameplayState.HUD;
+using BouncingBall.Game.UI.GameplayState.Screen;
 using BouncingBall.UI;
 using BouncingBall.Utilities;
 using UniRx;
-using UnityEngine;
 using Zenject;
 
 namespace BouncingBall.Game.UI.GameplayState
 {
     public class GameUI : StateUI
     {
-        [Inject] private WinPopup _winPopup;
-        [Inject] private LossPopup _lossPopup;
+        [Inject] private WinScreen _winPopup;
+        [Inject] private LossScreen _lossPopup;
         [Inject] private GameHUD _hud;
         [Inject] private IPausable _pausable;
 

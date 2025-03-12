@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UniRx;
+using UnityEngine;
 using UnityEngine.Advertisements;
 
 namespace BouncingBall.Ads
 {
     public class InterstitialAdsBanner : IUnityAdsLoadListener, IUnityAdsShowListener
     {
-        string _adUnitId;
+        public Subject<Unit> AdvertisingHasStarted = new();
+        public Subject<Unit> AdvertisingHasEnded = new();
+
+        private string _adUnitId;
 
         public InterstitialAdsBanner(string adUnitId)
         {
@@ -36,8 +41,14 @@ namespace BouncingBall.Ads
             Debug.Log($"Error showing Ad Unit {_adUnitId}: {error.ToString()} - {message}");
         }
 
-        public void OnUnityAdsShowStart(string _adUnitId) { }
+        public void OnUnityAdsShowStart(string _adUnitId) 
+        {
+            AdvertisingHasStarted.OnNext(Unit.Default);
+        }
         public void OnUnityAdsShowClick(string _adUnitId) { }
-        public void OnUnityAdsShowComplete(string _adUnitId, UnityAdsShowCompletionState showCompletionState) { }
+        public void OnUnityAdsShowComplete(string _adUnitId, UnityAdsShowCompletionState showCompletionState)
+        {
+            AdvertisingHasEnded.OnNext(Unit.Default);
+        }
     }
 }

@@ -1,6 +1,10 @@
 ﻿
 using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
+using NUnit.Framework;
+using System;
+using System.Security.Policy;
+using UniRx;
 using Zenject;
 
 namespace BouncingBall.Ads
@@ -13,6 +17,9 @@ namespace BouncingBall.Ads
         private AdsInitializer _adsInitializer;
         private InterstitialAdsBanner _interstitialAdsBanner;
         private AdsData _adsData;
+
+        public IObservable<Unit> AdvertisingHasStarted => _interstitialAdsBanner.AdvertisingHasStarted;
+        public IObservable<Unit> AdvertisingHasEnded => _interstitialAdsBanner.AdvertisingHasEnded;
 
         public void Init()
         {

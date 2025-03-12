@@ -1,0 +1,5 @@
+C:/Users/280/Documents/GitHub/BouncingBall/.utmp/RelWithDebInfo/58215573/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/280/Documents/GitHub/BouncingBall/.utmp/RelWithDebInfo/58215573/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/280/Documents/GitHub/BouncingBall/.utmp/RelWithDebInfo/58215573/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/280/Documents/GitHub/BouncingBall/.utmp/RelWithDebInfo/58215573/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/280/Documents/GitHub/BouncingBall/.utmp/RelWithDebInfo/58215573/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

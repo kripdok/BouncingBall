@@ -15,7 +15,7 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
         private CoinCounterViewModel _viewModel;
         private Vector3 _targetScale;
         private Vector3 _defaultScale;
-        private bool _isEnabled;
+        private bool _isWork;
 
         public void Init(CoinCounterViewModel viewModel)
         {
@@ -25,17 +25,17 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
 
             _targetScale = _coinCountText.transform.localScale * _scaleMultiplier;
             _defaultScale = _coinCountText.transform.localScale;
-            _isEnabled = true;
+            _isWork = true;
         }
 
         private void OnDestroy()
         {
-            _isEnabled = false;
+            _isWork = false;
         }
 
         private async void UpdateCoinCountWithAnimation(int amount)
         {
-            if (!_isEnabled)
+            if (!_isWork)
                 return;
 
             _coinCountText.text = amount.ToString();
@@ -48,7 +48,7 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
         {
             float elapsedTime = 0f;
 
-            while (elapsedTime < _animationPlayerTime && _isEnabled)
+            while (elapsedTime < _animationPlayerTime && _isWork)
             {
                 float lerpT = elapsedTime / _animationPlayerTime;
                 _coinCountText.transform.localScale = Vector3.Lerp(_defaultScale, _targetScale, lerpT);
@@ -59,10 +59,13 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
 
         private async UniTask AnimateScaleDown()
         {
+            if (!_isWork)
+                return;
+
             Vector3 currentScale = _coinCountText.transform.localScale;
             float elapsedTime = 0f;
 
-            while (elapsedTime < _animationPlayerTime && _isEnabled)
+            while (elapsedTime < _animationPlayerTime && _isWork)
             {
                 float lerpT = elapsedTime / _animationPlayerTime;
                 _coinCountText.transform.localScale = Vector3.Lerp(currentScale, _defaultScale, lerpT);
@@ -70,7 +73,7 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
                 await UniTask.Yield();
             }
 
-            if (_isEnabled)
+            if (_isWork)
             {
                 _coinCountText.transform.localScale = _defaultScale;
             }

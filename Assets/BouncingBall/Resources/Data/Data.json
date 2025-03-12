@@ -1,7 +1,7 @@
 {
   "BallData": {
     "HealthSystem": {
-      "MaxHealth": 1
+      "MaxHealth": 4
     },
     "MaxSpeed": 10
   },
@@ -15,7 +15,7 @@
     "MaxMoveSpeed": 2
   },
 
-  "NominalCoin": 10,
+  "NominalCoin": 50,
   "_levelName": [
     "1",
     "2",

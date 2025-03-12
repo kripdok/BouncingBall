@@ -8,7 +8,9 @@ using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using BouncingBall.Game.GameRoot.Constants;
 using BouncingBall.Game.UI.GameplayState;
+using BouncingBall.InputSystem;
 using BouncingBall.UI.Root;
+using BouncingBall.Utilities;
 using BouncingBall.Utilities.Reset;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
@@ -28,6 +30,7 @@ namespace BouncingBall.Game.Gameplay.Root
         [Inject] private EnemyPool _enemyPool;
         [Inject] private AdsMediator _adsMediator;
         [Inject] private AnalyticsReporter _analitycsReporter;
+        [Inject] private IPausable _pausable;
 
         private List<AbstractEnemy> _enemies = new();
         private ReactiveCollection<Coin> _activeCoins = new();
@@ -122,6 +125,8 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             _level.OnExitTriggerHit.Subscribe(_ => ShowWinPopup()).AddTo(_subscriptions);
             _gameDataManager.GameData.BallData.HealthSystem.CurrentHealth.Subscribe(ShowLossPopup).AddTo(_subscriptions);
+            _adsMediator.AdvertisingHasStarted.Subscribe(_ => _pausable.Pause()).AddTo(_subscriptions);
+            _adsMediator.AdvertisingHasEnded.Subscribe(_ => _pausable.Resume()).AddTo(_subscriptions);
         }
 
         private void SpawnCoins(LevelData levelData, IReadOnlyList<Transform> spawnPoints)

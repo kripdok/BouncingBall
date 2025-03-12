@@ -1,4 +1,5 @@
 ﻿using BouncingBall.Game.UI.GameplayState.HUD;
+using BouncingBall.Game.UI.GameplayState.Screen;
 using UnityEngine;
 using Zenject;
 
@@ -21,8 +22,8 @@ namespace BouncingBall.Game.UI.GameplayState
 
         private void BindPopup()
         {
-            Container.Bind<WinPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/WinPopup").AsCached();
-            Container.Bind<LossPopup>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/LossPopup").AsCached();
+            Container.Bind<WinScreen>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/WinScreen").AsCached();
+            Container.Bind<LossScreen>().FromComponentInNewPrefabResource("Prefabs/UI/Gameplay/Popups/LossScreen").AsCached();
         }
 
         private void BindFactorys()

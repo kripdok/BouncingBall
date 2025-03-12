@@ -16,6 +16,7 @@ namespace BouncingBall.Game.UI.MainMenuState
         private void BindScreens()
         {
             Container.Bind<LevelSelectionScreen>().FromComponentInNewPrefabResource("Prefabs/UI/MainMenu/Screens/LevelSelection/LevelSelectionScreen").AsCached();
+            Container.Bind<MenuScreen>().FromComponentInNewPrefabResource("Prefabs/UI/MainMenu/Screens/LevelSelection/MenuScreen").AsCached();
         }
 
         private void BindFactorys()

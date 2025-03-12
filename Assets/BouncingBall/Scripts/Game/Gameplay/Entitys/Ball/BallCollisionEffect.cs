@@ -10,6 +10,8 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         [Inject] private BallCollisionEffectPool _pool;
 
+        private bool _isWork;
+
         public void Reset(Vector3 position, Quaternion rotation)
         {
             transform.position = position;
@@ -17,14 +19,28 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
             PlayEffectAndDespawn();
         }
+        private void Awake()
+        {
+            _isWork = true;
+        }
+
+        private void OnDestroy()
+        {
+            _isWork = false;
+        }
 
         private async void PlayEffectAndDespawn()
         {
             _effect.Play();
 
-            while (_effect.gameObject != null & _effect.isPlaying)
+            while (_isWork && _effect.isPlaying)
             {
                 await UniTask.Yield();
+            }
+
+            if (!_isWork)
+            {
+                return;
             }
 
             _effect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

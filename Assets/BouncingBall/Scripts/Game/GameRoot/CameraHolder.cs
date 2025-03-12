@@ -100,6 +100,9 @@ namespace BouncingBall.Game.GameRoot
                 await UniTask.Yield();
             }
 
+            if (!_isWork)
+                return;
+
             _holder.localPosition = targetPosition;
         }
     }
