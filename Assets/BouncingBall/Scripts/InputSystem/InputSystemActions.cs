@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace BouncingBall.InputSystem
+namespace BouncingBall.Scripts.InputSystem
 {
     public partial class @InputSystemActions: IInputActionCollection2, IDisposable
     {

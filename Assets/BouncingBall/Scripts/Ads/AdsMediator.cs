@@ -21,8 +21,8 @@ namespace BouncingBall.Ads
             var interstitalId = string.Empty;
 
 #if UNITY_IOS
-               gameId = adsData.GameIOSId;
-               interstitalId = adsData.InterstitialBannerIOSId;
+               gameId = _adsData.GameIOSId;
+               interstitalId = _adsData.InterstitialBannerIOSId;
 #elif UNITY_ANDROID ||UNITY_EDITOR
             gameId = _adsData.GameAndroidId;
             interstitalId = _adsData.InterstitialBannerAndroidId;

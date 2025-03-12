@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 239edc9b9b9e6cc43996657e7d06763a
+guid: 8e44af3cc881fa442a608436c0a52d2b
 labels:
 - gpsr
-- gvh
-- gvh_version-12.5.0
-- gvhp_exportpath-Firebase/m2repository/com/google/firebase/firebase-analytics-unity/12.5.0/firebase-analytics-unity-12.5.0.srcaar
 PluginImporter:
   externalObjects: {}
   serializedVersion: 3

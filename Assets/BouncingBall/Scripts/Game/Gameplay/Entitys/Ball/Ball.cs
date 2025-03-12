@@ -65,7 +65,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             Subscribe();
         }
 
-        private async void OnCollisionEnter(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
             ReactToCollisionWithObstacle(collision);
 

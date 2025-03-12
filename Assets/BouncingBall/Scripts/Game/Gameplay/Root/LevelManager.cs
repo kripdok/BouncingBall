@@ -183,7 +183,7 @@ namespace BouncingBall.Game.Gameplay.Root
             }
         }
 
-        private async void RestartLevel()
+        private void RestartLevel()
         {
             _adsMediator.ShowInterstitialBanner();
             _ball.Reset();
@@ -200,7 +200,7 @@ namespace BouncingBall.Game.Gameplay.Root
         private void ShowWinPopup()
         {
             _gameUI.ShowWinPopup();
-            _analitycsReporter.ReportLeveCompletion(_levelData.LevelName);
+            _analitycsReporter.ReportLevelCompletion(_levelData.LevelName);
         }
 
         private void ShowLossPopup(int healthCount)
