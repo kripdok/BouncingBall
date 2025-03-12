@@ -22,13 +22,20 @@ namespace BouncingBall.Game.GameRoot
         private BallData _ballData;
         private float _initialYPosition;
         private float _speed;
+        private bool _isWork;
 
         public void Init()
         {
+            _isWork = true;
             _initialYPosition = transform.position.y;
             _ballData = _gameDataManager.GameData.BallData;
 
             Subscribe();
+        }
+
+        private void OnDestroy()
+        {
+            _isWork = false;
         }
 
         private void Subscribe()
@@ -85,10 +92,10 @@ namespace BouncingBall.Game.GameRoot
             Vector3 startPosition = _holder.localPosition;
             float elapsedTime = 0f;
 
-            while (elapsedTime < _moveDuration)
+            while (elapsedTime < _moveDuration && _isWork)
             {
-                float lerpValue = elapsedTime / _moveDuration;
-                _holder.localPosition = Vector3.Lerp(startPosition, targetPosition, lerpValue);
+                float lerpT = elapsedTime / _moveDuration;
+                _holder.localPosition = Vector3.Lerp(startPosition, targetPosition, lerpT);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield();
             }

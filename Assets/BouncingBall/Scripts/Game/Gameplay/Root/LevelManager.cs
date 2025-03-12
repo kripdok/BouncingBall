@@ -52,6 +52,7 @@ namespace BouncingBall.Game.Gameplay.Root
             _subscriptions = new CompositeDisposable();
             _levelData = null;
             _level = null;
+
         }
 
         public async UniTask InitLevelAsync(Level level, string levelId)
@@ -184,6 +185,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private async void RestartLevel()
         {
+            _adsMediator.ShowInterstitialBanner();
             _ball.Reset();
             _ball.transform.position = _level.BallSpawnPoint.position;
             _gameUI.HidePopups();
@@ -197,7 +199,6 @@ namespace BouncingBall.Game.Gameplay.Root
 
         private void ShowWinPopup()
         {
-            _adsMediator.ShowInterstitialBanner();
             _gameUI.ShowWinPopup();
             _analitycsReporter.ReportLeveCompletion(_levelData.LevelName);
         }
@@ -206,7 +207,6 @@ namespace BouncingBall.Game.Gameplay.Root
         {
             if (healthCount <= 0)
             {
-                _adsMediator.ShowInterstitialBanner();
                 _gameUI.ShowLossPopup();
             }
         }

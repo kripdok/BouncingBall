@@ -127,13 +127,15 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
                 Vector3 direction = (targetPoint - startPosition).normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = targetRotation;
+                var position = transform.position;
 
-                while (Vector3.Distance(transform.position, targetPoint) > 1f && _isWoork)
+                while (Vector3.Distance(position, targetPoint) > 1f && _isWoork)
                 {
                     float t = elapsedTime / journeyLength;
 
                     transform.position = Vector3.Lerp(startPosition, targetPoint, t * _speed);
                     elapsedTime += Time.deltaTime;
+                    position = transform.position;  
                     await UniTask.Yield();
                 }
             }

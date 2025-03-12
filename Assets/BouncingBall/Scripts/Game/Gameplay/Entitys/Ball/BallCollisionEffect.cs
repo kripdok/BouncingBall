@@ -22,7 +22,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         {
             _effect.Play();
 
-            while (_effect.isPlaying)
+            while (_effect.gameObject != null & _effect.isPlaying)
             {
                 await UniTask.Yield();
             }

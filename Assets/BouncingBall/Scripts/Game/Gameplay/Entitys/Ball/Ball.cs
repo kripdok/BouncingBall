@@ -68,7 +68,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private async void OnCollisionEnter(Collision collision)
         {
             ReactToCollisionWithObstacle(collision);
-          
+
         }
 
         private void OnTriggerEnter(Collider other)
@@ -174,7 +174,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             float elapsedTime = 0f;
             Color initialColor = _material.color;
 
-            while (elapsedTime < _compressionDuration)
+            while (elapsedTime < _compressionDuration && gameObject != null)
             {
                 float lerpValue = elapsedTime / _compressionDuration;
                 transform.localScale = Vector3.Lerp(transform.localScale, _defoltScale, lerpValue);
@@ -189,7 +189,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private void ReactToExitCollision(Collider collider)
         {
-            if(collider.gameObject.TryGetComponent<LevelExit>(out var exit))
+            if (collider.gameObject.TryGetComponent<LevelExit>(out var exit))
             {
                 _rigidbody.VelocityForce = Vector3.zero;
                 _rigidbody.RotationForce = Vector3.zero;
@@ -221,7 +221,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
                 return;
 
             _rigidbody.Reset();
-            _rigidbody.enabled = false; 
+            _rigidbody.enabled = false;
             _collider.enabled = false;
 
             Vector3 initialPosition = transform.position;

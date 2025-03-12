@@ -22,9 +22,9 @@ namespace BouncingBall.Game.Gameplay.Coins
         private Vector3 _defoltScale;
         private bool _isColliderDetected;
         private Vector3 _sumVector = new Vector3(0, 1, 0);
+        private bool _isWork;
 
         public IObservable<int> OnRewardCollected => _data.Reword;
-
 
         public void Reset()
         {
@@ -37,6 +37,7 @@ namespace BouncingBall.Game.Gameplay.Coins
 
         private void Awake()
         {
+            _isWork = true;
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.isKinematic = true;
 
@@ -67,6 +68,11 @@ namespace BouncingBall.Game.Gameplay.Coins
             _pool.Despawn(this);
         }
 
+        private void OnDestroy()
+        {
+            _isWork = false;
+        }
+
         public void SetData(CoinData data)
         {
             _data = data;
@@ -82,14 +88,18 @@ namespace BouncingBall.Game.Gameplay.Coins
 
             float elapsedTime = 0f;
 
-            while (elapsedTime < _duration)
+            while (elapsedTime < _duration && _isWork)
             {
-                float t = elapsedTime / _duration;
-
+                float lerpT = elapsedTime / _duration;
                 _body.Rotate(Vector3.up, 360 * Time.deltaTime / _duration);
-                _body.localScale = Vector3.Lerp(initialScale, Vector3.zero, t);
+                _body.localScale = Vector3.Lerp(initialScale, Vector3.zero, lerpT);
                 elapsedTime += Time.deltaTime;
                 await Task.Yield();
+            }
+
+            if (!_isWork)
+            {
+                return;
             }
 
             gameObject.SetActive(false);
