@@ -13,11 +13,11 @@ namespace BouncingBall.InputSystem.Device.Concrete
 
         private Plane _plane;
         private Vector3 _ballPosition;
-        private GameDataManager _gameDataManager;
+        private GameDataProvider _gameDataManager;
 
         public bool IsControllable { get; private set; }
 
-        public TouchpadInputDevice(GameDataManager gameDataManager)
+        public TouchpadInputDevice(GameDataProvider gameDataManager)
         {
             IsDirectionActive = new();
             Direction = new();

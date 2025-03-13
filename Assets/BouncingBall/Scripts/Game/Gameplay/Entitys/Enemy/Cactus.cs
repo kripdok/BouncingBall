@@ -32,7 +32,7 @@ namespace BouncingBall.Game.Gameplay.Entities.EnemyEntity
         }
 
         [Inject]
-        public void InitData(GameDataManager gameDataManager)
+        public void InitData(GameDataProvider gameDataManager)
         {
             HealthSystem = new(gameDataManager.GameData.CactusData.MaxHealthAmount);
             _speed = gameDataManager.GameData.CactusData.MaxMoveSpeed;

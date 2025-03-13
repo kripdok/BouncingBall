@@ -19,7 +19,7 @@ namespace BouncingBall.InputSystem.Device.Concrete
         private bool _isCooldown;
         private float _maxScale;
 
-        public KeyboardInputDevice(GameDataManager gameDataManager)
+        public KeyboardInputDevice(GameDataProvider gameDataManager)
         {
             _maxScale = gameDataManager.GameData.BallData.MaxSpeed;
             _isCooldown = false;

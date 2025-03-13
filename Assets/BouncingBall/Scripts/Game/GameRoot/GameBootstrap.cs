@@ -13,14 +13,14 @@ namespace BouncingBall.Game.GameRoot
     {
         private const int TargetFrameRate = 60;
 
-        [Inject] private GameDataManager _gameDataManager;
+        [Inject] private GameDataProvider _gameDataManager;
         [Inject] private IStateMachine _gameStateMachine;
         [Inject] private CameraHolder _cameraHolder;
         [Inject] private AdsMediator _adsMediator;
         [Inject] private FirebaseInitializer _firebaseInitializer;
 
         [Inject]
-        private async UniTaskVoid InitializeGameSettings(GameDataManager gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder, AdsMediator adsMediator)
+        private async UniTaskVoid InitializeGameSettings(GameDataProvider gameDataManager, IStateMachine gameStateMachine, CameraHolder cameraHolder, AdsMediator adsMediator)
         {
             Application.targetFrameRate = TargetFrameRate;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;

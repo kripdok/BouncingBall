@@ -14,7 +14,7 @@ namespace BouncingBall.Game.UI.GameplayState.HUD
         [SerializeField] private CoinCounterView _coinsCount;
         [SerializeField] private PlayerHealthView _playerHealthView;
 
-        [Inject] private GameDataManager _gameDataManager;
+        [Inject] private GameDataProvider _gameDataManager;
 
         private CoinCounterViewModel _coinsCounterView;
 

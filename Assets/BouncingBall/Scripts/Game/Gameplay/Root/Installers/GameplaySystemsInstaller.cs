@@ -20,7 +20,7 @@ namespace BouncingBall.Game.Gameplay.Root.Installers
 
         private void BindLevelManager()
         {
-            Container.Bind<LevelManager>().AsCached();
+            Container.Bind<LevelProvider>().AsCached();
         }
 
         private void BindGameplayBootstrap()

@@ -8,7 +8,7 @@ namespace BouncingBall.Game.UI.GameplayState.MVVM
         public ReactiveProperty<int> CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
 
-        public PlayerHealthModel(GameDataManager gameDataManager)
+        public PlayerHealthModel(GameDataProvider gameDataManager)
         {
             MaxHealth = gameDataManager.GameData.BallData.HealthSystem.MaxHealth;
             CurrentHealth = gameDataManager.GameData.BallData.HealthSystem.CurrentHealth;

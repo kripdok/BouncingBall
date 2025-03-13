@@ -51,12 +51,12 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindGameDataManager()
         {
-            Container.Bind<GameDataManager>().AsSingle();
+            Container.Bind<GameDataProvider>().AsSingle();
         }
 
         private void BindResetManager()
         {
-            Container.Bind<ResetManager>().AsSingle();
+            Container.Bind<ResetProvider>().AsSingle();
         }
 
         private void BindAdsMediator()

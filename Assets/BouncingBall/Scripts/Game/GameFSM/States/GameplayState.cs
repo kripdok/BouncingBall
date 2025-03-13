@@ -21,12 +21,10 @@ namespace BouncingBall.Game.FinalStateMachine.States
         [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         [Inject] private readonly StateUIFactory _stateUIFactory;
         [Inject] private readonly LevelLoaderMediator _levelLoaderMediator;
-        [Inject] private readonly ResetManager _resetManager;
+        [Inject] private readonly ResetProvider _resetManager;
         [Inject] private readonly IInputInteractivityChanger _inputInteractivityChanger;
 
         private CompositeDisposable _subscriptions;
-
-        public GameplayState() : base(GameStateTag.Gameplay) { }
 
         public override async void Enter()
         {

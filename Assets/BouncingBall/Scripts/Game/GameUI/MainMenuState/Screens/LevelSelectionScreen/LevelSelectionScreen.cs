@@ -15,7 +15,7 @@ namespace BouncingBall.Game.UI.MainMenuState.Screen
 
         [Inject] private MenuScreen _menuScreen;
         [Inject] private LevelSelectionViewFactory LevelViewFactory;
-        [Inject] private GameDataManager _gameDataManager;
+        [Inject] private GameDataProvider _gameDataManager;
 
         private readonly ReactiveCollection<LevelSelectionViewModel> _levelViewModels = new();
         private Subject<string> _setLevelRequested = new();

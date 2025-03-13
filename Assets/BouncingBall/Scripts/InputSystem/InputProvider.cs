@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BouncingBall.InputSystem
 {
-    public class InputManager : IInputInteractivityChanger, IInputManager, IPausable
+    public class InputProvider : IInputInteractivityChanger, IInputProvider, IPausable
     {
         public ReadOnlyReactiveProperty<Vector3> Direction { get; private set; }
         public ReadOnlyReactiveProperty<float> DistanceScale { get; private set; }
@@ -23,7 +23,7 @@ namespace BouncingBall.InputSystem
 
         private bool _isPaused;
 
-        public InputManager(InputDevicePool factory)
+        public InputProvider(InputDevicePool factory)
         {
             _factory = factory;
             _currentInputDeviceName = InputDeviceTag.Keyboard;

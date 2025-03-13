@@ -5,7 +5,7 @@ namespace BouncingBall.Game.Gameplay.Coins
 {
     public class CoinsPool : MemoryPool<Coin>
     {
-        [Inject] GameDataManager _gameDataManager;
+        [Inject] GameDataProvider _gameDataManager;
 
         protected override void Reinitialize(Coin item)
         {

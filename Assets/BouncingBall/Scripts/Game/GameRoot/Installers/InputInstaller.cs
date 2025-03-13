@@ -14,7 +14,7 @@ namespace BouncingBall.Game.GameRoot.Installers
 
         private void BindInputManager()
         {
-            Container.BindInterfacesTo<InputManager>().AsSingle();
+            Container.BindInterfacesTo<InputProvider>().AsSingle();
         }
 
         private void BindInputDevicePool()

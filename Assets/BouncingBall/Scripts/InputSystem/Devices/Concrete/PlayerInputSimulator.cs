@@ -18,7 +18,7 @@ namespace BouncingBall.InputSystem.Device.Concrete
         private float _maxScale;
         private bool _isSimulationActive;
 
-        public PlayerInputSimulator(GameDataManager gameDataManager)
+        public PlayerInputSimulator(GameDataProvider gameDataManager)
         {
             _maxScale = gameDataManager.GameData.BallData.MaxSpeed;
             IsDirectionActive = new ReactiveProperty<bool>(false);

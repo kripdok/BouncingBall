@@ -1,7 +1,6 @@
 ﻿using BouncingBall.Game.Data;
 using BouncingBall.Game.Data.ObjectData;
 using BouncingBall.InputSystem;
-using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -10,12 +9,12 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 {
     public class BallDirectionSign : MonoBehaviour
     {
-        [Inject] private IInputManager _inputController;
+        [Inject] private IInputProvider _inputController;
         private CompositeDisposable _inputDeviceDisposable;
         private BallData _ballData;
 
         [Inject]
-        private void Constructor(GameDataManager gameDataManager)
+        private void Constructor(GameDataProvider gameDataManager)
         {
             _ballData = gameDataManager.GameData.BallData;
         }

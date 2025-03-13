@@ -83,7 +83,6 @@ namespace BouncingBall.Game.Gameplay.Coins
             _pulsationEffect.Stop();
             _explosionEffect.Play();
 
-            Vector3 initialPosition = transform.position;
             Vector3 initialScale = _defoltScale;
 
             float elapsedTime = 0f;

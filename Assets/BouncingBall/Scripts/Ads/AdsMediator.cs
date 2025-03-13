@@ -11,7 +11,7 @@ namespace BouncingBall.Ads
 {
     public class AdsMediator
     {
-        [Inject] private readonly GameDataManager _gameDataManager;
+        [Inject] private readonly GameDataProvider _gameDataManager;
 
         private bool _isTestMode = true;
         private AdsInitializer _adsInitializer;

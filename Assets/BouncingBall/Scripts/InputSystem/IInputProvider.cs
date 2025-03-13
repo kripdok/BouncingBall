@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BouncingBall.InputSystem
 {
-    public interface IInputManager
+    public interface IInputProvider
     {
         public ReadOnlyReactiveProperty<Vector3> Direction { get; }
         public ReadOnlyReactiveProperty<float> DistanceScale { get; }

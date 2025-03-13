@@ -6,7 +6,7 @@ using Zenject;
 
 namespace BouncingBall.Game.Data
 {
-    public class GameDataManager
+    public class GameDataProvider
     {
         private const string GameDataFilePath = "Assets/BouncingBall/Resources/Data/Data.json";
         private const string PlayerDataFilePath = "Assets/BouncingBall/Resources/Data/PlayerData.json";

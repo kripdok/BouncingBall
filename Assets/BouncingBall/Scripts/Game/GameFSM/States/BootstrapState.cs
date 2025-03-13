@@ -9,8 +9,6 @@ namespace BouncingBall.Game.FinalStateMachine.States
     {
         [Inject] private readonly SceneLoader _sceneLoader;
 
-        public BootstrapState() : base(GameStateTag.Bootstrap) { }
-
         public override async void Enter()
         {
             await _sceneLoader.LoadSceneAsync(SceneTag.PreLoader);

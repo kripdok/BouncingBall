@@ -15,8 +15,8 @@ namespace BouncingBall.Game.GameRoot
         [SerializeField] private Transform _holder;
         [SerializeField] private float _moveDuration = 0.5f;
 
-        [Inject] private GameDataManager _gameDataManager;
-        [Inject] private IInputManager _inputManager;
+        [Inject] private GameDataProvider _gameDataManager;
+        [Inject] private IInputProvider _inputManager;
 
         private CompositeDisposable _inputDeviceDisposable;
         private BallData _ballData;

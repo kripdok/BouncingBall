@@ -26,7 +26,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         [SerializeField] private ParticleSystem _deathEffect;
         [SerializeField] private float _deathAnimationDurationduration = 0.5f;
 
-        [Inject] private IInputManager _inputManager;
+        [Inject] private IInputProvider _inputManager;
         [Inject] private BallCollisionEffectPool _collisionEffectPool;
 
         private CompositeDisposable _inputDisposables;
@@ -41,7 +41,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
         private Color _defaultColor => Color.white;
 
         [Inject]
-        private void Construct(GameDataManager gameDataManager, ResetManager resetManager)
+        private void Construct(GameDataProvider gameDataManager, ResetProvider resetManager)
         {
             resetManager.RegisterResettable(this);
             _ballData = gameDataManager.GameData.BallData;
@@ -60,7 +60,7 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
 
         private void Awake()
         {
-            _isWork =true;
+            _isWork = true;
             _defoltScale = transform.localScale;
             _collider = GetComponent<Collider>();
             _rigidbody = GetComponent<CustomRigidbody>();
@@ -235,7 +235,6 @@ namespace BouncingBall.Game.Gameplay.Entities.BallEntity
             _rigidbody.enabled = false;
             _collider.enabled = false;
 
-            Vector3 initialPosition = transform.position;
             Vector3 initialScale = _defoltScale;
 
             float elapsedTime = 0f;

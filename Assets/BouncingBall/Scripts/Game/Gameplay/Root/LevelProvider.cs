@@ -8,7 +8,6 @@ using BouncingBall.Game.Gameplay.Entities.EnemyEntity;
 using BouncingBall.Game.Gameplay.LevelObject;
 using BouncingBall.Game.GameRoot.Constants;
 using BouncingBall.Game.UI.GameplayState;
-using BouncingBall.InputSystem;
 using BouncingBall.UI.Root;
 using BouncingBall.Utilities;
 using BouncingBall.Utilities.Reset;
@@ -21,9 +20,9 @@ using Zenject;
 
 namespace BouncingBall.Game.Gameplay.Root
 {
-    public class LevelManager : IResettable
+    public class LevelProvider : IResettable
     {
-        [Inject] private GameDataManager _gameDataManager;
+        [Inject] private GameDataProvider _gameDataManager;
         [Inject] private CoinsPool _coinsPool;
         [Inject] private Ball _ball;
         [Inject] private IAttachStateUI _attachStateUI;
@@ -41,7 +40,7 @@ namespace BouncingBall.Game.Gameplay.Root
         private int _coinsCollected;
         private int _coinsRequiredToExit;
 
-        public LevelManager(ResetManager resetManager)
+        public LevelProvider(ResetProvider resetManager)
         {
             resetManager.RegisterResettable(this);
         }

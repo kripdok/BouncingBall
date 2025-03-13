@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BouncingBall.Utilities.Reset
 {
-    public class ResetManager : IResettable
+    public class ResetProvider : IResettable
     {
         private List<IResettable> _resettableObjects = new();
 

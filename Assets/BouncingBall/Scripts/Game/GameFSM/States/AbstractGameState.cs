@@ -9,12 +9,10 @@ namespace BouncingBall.Game.FinalStateMachine.States
     {
         public IObservable<string> OnExitObservable => OnExit;
 
-        public readonly string StateId;
         protected readonly Subject<string> OnExit;
 
-        public AbstractGameState(string stateId)
+        public AbstractGameState()
         {
-            StateId = stateId;
             OnExit = new Subject<string>();
         }
 

@@ -15,7 +15,7 @@ namespace BouncingBall.Game.Gameplay.Root
 
         [Inject] private readonly IPrefabLoadStrategy _prefabLoadStrategy;
         [Inject] private readonly LevelFactory _levelFactory;
-        [Inject] private readonly LevelManager _levelManager;
+        [Inject] private readonly LevelProvider _levelManager;
 
         private readonly LevelLoaderMediator _levelLoaderMediator;
         private Level _currentLevel;
